@@ -1,0 +1,15 @@
+version: '3'
+services:
+  client:
+    container_name: dvelope_client
+    build: ./client
+    environment:
+      - REACT_APP_PORT=${REACT_APP_PORT}
+    expose:
+      - ${REACT_APP_PORT}
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    volumes:
+      - ./client/src:/dvelope/client/src
+      - ./client/public:/dvelope/client/public
+    command: npm start
