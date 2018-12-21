@@ -1,6 +1,6 @@
 FROM node:10.13.0
 
-WORKDIR /dvelope/client
+WORKDIR /tranquill/client
 
 COPY package*.json ./
 
