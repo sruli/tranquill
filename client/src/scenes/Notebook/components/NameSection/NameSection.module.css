@@ -1,0 +1,7 @@
+.nameInput {
+  border: none;
+}
+
+.nameInput:focus {
+  box-shadow: none;
+}
