@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
+import AppNavbar from './components/AppNavbar';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <textarea />
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="App">
+    <div className="container_fluid">
+      <AppNavbar />
+    </div>
+  </div>
+);
 
 export default App;

@@ -1,0 +1,13 @@
+// Write overrides above the bootsrap imports
+
+$font-family-sans-serif: Metropolis, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$primary: #0985FA;
+$gray-600: #A2A1A2;
+$emphasized-link-hover-darken-percentage: 0;
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+.nav-link {
+  font-weight: 600;
+  letter-spacing: -0.05rem;
+}

@@ -1,8 +1,7 @@
 import 'typeface-metropolis';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './custom.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
