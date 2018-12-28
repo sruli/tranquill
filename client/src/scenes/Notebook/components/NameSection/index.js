@@ -5,9 +5,9 @@ const NameSection = () => (
   <React.Fragment>
     <div className="row">
       <input
-        className={`col-8 form-control form-control-lg ${styles.nameInput}`}
+        className={`col-8 form-control form-control-lg ls-1 ${styles.nameInput}`}
         type="text"
-        placeholder="Notebook name"
+        placeholder="Notebook #1"
       />
     </div>
     <div className="row">
