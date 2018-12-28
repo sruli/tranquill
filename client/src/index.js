@@ -1,5 +1,5 @@
 import 'typeface-metropolis';
-import './custom.scss';
+import './scss/custom.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

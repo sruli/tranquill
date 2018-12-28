@@ -1,5 +1,8 @@
+@import "../../../../scss/vars.scss";
+
 .nameInput {
   border: none;
+  height: $font-size-lg;
 }
 
 .nameInput:focus {

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './NameSection.module.css';
+import styles from './NameSection.module.scss';
 
 const NameSection = () => (
   <React.Fragment>
@@ -11,7 +11,7 @@ const NameSection = () => (
       />
     </div>
     <div className="row">
-      <div className="col"><hr className="my-0" /></div>
+      <div className="col"><hr /></div>
     </div>
   </React.Fragment>
 );
