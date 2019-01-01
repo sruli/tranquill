@@ -3,8 +3,10 @@
 .nameInput {
   border: none;
   height: $font-size-lg;
+  color: $gray-600;
 }
 
 .nameInput:focus {
   box-shadow: none;
+  color: $gray-900;
 }
