@@ -13,7 +13,7 @@ const Notebook = () => (
         <div className="col-6 offset-1">
           <NotebookEditor />
         </div>
-        <div className="col-3 offset-2">
+        <div className={`col-3 offset-2 position-fixed ${styles.sideBar}`}>
           <NameSection />
         </div>
       </div>
