@@ -20,7 +20,7 @@ class NotebookEditor extends React.Component {
     const { editorState } = this.state;
 
     return (
-      <div className={`${styles.editor} ls-1`}>
+      <div className={`${styles.editor} h-100 ls-1`}>
         <Editor
           editorState={editorState}
           onChange={this.onChange}

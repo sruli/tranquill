@@ -3,7 +3,7 @@ import NotebookEditor from './components/NotebookEditor';
 import NameSection from './components/NameSection';
 
 const Notebook = () => (
-  <div className="row mt-5">
+  <div className="row mt-5 flex-grow-1">
     <div className="col-6 offset-1">
       <NotebookEditor />
     </div>
