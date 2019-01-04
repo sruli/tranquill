@@ -1,10 +1,16 @@
 import React from 'react';
-import { Editor, EditorState } from 'draft-js';
+import { Editor, EditorState, getDefaultKeyBinding } from 'draft-js';
+import { enforceCursorLocation } from '../../../../utils/cursorUtils';
 import 'draft-js/dist/Draft.css';
 import styles from './NotebookEditor.module.scss';
 import './DraftEditorStyles.scss';
 
 class NotebookEditor extends React.Component {
+  static keyBindingFn(e) {
+    enforceCursorLocation();
+    return getDefaultKeyBinding(e);
+  }
+
   constructor(props) {
     super(props);
     this.state = { editorState: EditorState.createEmpty() };
@@ -25,6 +31,7 @@ class NotebookEditor extends React.Component {
           editorState={editorState}
           onChange={this.onChange}
           placeholder="Start typing something…"
+          keyBindingFn={NotebookEditor.keyBindingFn}
           ref={this.draftEditor}
           spellCheck
         />
