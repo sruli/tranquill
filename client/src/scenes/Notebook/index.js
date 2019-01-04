@@ -10,10 +10,10 @@ const Notebook = () => (
 
     <div className={`container-fluid min-vh-100 d-flex flex-column ${styles.notebook}`}>
       <div className="row mt-5 flex-grow-1">
-        <div className="col-6 offset-1">
+        <div className="col-7 offset-1">
           <NotebookEditor />
         </div>
-        <div className={`col-3 offset-2 position-fixed ${styles.sideBar}`}>
+        <div className={`col-3 position-fixed ${styles.sideBar}`}>
           <NameSection />
         </div>
       </div>
