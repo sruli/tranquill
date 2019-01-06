@@ -1,3 +1,8 @@
+// This implementation needs to be better. It needs to take into account hitting return key as well.
+// A possibly solution could be also to check the x position of the cursor in relation to it's
+// container and know when it is at the end. Once there is no more room then we know that the next
+// key stroke will have to be pushed up a line.
+
 const VIEWPORT_HEIGHT = document.documentElement.clientHeight;
 
 // eslint-disable-next-line import/prefer-default-export
