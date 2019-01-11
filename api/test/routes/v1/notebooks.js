@@ -20,14 +20,13 @@ describe('notebookRoutes', () => {
       });
 
       it('returns the notebook', async () => {
-        const { _id, name } = notebook;
-        const { body } = await request(app).get(`/v1/notebooks/${_id}`);
+        const { name } = notebook;
+        const { body } = await request(app).get(`/v1/notebooks/${notebook.id}`);
         expect(body).to.deep.equal({ name });
       });
 
       it('returns OK status', async () => {
-        const { _id } = notebook;
-        const { statusCode } = await request(app).get(`/v1/notebooks/${_id}`);
+        const { statusCode } = await request(app).get(`/v1/notebooks/${notebook.id}`);
         expect(statusCode).to.equal(OK);
       });
     });
