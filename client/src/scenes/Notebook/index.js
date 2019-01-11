@@ -1,5 +1,6 @@
 import Component from './components';
-import { PATH } from './constants';
+import { PATH, SCENE } from './constants';
+import reducer from './reducer';
 
 export default Component;
-export { PATH };
+export { PATH, SCENE, reducer };

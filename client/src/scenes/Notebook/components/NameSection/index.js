@@ -13,6 +13,7 @@ const NameSection = ({ name }) => (
         type="text"
         placeholder="Notebook #1"
         value={name}
+        onChange={() => {}}
       />
     </div>
     <div className="row">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import Notebook, { PATH as notebookPath } from './scenes/Notebook';
+import Notebook, { PATH as notebookPath } from './scenes/notebook';
 
 const App = () => (
   <div className="min-vh-100">
