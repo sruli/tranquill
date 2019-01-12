@@ -1,2 +1,2 @@
-export const SCENE = 'notebook';
-export const PATH = '/notebooks/:id';
+export const SCENE_NAME = 'notebook';
+export const SCENE_PATH = '/notebooks/:id';

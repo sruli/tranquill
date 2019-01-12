@@ -22,12 +22,8 @@ const NameSection = ({ name }) => (
   </React.Fragment>
 );
 
-NameSection.defaultProps = {
-  name: '',
-};
-
 NameSection.propTypes = {
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -3,24 +3,41 @@ import './scss/custom.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { BrowserRouter } from 'react-router-dom';
-import reducer from './reducer';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+import createSagaMiddleware from 'redux-saga';
+import reducers from './reducers';
+import sagas from './sagas';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-/* eslint-disable no-underscore-dangle */
+const sagaMiddleware = createSagaMiddleware();
+
+const history = createBrowserHistory();
+
+/* eslint-disable-next-line no-underscore-dangle */
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const enhancedReducers = combineReducers({
+  ...reducers,
+  router: connectRouter(history),
+});
+
+const appliedMiddleware = applyMiddleware(sagaMiddleware, routerMiddleware(history));
+
 const store = createStore(
-  reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  enhancedReducers,
+  composeEnhancer(appliedMiddleware),
 );
-/* eslint-enable */
+
+sagas.forEach(saga => sagaMiddleware.run(saga));
 
 const Tranquill = () => (
   <Provider store={store}>
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <App />
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>
 );
 

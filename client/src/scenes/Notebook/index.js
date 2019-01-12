@@ -1,6 +1,7 @@
 import Component from './components';
-import { PATH, SCENE } from './constants';
+import { SCENE_PATH, SCENE_NAME } from './constants';
 import reducer from './reducer';
+import sagas from './sagas';
 
 export default Component;
-export { PATH, SCENE, reducer };
+export { SCENE_PATH, SCENE_NAME, reducer, sagas };
