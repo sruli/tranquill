@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styles from './NameSection.module.scss';
 import NotebookIcon from '../../../../components/icons/NotebookIcon';
+import { getNotebookName } from '../../reducer';
 
 const NameSection = ({ name }) => (
   <React.Fragment>
@@ -27,7 +28,7 @@ NameSection.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  name: state.notebook.name,
+  name: getNotebookName(state),
 });
 
 export default connect(mapStateToProps)(NameSection);

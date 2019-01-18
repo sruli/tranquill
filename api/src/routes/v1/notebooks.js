@@ -10,7 +10,7 @@ router.get('/notebooks/:id', async (req, res) => {
 
   if (notebook) {
     const { name } = notebook;
-    return res.status(OK).json({ name });
+    return res.status(OK).json({ id, name });
   }
 
   return res.status(NOT_FOUND).end();

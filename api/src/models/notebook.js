@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 
-const notebookSchema = mongoose.Schema({ name: String }, { timestamps: true });
+// TODO: add validation that name is unique per user
+const notebookSchema = mongoose.Schema({
+  name: { type: String, required: true },
+}, {
+  timestamps: true,
+});
+
+// TODO: removing a notebook removes all associated content blocks
 
 const Notebook = mongoose.model('Notebook', notebookSchema);
+
 module.exports = Notebook;

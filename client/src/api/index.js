@@ -3,6 +3,18 @@ const getNotebook = async (id) => {
   return response;
 };
 
+const saveEditorState = async ({ notebookId, rawEditorState }) => {
+  await fetch(`/v1/notebooks/${notebookId}/contentBlocks`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(rawEditorState),
+  });
+};
+
 export default {
   getNotebook,
+  saveEditorState,
 };
