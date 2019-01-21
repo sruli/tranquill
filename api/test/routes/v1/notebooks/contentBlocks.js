@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
 const app = require('../../../../src/app');
-const contentBlockFactoryService = require('../../../../src/services/factories/contentBlock');
+const ContentBlockFactory = require('../../../../src/services/factories/ContentBlockFactory');
 const notebookFactory = require('../../../factories/notebook');
 
 describe('contentBlocks routes', () => {
@@ -14,7 +14,7 @@ describe('contentBlocks routes', () => {
     let response;
 
     beforeEach(async () => {
-      createOrUpdateSpy = sinon.stub(contentBlockFactoryService, 'createOrUpdate');
+      createOrUpdateSpy = sinon.stub(ContentBlockFactory.prototype, 'createOrUpdate');
       notebook = await notebookFactory.create('notebook');
       response = await request(app)
         .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
@@ -30,9 +30,7 @@ describe('contentBlocks routes', () => {
       expect(createOrUpdateSpy).to.have.been.calledThrice;
 
       const { args } = createOrUpdateSpy.getCall(0);
-      expect(args).to.have.lengthOf(2);
-      expect(args[0].id).to.equal(notebook.id);
-      expect(args[1]).to.deep.equal({});
+      expect(args[0]).to.deep.equal({});
     });
 
     it('returns ACCEPTED response', () => {
