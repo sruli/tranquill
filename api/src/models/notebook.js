@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ContentBlock = require('./contentBlock');
 
 // TODO: add validation that name is unique per user
 const notebookSchema = mongoose.Schema({
@@ -8,6 +9,15 @@ const notebookSchema = mongoose.Schema({
 });
 
 // TODO: removing a notebook removes all associated content blocks
+
+class NotebookClass {
+  async contentBlocks() {
+    const contentBlocks = await ContentBlock.find({ notebook: this });
+    return contentBlocks;
+  }
+}
+
+notebookSchema.loadClass(NotebookClass);
 
 const Notebook = mongoose.model('Notebook', notebookSchema);
 
