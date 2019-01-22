@@ -11,6 +11,7 @@ const contentBlockSchema = mongoose.Schema({
   inlineStyleRanges: [],
   entityRanges: [],
   data: {},
+  position: Number,
 }, {
   timestamps: true,
 });

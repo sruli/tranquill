@@ -53,6 +53,15 @@ describe('notebook', () => {
       expect(saveArgs.notebookId).toBeTruthy();
       expect(saveArgs.rawEditorState).toBeTruthy();
     });
+
+    it('includes the position of each content block in the saveEditorState() payload', async () => {
+      const editorContent = wrapper.find('.public-DraftEditor-content');
+      await editorContent.simulate('beforeInput', { data: 'Some text' });
+      await wait(1); // wait 1ms for saga throttle
+      wrapper.update();
+      const saveArgs = api.saveEditorState.mock.calls[0][0];
+      expect(saveArgs.rawEditorState.blocks[0]).toHaveProperty('position', 0);
+    });
   });
 
   describe('when editor state changes and notebookId is null', () => {

@@ -4,6 +4,7 @@ import { LOCATION_CHANGE, getLocation } from 'connected-react-router';
 import { convertToRaw } from 'draft-js';
 import { DEBOUNCE_MILISECONDS } from '../../constants';
 import api from '../../api';
+import transmuter from '../../api/transmuter';
 import { SCENE_PATH } from './constants';
 import { notebookRetrieved, EDITOR_CHANGED } from './actions';
 import { getNotebookId } from './reducer';
@@ -24,7 +25,8 @@ function* saveEditorState(action) {
   if (!notebookId) return;
 
   const rawEditorState = convertToRaw(editorState.getCurrentContent());
-  yield call(api.saveEditorState, { notebookId, rawEditorState });
+  const params = transmuter.saveEditorState.toServer({ notebookId, rawEditorState });
+  yield call(api.saveEditorState, params);
 }
 
 function* notebookSaga() {
