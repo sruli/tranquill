@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { OK, NOT_FOUND } = require('http-status');
-const Notebook = require('../../models/notebook');
+const Notebook = require('../../models/Notebook');
 
 const router = Router();
 

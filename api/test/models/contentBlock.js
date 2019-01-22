@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const notebookFactory = require('../factories/notebook');
 const contentBlockFactory = require('../factories/contentBlock');
-const ContentBlock = require('../../src/models/contentBlock');
+const ContentBlock = require('../../src/models/ContentBlock');
 
 describe('contentBlock', () => {
   context('when instantiated with a notebook', () => {

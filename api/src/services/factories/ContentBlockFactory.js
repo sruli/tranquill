@@ -1,4 +1,4 @@
-const ContentBlock = require('../../models/contentBlock');
+const ContentBlock = require('../../models/ContentBlock');
 
 class ContentBlockFactory {
   static async init(notebook) {

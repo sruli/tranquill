@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
 const ContentBlockFactory = require('../../../services/factories/ContentBlockFactory');
-const Notebook = require('../../../models/notebook');
+const Notebook = require('../../../models/Notebook');
 
 const jsonParser = bodyParser.json();
 const router = express.Router();

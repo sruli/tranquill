@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ContentBlock = require('./contentBlock');
+const ContentBlock = require('./ContentBlock');
 
 // TODO: add validation that name is unique per user
 const notebookSchema = mongoose.Schema({

@@ -1,5 +1,5 @@
 const { factory } = require('factory-girl');
-const ContentBlock = require('../../src/models/contentBlock');
+const ContentBlock = require('../../src/models/ContentBlock');
 const notebookFactory = require('./notebook');
 
 factory.define('contentBlock', ContentBlock, async () => {

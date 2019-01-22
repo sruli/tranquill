@@ -6,8 +6,8 @@ const chaiChange = require('chai-change');
 const sinonChai = require('sinon-chai');
 const FactoryGirl = require('factory-girl');
 const { connectDB, closeDB } = require('../src/utilities/mongodbUtils');
-const Notebook = require('../src/models/notebook');
-const ContentBlock = require('../src/models/contentBlock');
+const Notebook = require('../src/models/Notebook');
+const ContentBlock = require('../src/models/ContentBlock');
 
 const { factory } = FactoryGirl;
 const adapter = new FactoryGirl.MongooseAdapter();
