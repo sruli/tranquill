@@ -1,1 +1,1 @@
-export const THROTTLE_DELAY = process.env.NODE_ENV === 'test' ? 0 : 5000;
+export const DEBOUNCE_MILISECONDS = process.env.NODE_ENV === 'test' ? 0 : 2000;

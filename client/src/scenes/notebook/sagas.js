@@ -1,8 +1,8 @@
-import { takeEvery, throttle, select, call, put } from 'redux-saga/effects';
+import { takeEvery, debounce, select, call, put } from 'redux-saga/effects';
 import { matchPath } from 'react-router-dom';
 import { LOCATION_CHANGE, getLocation } from 'connected-react-router';
 import { convertToRaw } from 'draft-js';
-import { THROTTLE_DELAY } from '../../constants';
+import { DEBOUNCE_MILISECONDS } from '../../constants';
 import api from '../../api';
 import { SCENE_PATH } from './constants';
 import { notebookRetrieved, EDITOR_CHANGED } from './actions';
@@ -29,8 +29,7 @@ function* saveEditorState(action) {
 
 function* notebookSaga() {
   yield takeEvery(LOCATION_CHANGE, loadNotebook);
-  // TODO: Replace throttle with debounce when debounce becomes available
-  yield throttle(THROTTLE_DELAY, EDITOR_CHANGED, saveEditorState);
+  yield debounce(DEBOUNCE_MILISECONDS, EDITOR_CHANGED, saveEditorState);
 }
 
 export default notebookSaga;
