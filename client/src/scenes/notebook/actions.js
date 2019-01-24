@@ -1,9 +1,9 @@
 export const NOTEBOOK_RETRIEVED = 'notebook.NOTEBOOK_RETRIEVED';
 export const EDITOR_CHANGED = 'notebook.EDITOR_CHANGED';
 
-export const notebookRetrieved = notebook => ({
+export const notebookRetrieved = ({ notebook, editorState }) => ({
   type: NOTEBOOK_RETRIEVED,
-  payload: { notebook },
+  payload: { notebook, editorState },
 });
 
 export const editorChanged = editorState => ({

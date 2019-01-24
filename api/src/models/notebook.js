@@ -10,10 +10,22 @@ const notebookSchema = mongoose.Schema({
 
 // TODO: removing a notebook removes all associated content blocks
 
+// TODO: Order contentBlocks by position
 class NotebookClass {
   async contentBlocks() {
     const contentBlocks = await ContentBlock.find({ notebook: this });
     return contentBlocks;
+  }
+
+  toJSON() {
+    const { id, name, createdAt, updatedAt } = this;
+
+    return {
+      id,
+      name,
+      createdAt: createdAt.toISOString(),
+      updatedAt: updatedAt.toISOString(),
+    };
   }
 }
 

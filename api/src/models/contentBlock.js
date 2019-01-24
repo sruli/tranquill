@@ -14,7 +14,42 @@ const contentBlockSchema = mongoose.Schema({
   position: Number,
 }, {
   timestamps: true,
+  minimize: false,
 });
+
+class ContentBlockClass {
+  toJSON() {
+    const {
+      notebook,
+      key,
+      text,
+      type,
+      depth,
+      inlineStyleRanges,
+      entityRanges,
+      data,
+      position,
+      createdAt,
+      updatedAt,
+    } = this;
+
+    return {
+      notebook,
+      key,
+      text,
+      type,
+      depth,
+      inlineStyleRanges,
+      entityRanges,
+      data,
+      position,
+      createdAt: createdAt.toISOString(),
+      updatedAt: updatedAt.toISOString(),
+    };
+  }
+}
+
+contentBlockSchema.loadClass(ContentBlockClass);
 
 const ContentBlock = mongoose.model('ContentBlock', contentBlockSchema);
 

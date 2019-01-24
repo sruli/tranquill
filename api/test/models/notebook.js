@@ -29,7 +29,7 @@ describe('Notebook', () => {
     });
   });
 
-  describe('Notebook.prototype.contentBlocks()', () => {
+  describe('prototype.contentBlocks()', () => {
     let notebook;
 
     beforeEach(async () => {
@@ -55,6 +55,22 @@ describe('Notebook', () => {
       expect(
         await notebook.contentBlocks(),
       ).to.have.lengthOf(2);
+    });
+  });
+
+  describe('prototype.toJSON()', () => {
+    it('renders the notebook as JSON', async () => {
+      const notebook = await notebookFactory.create('notebook');
+      const { id, name, createdAt, updatedAt } = notebook;
+
+      const expected = {
+        id,
+        name,
+        createdAt: createdAt.toISOString(),
+        updatedAt: updatedAt.toISOString(),
+      };
+
+      expect(notebook.toJSON()).to.deep.equal(expected);
     });
   });
 });

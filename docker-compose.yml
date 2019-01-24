@@ -6,6 +6,7 @@ services:
     restart: always
     environment:
       - REACT_APP_PORT=${REACT_APP_PORT}
+      - CLIENT_URL=${CLIENT_URL}
     expose:
       - ${REACT_APP_PORT}
     ports:
@@ -24,6 +25,7 @@ services:
       - APP_SERVER_PORT=${APP_SERVER_PORT}
       - NODE_ENV=${NODE_ENV}
       - MONGO_DB_URI=${MONGO_DB_URI}
+      - API_URL=${API_URL}
     expose:
       - ${APP_SERVER_PORT}
     ports:

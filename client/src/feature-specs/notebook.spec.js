@@ -1,6 +1,7 @@
 import api from '../api';
-import mountApp from '../specHelpers/mountApp';
-import wait from '../specHelpers/wait';
+import mountApp from '../spec/helpers/mountApp';
+import wait from '../spec/helpers/wait';
+import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
 
 jest.mock('../api');
 
@@ -14,7 +15,7 @@ describe('notebook', () => {
 
     beforeEach(async () => {
       window.scrollTo = () => {};
-      api.getNotebook.mockResolvedValue({ name: 'Notebook', id: 1 });
+      api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: 1 }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
@@ -34,7 +35,7 @@ describe('notebook', () => {
 
     beforeEach(async () => {
       window.scrollTo = () => {};
-      api.getNotebook.mockResolvedValue({ name: 'Notebook', id: 1 });
+      api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: 1 }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
@@ -69,7 +70,7 @@ describe('notebook', () => {
 
     beforeEach(async () => {
       window.scrollTo = () => {};
-      api.getNotebook.mockResolvedValue({ name: 'Notebook', id: null });
+      api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: null }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });

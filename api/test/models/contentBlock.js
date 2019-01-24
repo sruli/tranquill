@@ -26,4 +26,37 @@ describe('contentBlock', () => {
       expect(String(contentBlock.notebook)).to.equal(String(notebook.id));
     });
   });
+
+  describe('prototype.toJSON()', () => {
+    it('returns the contentBlock as JSON', async () => {
+      const contentBlock = await contentBlockFactory.create('contentBlock');
+      const {
+        notebook,
+        key,
+        text,
+        type,
+        depth,
+        inlineStyleRanges,
+        entityRanges,
+        data,
+        position,
+        createdAt,
+        updatedAt,
+      } = contentBlock;
+
+      expect(contentBlock.toJSON()).to.deep.equal({
+        notebook,
+        key,
+        text,
+        type,
+        depth,
+        inlineStyleRanges,
+        entityRanges,
+        data,
+        position,
+        createdAt: createdAt.toISOString(),
+        updatedAt: updatedAt.toISOString(),
+      });
+    });
+  });
 });

@@ -33,6 +33,10 @@ const nameReducer = (state = '', action) => {
 
 const editorStateReducer = (state = EditorState.createEmpty(), action) => {
   switch (action.type) {
+    case NOTEBOOK_RETRIEVED: {
+      const { editorState } = action.payload;
+      return EditorState.createWithContent(editorState);
+    }
     case EDITOR_CHANGED: {
       const { editorState } = action.payload;
       return editorState;

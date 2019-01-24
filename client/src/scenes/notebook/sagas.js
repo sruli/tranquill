@@ -15,8 +15,9 @@ function* loadNotebook() {
   if (!match) return;
 
   const { id } = match.params;
-  const notebook = yield call(api.getNotebook, id);
-  yield put(notebookRetrieved(notebook));
+  const response = yield call(api.getNotebook, id);
+  const transmutedResponse = transmuter.getNotebook.fromServer(response);
+  yield put(notebookRetrieved(transmutedResponse));
 }
 
 function* saveEditorState(action) {

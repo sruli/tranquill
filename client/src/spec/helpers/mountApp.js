@@ -5,9 +5,9 @@ import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-reac
 import { createMemoryHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
 import { mount } from 'enzyme';
-import App from '../App';
-import reducers from '../reducers';
-import sagas from '../sagas';
+import App from '../../App';
+import reducers from '../../reducers';
+import sagas from '../../sagas';
 
 const mountApp = ({ path = '/' }) => {
   const history = createMemoryHistory({ initialEntries: [path] });

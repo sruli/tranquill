@@ -4,6 +4,7 @@ const { expect } = require('chai');
 const { OK, NOT_FOUND } = require('http-status');
 const app = require('../../../src/app');
 const notebookFactory = require('../../factories/notebook');
+const { present } = require('../../../src/services/presenters/notebookPresenter');
 
 describe('notebooks routes', () => {
   let notebook;
@@ -14,10 +15,10 @@ describe('notebooks routes', () => {
         notebook = await notebookFactory.create('notebook');
       });
 
-      it('returns the notebook', async () => {
-        const { id, name } = notebook;
+      it('returns a presented notebook', async () => {
         const { body } = await request(app).get(`/v1/notebooks/${notebook.id}`);
-        expect(body).to.deep.equal({ name, id });
+        const presented = await present(notebook);
+        expect(body).to.deep.equal(presented);
       });
 
       it('returns OK status', async () => {
