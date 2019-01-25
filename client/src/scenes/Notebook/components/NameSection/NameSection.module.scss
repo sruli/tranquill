@@ -1,0 +1,16 @@
+@import "../../../../scss/vars.scss";
+
+.nameInput {
+  border: none;
+  height: $font-size-lg;
+  color: $gray-600;
+}
+
+.nameInput:hover {
+  color: $gray-900;
+}
+
+.nameInput:focus {
+  box-shadow: none;
+  color: $gray-900;
+}

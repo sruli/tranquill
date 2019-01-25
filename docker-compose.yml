@@ -3,8 +3,10 @@ services:
   client:
     container_name: tranquill_client
     build: ./client
+    restart: always
     environment:
       - REACT_APP_PORT=${REACT_APP_PORT}
+      - CLIENT_URL=${CLIENT_URL}
     expose:
       - ${REACT_APP_PORT}
     ports:
@@ -12,4 +14,34 @@ services:
     volumes:
       - ./client/src:/tranquill/client/src
       - ./client/public:/tranquill/client/public
+    links:
+      - api
     command: npm start
+  api:
+    container_name: tranquill_api
+    build: ./api
+    restart: always
+    environment:
+      - APP_SERVER_PORT=${APP_SERVER_PORT}
+      - NODE_ENV=${NODE_ENV}
+      - MONGO_DB_URI=${MONGO_DB_URI}
+      - API_URL=${API_URL}
+    expose:
+      - ${APP_SERVER_PORT}
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    volumes:
+      - ./api/src:/tranquill/api/src
+    links:
+      - mongodb
+    command: npm start
+  mongodb:
+    container_name: tranquill_mongodb
+    image: mongo
+    expose:
+      - ${MONGO_DB_PORT}
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - ${MONGO_DB_PORT}:${MONGO_DB_PORT}
