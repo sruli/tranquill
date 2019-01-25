@@ -30,31 +30,50 @@ describe('Notebook', () => {
   });
 
   describe('prototype.contentBlocks()', () => {
-    let notebook;
+    describe('happy path', () => {
+      let notebook;
 
-    beforeEach(async () => {
-      notebook = await notebookFactory.create('notebook');
-      await Promise.all([...Array(2).keys()].map(() => (
-        contentBlockFactory.create('contentBlock', { notebook })
-      )));
+      beforeEach(async () => {
+        notebook = await notebookFactory.create('notebook');
+        await Promise.all([...Array(2).keys()].map(() => (
+          contentBlockFactory.create('contentBlock', { notebook })
+        )));
+      });
+
+      it('retrieves the contentBlocks for a notebook', async () => {
+        const contentBlocks = await notebook.contentBlocks();
+        expect(contentBlocks).to.have.lengthOf(2);
+      });
+
+      it('does not retrieve contentBlocks that belong to a different notebook', async () => {
+        const differentNotebook = await notebookFactory.create('notebook');
+        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook });
+
+        expect(
+          await differentNotebook.contentBlocks(),
+        ).to.have.lengthOf(1);
+
+        expect(
+          await notebook.contentBlocks(),
+        ).to.have.lengthOf(2);
+      });
     });
 
-    it('retrieves the contentBlocks for a notebook', async () => {
-      const contentBlocks = await notebook.contentBlocks();
-      expect(contentBlocks).to.have.lengthOf(2);
-    });
+    describe('when contentBlocks are created out of order', () => {
+      let notebook;
 
-    it('does not retrieve contentBlocks that belong to a different notebook', async () => {
-      const differentNotebook = await notebookFactory.create('notebook');
-      await contentBlockFactory.create('contentBlock', { notebook: differentNotebook });
+      beforeEach(async () => {
+        notebook = await notebookFactory.create('notebook');
+        await contentBlockFactory.create('contentBlock', { notebook, position: 1 });
+        await contentBlockFactory.create('contentBlock', { notebook, position: 0 });
+      });
 
-      expect(
-        await differentNotebook.contentBlocks(),
-      ).to.have.lengthOf(1);
-
-      expect(
-        await notebook.contentBlocks(),
-      ).to.have.lengthOf(2);
+      it('returns them in their proper order', async () => {
+        const contentBlocks = await notebook.contentBlocks();
+        expect(
+          contentBlocks.map(contentBlock => contentBlock.position),
+        ).to.deep.equal([0, 1]);
+      });
     });
   });
 

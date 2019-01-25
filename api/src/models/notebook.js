@@ -10,10 +10,12 @@ const notebookSchema = mongoose.Schema({
 
 // TODO: removing a notebook removes all associated content blocks
 
-// TODO: Order contentBlocks by position
 class NotebookClass {
   async contentBlocks() {
-    const contentBlocks = await ContentBlock.find({ notebook: this });
+    const contentBlocks = await ContentBlock
+      .find({ notebook: this })
+      .sort({ position: 'asc' });
+
     return contentBlocks;
   }
 
