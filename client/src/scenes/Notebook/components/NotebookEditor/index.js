@@ -27,23 +27,31 @@ class NotebookEditor extends React.Component {
   render() {
     const { editorState, onEditorChange } = this.props;
 
-    return (
-      <div className={`${styles.editor} pb-5 h-100 ls-1`}>
-        <Editor
-          editorState={editorState}
-          onChange={onEditorChange}
-          placeholder="Start typing something…" // i18n!
-          keyBindingFn={NotebookEditor.keyBindingFn}
-          ref={this.draftEditor}
-          spellCheck
-        />
-      </div>
-    );
+    if (editorState) {
+      return (
+        <div className={`${styles.editor} pb-5 h-100 ls-1`}>
+          <Editor
+            editorState={editorState}
+            onChange={onEditorChange}
+            placeholder="Start typing something…" // i18n!
+            keyBindingFn={NotebookEditor.keyBindingFn}
+            ref={this.draftEditor}
+            spellCheck
+          />
+        </div>
+      );
+    }
+
+    return null;
   }
 }
 
+NotebookEditor.defaultProps = {
+  editorState: null,
+};
+
 NotebookEditor.propTypes = {
-  editorState: PropTypes.instanceOf(EditorState).isRequired,
+  editorState: PropTypes.instanceOf(EditorState),
   onEditorChange: PropTypes.func.isRequired,
 };
 

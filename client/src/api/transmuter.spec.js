@@ -7,33 +7,51 @@ describe('transmuter', () => {
     describe('fromServer()', () => {
       let response;
 
-      beforeEach(() => {
-        response = getNotebookResponse();
+      describe('happy path', () => {
+        beforeEach(() => {
+          response = getNotebookResponse();
+        });
+
+        it('transmutes the response into an object ready to be used by the notebook UI', () => {
+          const expectedResult = {
+            notebook: {
+              id: '5c374963bb3224058cf7d2aa',
+              name: 'First notebook',
+            },
+            editorState: convertFromRaw({
+              blocks: [
+                {
+                  data: {},
+                  depth: 0,
+                  entityRanges: [],
+                  inlineStyleRanges: [],
+                  key: 'aergj',
+                  text: 'Some text',
+                  type: 'unstyled',
+                },
+              ],
+              entityMap: {},
+            }),
+          };
+
+          expect(transmuter.getNotebook.fromServer(response)).toEqual(expectedResult);
+        });
       });
 
-      it('transmutes the response into an object ready to be used by the notebook UI', () => {
-        const expectedResult = {
-          notebook: {
-            id: '5c374963bb3224058cf7d2aa',
-            name: 'First notebook',
-          },
-          editorState: convertFromRaw({
-            blocks: [
-              {
-                data: {},
-                depth: 0,
-                entityRanges: [],
-                inlineStyleRanges: [],
-                key: 'aergj',
-                text: 'Some text',
-                type: 'unstyled',
-              },
-            ],
-            entityMap: {},
-          }),
-        };
+      describe('when the notebook does not have any content blocks', () => {
+        beforeEach(() => {
+          response = getNotebookResponse({
+            contentBlocks: {
+              href: '',
+              items: [],
+            },
+          });
+        });
 
-        expect(transmuter.getNotebook.fromServer(response)).toEqual(expectedResult);
+        it('sets editorState to null', () => {
+          const transmutedResponse = transmuter.getNotebook.fromServer(response);
+          expect(transmutedResponse.editorState).toBeNull();
+        });
       });
     });
   });

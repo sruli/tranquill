@@ -8,10 +8,12 @@ export default {
         return rest;
       });
 
-      const editorState = convertFromRaw({
-        blocks,
-        entityMap: {},
-      });
+      const editorState = blocks.length
+        ? convertFromRaw({
+          blocks,
+          entityMap: {},
+        })
+        : null;
 
       return {
         editorState,

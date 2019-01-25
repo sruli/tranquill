@@ -30,6 +30,47 @@ describe('notebook', () => {
     });
   });
 
+  describe('when the notebook is loaded and there are contentBlocks', () => {
+    let wrapper;
+
+    beforeEach(async () => {
+      window.scrollTo = () => {};
+      api.getNotebook.mockResolvedValue(getNotebookResponse());
+      const { app } = await mountApp({ path: '/notebooks/1' });
+      wrapper = app.update();
+    });
+
+    afterEach(() => {
+      resetApiMocks();
+      wrapper.unmount();
+    });
+
+    it('loads the contentBlocks into the Editor', () => {
+      expect(wrapper.find('.public-DraftEditor-content').text()).toEqual('Some text');
+    });
+  });
+
+  describe('when the notebook is loaded and there are no contentBlocks', () => {
+    let wrapper;
+
+    beforeEach(async () => {
+      window.scrollTo = () => {};
+      const contentBlocks = { href: '', items: [] };
+      api.getNotebook.mockResolvedValue(getNotebookResponse({ contentBlocks }));
+      const { app } = await mountApp({ path: '/notebooks/1' });
+      wrapper = app.update();
+    });
+
+    afterEach(() => {
+      resetApiMocks();
+      wrapper.unmount();
+    });
+
+    it('loads the Editor in an empty state', () => {
+      expect(wrapper.find('.public-DraftEditor-content').text()).toEqual('');
+    });
+  });
+
   describe('when draft editor state changes', () => {
     let wrapper;
 
