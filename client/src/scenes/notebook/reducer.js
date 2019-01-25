@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { EditorState } from 'draft-js';
 import { NOTEBOOK_RETRIEVED, EDITOR_CHANGED } from './actions';
 import { SCENE_NAME } from './constants';
+import { RESET } from '../../constants';
 
 // selectors
 export const getNotebookId = state => state[SCENE_NAME].id;
@@ -15,6 +16,8 @@ const idReducer = (state = '', action) => {
       const { id } = action.payload.notebook;
       return id;
     }
+    case RESET:
+      return '';
     default:
       return state;
   }

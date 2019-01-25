@@ -20,9 +20,9 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       resetApiMocks();
-      wrapper.unmount();
+      await wrapper.unmount();
     });
 
     it('displays the notebook name', () => {
@@ -40,9 +40,9 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       resetApiMocks();
-      wrapper.unmount();
+      await wrapper.unmount();
     });
 
     it('loads the contentBlocks into the Editor', () => {
@@ -61,9 +61,9 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       resetApiMocks();
-      wrapper.unmount();
+      await wrapper.unmount();
     });
 
     it('loads the Editor in an empty state', () => {
@@ -81,9 +81,9 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       resetApiMocks();
-      wrapper.unmount();
+      await wrapper.unmount();
     });
 
     it('persists the editorState', async () => {
@@ -116,9 +116,9 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
       resetApiMocks();
-      wrapper.unmount();
+      await wrapper.unmount();
     });
 
     it('does not persist editor state', async () => {
