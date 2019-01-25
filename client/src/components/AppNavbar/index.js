@@ -10,6 +10,7 @@ const AppNavbar = () => (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
             <a className="nav-link text-secondary d-flex align-items-center" href="/">
+              { /* i18n! */ }
               Account
               <i className="material-icons">expand_more</i>
             </a>
