@@ -48,6 +48,15 @@ describe('notebook', () => {
     it('loads the contentBlocks into the Editor', () => {
       expect(wrapper.find('.public-DraftEditor-content').text()).toEqual('Some text');
     });
+
+    it('focuses the editor at the end of the text', async () => {
+      await wait(200); // wait for editorState to load and to set the focus
+      wrapper.update();
+      const editorState = wrapper.find('DraftEditor').prop('editorState');
+      const lastContentBlock = editorState.getCurrentContent().getLastBlock();
+      const selection = editorState.getSelection();
+      expect(selection.getFocusOffset()).toEqual(lastContentBlock.getLength());
+    });
   });
 
   describe('when the notebook is loaded and there are no contentBlocks', () => {
