@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
-const ContentBlockFactory = require('../../../services/factories/ContentBlockFactory');
+const ContentBlocksPersistenceManager = require('../../../services/ContentBlocksPersistenceManager');
 const Notebook = require('../../../models/Notebook');
 
 const jsonParser = bodyParser.json();
@@ -26,8 +26,7 @@ router.post('/notebooks/:id/contentBlocks', jsonParser, async (req, res) => {
     });
   }
 
-  const factory = await ContentBlockFactory.init(notebook);
-  blocks.forEach(factory.createOrUpdate, factory);
+  ContentBlocksPersistenceManager.init({ notebook, blocks }).manage();
 
   return res.status(ACCEPTED).end();
 });
