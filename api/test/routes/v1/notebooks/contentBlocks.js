@@ -4,18 +4,18 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
 const app = require('../../../../src/app');
-const ContentBlockFactory = require('../../../../src/services/factories/ContentBlockFactory');
+const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebook');
 
 describe('contentBlocks routes', () => {
   describe('POST /notebooks/:id/contentBlocks', () => {
     context('happy path', () => {
       let notebook;
-      let createOrUpdateSpy;
+      let persistenceManagerSpy;
       let response;
 
       beforeEach(async () => {
-        createOrUpdateSpy = sinon.stub(ContentBlockFactory.prototype, 'createOrUpdate');
+        persistenceManagerSpy = sinon.stub(ContentBlocksPersistenceManager.prototype, 'manage');
         notebook = await notebookFactory.create('notebook');
         response = await request(app)
           .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
@@ -27,11 +27,8 @@ describe('contentBlocks routes', () => {
         sinon.restore();
       });
 
-      it('calls createOrUpdate for each of the blocks', async () => {
-        expect(createOrUpdateSpy).to.have.been.calledThrice;
-
-        const { args } = createOrUpdateSpy.getCall(0);
-        expect(args[0]).to.deep.equal({});
+      it('manages the persistence of the blocks', async () => {
+        expect(persistenceManagerSpy).to.have.been.called;
       });
 
       it('returns ACCEPTED status', () => {
