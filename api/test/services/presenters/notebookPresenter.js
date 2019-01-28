@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const notebookFactory = require('../../factories/notebook');
+const notebookFactory = require('../../factories/notebookFactory');
 const { present } = require('../../../src/services/presenters/notebookPresenter');
 const { present: contentBlocksPresenter } = require('../../../src/services/presenters/contentBlocksPresenter');
 

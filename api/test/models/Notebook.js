@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { expect } = require('chai');
-const notebookFactory = require('../factories/notebook');
-const contentBlockFactory = require('../factories/contentBlock');
+const notebookFactory = require('../factories/notebookFactory');
+const contentBlockFactory = require('../factories/contentBlockFactory');
 
 describe('Notebook', () => {
   it('saves a notebook with timestamps', async () => {

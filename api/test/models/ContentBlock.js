@@ -1,6 +1,6 @@
 const { expect } = require('chai');
-const notebookFactory = require('../factories/notebook');
-const contentBlockFactory = require('../factories/contentBlock');
+const notebookFactory = require('../factories/notebookFactory');
+const contentBlockFactory = require('../factories/contentBlockFactory');
 const ContentBlock = require('../../src/models/ContentBlock');
 
 describe('contentBlock', () => {

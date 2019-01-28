@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 const ContentBlock = require('../../src/models/ContentBlock');
 const ContentBlocksPersistenceManager = require('../../src/services/ContentBlocksPersistenceManager');
-const notebookFactory = require('../factories/notebook');
-const contentBlockFactory = require('../factories/contentBlock');
+const notebookFactory = require('../factories/notebookFactory');
+const contentBlockFactory = require('../factories/contentBlockFactory');
 
 describe('ContentBlocksPersistenceManager', () => {
   describe('prototype.manage()', () => {
