@@ -1,7 +1,7 @@
 const { factory } = require('factory-girl');
 const generateRandomKey = require('../helpers/generateRandomKey');
 const ContentBlock = require('../../src/models/ContentBlock');
-const notebookFactory = require('./notebook');
+const notebookFactory = require('./notebookFactory');
 
 factory.define('contentBlock', ContentBlock, async () => {
   const notebook = await notebookFactory.create('notebook');

@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
 const app = require('../../../../src/app');
 const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
-const notebookFactory = require('../../../factories/notebook');
+const notebookFactory = require('../../../factories/notebookFactory');
 
 describe('contentBlocks routes', () => {
   describe('POST /notebooks/:id/contentBlocks', () => {

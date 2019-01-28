@@ -3,7 +3,7 @@ const request = require('supertest');
 const { expect } = require('chai');
 const { OK, NOT_FOUND } = require('http-status');
 const app = require('../../../src/app');
-const notebookFactory = require('../../factories/notebook');
+const notebookFactory = require('../../factories/notebookFactory');
 const { present } = require('../../../src/services/presenters/notebookPresenter');
 
 describe('notebooks routes', () => {
