@@ -10,6 +10,6 @@ describe('AppNavbar', () => {
 
   it('displays an account link', () => {
     const wrapper = shallow(<AppNavbar />);
-    expect(wrapper.find('.nav-link').text()).toMatch(/account/i);
+    expect(wrapper.find('.nav-link').dive().text()).toMatch(/account/i);
   });
 });
