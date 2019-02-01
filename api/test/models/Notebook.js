@@ -13,19 +13,12 @@ describe('Notebook', () => {
   context('when saving a notebook without a name', () => {
     it('raises a ValidationError', () => {
       const noName = async () => {
-        await notebookFactory.create('noName');
+        await notebookFactory.create('notebook', { name: null });
       };
-      expect(noName()).to.be.rejectedWith(mongoose.Error.ValidationError);
-    });
-
-    it('specifies that name is required', async () => {
-      try {
-        await notebookFactory.create('noName');
-        throw new Error('Force an exeption so that expectations execute no matter what.');
-      } catch (e) {
-        expect(e.errors).to.have.property('name');
-        expect(e.errors.name.message).to.equal('Path `name` is required.');
-      }
+      expect(noName()).to.be.rejectedWith(
+        mongoose.Error.ValidationError,
+        'Path `name` is required.',
+      );
     });
   });
 

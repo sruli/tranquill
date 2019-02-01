@@ -5,8 +5,4 @@ factory.define('notebook', Notebook, {
   name: 'notebook name',
 });
 
-factory.extend('notebook', 'noName', {
-  name: null,
-});
-
 module.exports = factory;
