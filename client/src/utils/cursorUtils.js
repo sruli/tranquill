@@ -1,13 +1,14 @@
 const viewportHeight = document.documentElement.clientHeight;
 let isLastLine = false;
 
+const scrollViewport = function srollViewport() {
+  setTimeout(() => window.scrollBy(0, 50), 1);
+};
+
 const enforceCursorLocation = function enforceCursorLocation(e) {
   if (!window.getSelection) return;
 
-  if (e && e.key === 'Enter' && isLastLine) {
-    setTimeout(() => window.scrollBy(0, 50), 1);
-    return;
-  }
+  if (e && e.key === 'Enter' && isLastLine) return scrollViewport();
 
   const selection = window.getSelection();
   const range = selection.rangeCount > 0 && selection.getRangeAt(0);
@@ -24,7 +25,7 @@ const enforceCursorLocation = function enforceCursorLocation(e) {
 
   isLastLine = (viewportHeight - top) < 130;
 
-  if ((viewportHeight - top) < 100) window.scrollBy(0, 30);
+  if ((viewportHeight - top) < 100) scrollViewport();
 };
 
 export default enforceCursorLocation;
