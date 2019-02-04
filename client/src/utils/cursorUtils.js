@@ -1,13 +1,14 @@
-// This implementation needs to be better. It needs to take into account hitting return key as well.
-// A possibly solution could be also to check the x position of the cursor in relation to it's
-// container and know when it is at the end. Once there is no more room then we know that the next
-// key stroke will have to be pushed up a line.
+const viewportHeight = document.documentElement.clientHeight;
+let isLastLine = false;
 
-const VIEWPORT_HEIGHT = document.documentElement.clientHeight;
+const scrollViewport = function srollViewport() {
+  setTimeout(() => window.scrollBy(0, 50), 1);
+};
 
-// eslint-disable-next-line import/prefer-default-export
-export const enforceCursorLocation = function enforceCursorLocation() {
+const enforceCursorLocation = function enforceCursorLocation(e) {
   if (!window.getSelection) return;
+
+  if (e && e.key === 'Enter' && isLastLine) return scrollViewport();
 
   const selection = window.getSelection();
   const range = selection.rangeCount > 0 && selection.getRangeAt(0);
@@ -22,5 +23,9 @@ export const enforceCursorLocation = function enforceCursorLocation() {
   const { top = 0 } = clonedRange.getBoundingClientRect();
   clonedRange.detach();
 
-  if ((VIEWPORT_HEIGHT - top) < 100) window.scrollBy(0, 30);
+  isLastLine = (viewportHeight - top) < 130;
+
+  if ((viewportHeight - top) < 100) scrollViewport();
 };
+
+export default enforceCursorLocation;
