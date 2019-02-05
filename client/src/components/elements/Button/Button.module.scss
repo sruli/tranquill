@@ -1,0 +1,23 @@
+@import '../../../scss/vars';
+
+.btn {
+  border-radius: .125rem;
+}
+
+.lgBtn {
+  font-size: 1rem !important;
+}
+
+.outlineBtn {
+  font-size: .875rem;
+}
+
+.outlineBtnPrimary {
+  @extend .outlineBtn;
+
+  &:hover {
+    color: lighten($primary, 10%);
+    background-color: transparent;
+    border-color: lighten($primary, 10%);
+  }
+}

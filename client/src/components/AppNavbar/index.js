@@ -1,5 +1,6 @@
 import React from 'react';
-import TranquillLogo from './TranquillLogo';
+import { Button } from '../elements';
+import TranquillLogo from '../TranquillLogo';
 import styles from './AppNavbar.module.scss';
 
 const AppNavbar = () => (
@@ -9,11 +10,9 @@ const AppNavbar = () => (
         <a className="navbar-brand" href="/"><TranquillLogo /></a>
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className="nav-link text-secondary d-flex align-items-center" href="/">
-              { /* i18n! */ }
+            <Button className="nav-link text-secondary">
               Account
-              <i className="material-icons">expand_more</i>
-            </a>
+            </Button>
           </li>
         </ul>
       </nav>
