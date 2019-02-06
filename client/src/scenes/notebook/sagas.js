@@ -2,10 +2,9 @@ import { takeEvery, debounce, select, call, put } from 'redux-saga/effects';
 import { matchPath } from 'react-router-dom';
 import { LOCATION_CHANGE, getLocation } from 'connected-react-router';
 import { convertToRaw } from 'draft-js';
-import { DEBOUNCE_MILISECONDS } from '../../constants';
 import api from '../../api';
 import transmuter from '../../api/transmuter';
-import { SCENE_PATH } from './constants';
+import { SCENE_PATH, DEBOUNCE_MILISECONDS } from './constants';
 import { notebookRetrieved, EDITOR_CHANGED } from './actions';
 import { getNotebookId } from './reducer';
 

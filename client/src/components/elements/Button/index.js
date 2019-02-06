@@ -15,11 +15,12 @@ const getButtonTypeClass = function getButtonTypeClass(type) {
   return typeMap[type] || '';
 };
 
-const Button = ({ type, className, children }) => {
+const Button = ({ type, className, disabled, children }) => {
   const typeClass = getButtonTypeClass(type);
 
   return (
     <button
+      disabled={disabled}
       type="submit"
       className={`btn ${typeClass} ${className} ${styles.btn}`}
     >
@@ -31,11 +32,13 @@ const Button = ({ type, className, children }) => {
 Button.defaultProps = {
   type: null,
   className: '',
+  disabled: false,
 };
 
 Button.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

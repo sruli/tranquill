@@ -14,7 +14,10 @@ const saveEditorState = async ({ notebookId, rawEditorState }) => {
   });
 };
 
+const signInUser = () => {};
+
 export default {
   getNotebook,
   saveEditorState,
+  signInUser,
 };
