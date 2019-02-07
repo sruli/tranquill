@@ -8,7 +8,7 @@ const seenKeys = {};
 const MULTIPLIER = 2 ** 24;
 function generateRandomKey() {
   let key;
-  while (key === undefined || has.call(seenKeys, key) || !Number.isNaN(+key)) {
+  while (key === undefined || has(seenKeys, key) || !Number.isNaN(+key)) {
     key = Math.floor(Math.random() * MULTIPLIER).toString(32);
   }
   seenKeys[key] = true;
