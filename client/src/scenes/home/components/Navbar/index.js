@@ -1,6 +1,7 @@
 import React from 'react';
 import TranquillLogo from '../../../../components/TranquillLogo';
-import { Button } from '../../../../components/elements';
+import { Link } from '../../../../components/elements';
+import { SCENE_PATH as signInPath } from '../../../sign-in';
 import styles from './Navbar.module.scss';
 
 const Navbar = () => (
@@ -10,7 +11,7 @@ const Navbar = () => (
         <a className="navbar-brand" href="/"><TranquillLogo /></a>
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <Button type="outline-primary">Sign in</Button>
+            <Link href={signInPath} type="btn-outline-primary">Sign in</Link>
           </li>
         </ul>
       </nav>

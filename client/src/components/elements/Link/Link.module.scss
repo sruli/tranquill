@@ -1,0 +1,16 @@
+@import '../../../scss/vars';
+
+.outlineBtn {
+  font-size: .875rem;
+}
+
+.outlineBtnPrimary {
+  @extend .outlineBtn;
+
+  &:hover {
+    color: lighten($primary, 10%);
+    background-color: transparent;
+    border-color: lighten($primary, 10%);
+  }
+}
+
