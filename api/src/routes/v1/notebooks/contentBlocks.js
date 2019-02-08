@@ -1,11 +1,11 @@
-const express = require('express');
+const { Router } = require('express');
 const bodyParser = require('body-parser');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
 const ContentBlocksPersistenceManager = require('../../../services/ContentBlocksPersistenceManager');
 const Notebook = require('../../../models/Notebook');
 
 const jsonParser = bodyParser.json();
-const router = express.Router();
+const router = Router();
 
 // TODO: Add GET to align with the href in the contentBlocksPresenter
 
