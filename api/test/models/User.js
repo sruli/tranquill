@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { expect } = require('chai');
+const User = require('../../src/models/User');
 const userFactory = require('../factories/userFactory');
 
 describe('User', () => {
@@ -71,6 +72,33 @@ describe('User', () => {
   it('encrypts passwords', async () => {
     const user = await userFactory.create('user', { password: 'password123' });
     expect(user.password).not.to.equal('password123');
+  });
+
+  describe('.findByEmailAndPassword', () => {
+    context('when user exists with email and password', () => {
+      it('finds the user', async () => {
+        const user = await userFactory.create('user', { password: 'myawesomepassword' });
+        const { email } = user;
+        const found = await User.findByEmailAndPassword({ email, password: 'myawesomepassword' });
+        expect(found.toObject()).to.deep.equal(user.toObject());
+      });
+    });
+
+    context('when no users exists with email', () => {
+      it('returns null', async () => {
+        const found = await User.findByEmailAndPassword({ email: 'doesnt@exist.com' });
+        expect(found).to.be.null;
+      });
+    });
+
+    context('when password does not match', () => {
+      it('returns null', async () => {
+        const user = await userFactory.create('user', { password: 'myawesomepassword' });
+        const { email } = user;
+        const found = await User.findByEmailAndPassword({ email, password: 'fake' });
+        expect(found).to.be.null;
+      });
+    });
   });
 
   describe('prototype.correctPassword()', () => {

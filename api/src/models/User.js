@@ -32,6 +32,14 @@ userSchema.pre('save', async function encryptPassword(done) {
 });
 
 class UserClass {
+  static async findByEmailAndPassword({ email, password }) {
+    const user = await this.findOne({ email });
+    if (!user) return null;
+    const correct = await bcrypt.compare(password, user.password);
+    if (correct) return user;
+    return null;
+  }
+
   async correctPassword(password) {
     const correct = await bcrypt.compare(password, this.password);
     return correct;
