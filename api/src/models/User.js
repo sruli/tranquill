@@ -16,7 +16,9 @@ const userSchema = mongoose.Schema({
 userSchema.path('email').validate({
   validator: async function validateEmailUniqueness(email) {
     const existing = await this.model('User').findOne({ email });
-    return !existing;
+    if (!existing) return true;
+    if (existing.id === this.id) return true;
+    return false;
   },
   message: 'Email has already been taken.',
 });

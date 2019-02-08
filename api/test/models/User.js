@@ -37,6 +37,12 @@ describe('User', () => {
         'Email has already been taken.',
       );
     });
+
+    it('does not raise a validation exception when updating existing user', async () => {
+      const user = await userFactory.create('user', { email: 'user@example.com' });
+      user.firstName = 'updated';
+      expect(user.save()).to.not.be.rejectedWith(mongoose.Error.ValidationError);
+    });
   });
 
   describe('password validation', () => {
