@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const jwt = require('jsonwebtoken');
 const userFactory = require('../../factories/userFactory');
 const TokenGenerator = require('../../../src/services/jwt/TokenGenerator');
+const expectJWT = require('../../helpers/expectJWT');
 
 describe('TokenGenerator', () => {
   describe('prototype.generateToken()', () => {
@@ -10,11 +11,12 @@ describe('TokenGenerator', () => {
 
     beforeEach(async () => {
       user = await userFactory.create('user');
-      token = await TokenGenerator.init({ user }).generateToken();
+      const { id: userId } = user;
+      token = await TokenGenerator.init({ userId }).generateToken();
     });
 
     it('generates a jwt token', () => {
-      expect(token.split('.')).to.have.lengthOf(3);
+      expectJWT(token);
     });
 
     it('sets the issued at time', () => {

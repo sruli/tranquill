@@ -2,9 +2,16 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const { expect } = require('chai');
 const { OK, NOT_FOUND } = require('http-status');
-const app = require('../../../src/app');
+const proxyquire = require('proxyquire');
 const notebookFactory = require('../../factories/notebookFactory');
 const { present } = require('../../../src/services/presenters/notebookPresenter');
+const stubMiddleware = require('../../helpers/stubMiddleware');
+
+const app = stubMiddleware({
+  './notebooks': proxyquire('../../../src/routes/v1/notebooks', {
+    '../../middlewares/ensureAuthentication': (req, res, next) => next(),
+  }),
+});
 
 describe('notebooks routes', () => {
   let notebook;

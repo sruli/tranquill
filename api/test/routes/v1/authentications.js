@@ -4,6 +4,7 @@ const { NO_CONTENT, BAD_REQUEST } = require('http-status');
 const app = require('../../../src/app');
 const userFactory = require('../../factories/userFactory');
 const parseCookie = require('../../helpers/parseCookie');
+const expectJWT = require('../../helpers/expectJWT');
 
 describe('authentications routes', () => {
   describe('POST /authentications', () => {
@@ -85,21 +86,20 @@ describe('authentications routes', () => {
 
       it('sets jwt cookie', () => {
         const cookies = response.header['set-cookie'];
-        const jwtCookie = cookies.find(cookie => cookie.match(/authJwt/));
-        const jwt = parseCookie(jwtCookie).authJwt;
-        const parts = jwt.split('.');
-        expect(parts).to.have.lengthOf(3);
+        const jwtCookie = cookies.find(cookie => cookie.match(/authJWT/));
+        const jwt = parseCookie(jwtCookie).authJWT;
+        expectJWT(jwt);
       });
 
       it('sets jwt cookie as HttpOnly', () => {
         const cookies = response.header['set-cookie'];
-        const jwtCookie = cookies.find(cookie => cookie.match(/authJwt/));
+        const jwtCookie = cookies.find(cookie => cookie.match(/authJWT/));
         expect(parseCookie(jwtCookie).HttpOnly).to.be.true;
       });
 
       it('sets jwt cookie as Secure', () => {
         const cookies = response.header['set-cookie'];
-        const jwtCookie = cookies.find(cookie => cookie.match(/authJwt/));
+        const jwtCookie = cookies.find(cookie => cookie.match(/authJWT/));
         expect(parseCookie(jwtCookie).Secure).to.be.true;
       });
     });

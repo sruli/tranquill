@@ -18,8 +18,9 @@ router.post('/authentications', jsonParser, async (req, res) => {
   const user = await User.findByEmailAndPassword({ email, password });
   if (!user) return res.status(NOT_FOUND).end();
 
-  const token = await TokenGenerator.init({ user }).generateToken();
-  res.cookie('authJwt', token, { httpOnly: true, secure: !devEnv() });
+  const { id: userId } = user;
+  const token = await TokenGenerator.init({ userId }).generateToken();
+  res.cookie('authJWT', token, { httpOnly: true, secure: !devEnv() });
 
   return res.status(NO_CONTENT).end();
 });

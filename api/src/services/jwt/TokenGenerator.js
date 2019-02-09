@@ -11,12 +11,12 @@ class TokenGenerator {
     return tokenGenerator;
   }
 
-  constructor({ user }) {
-    this.user = user;
+  constructor({ userId }) {
+    this.userId = userId;
   }
 
   async generateToken() {
-    const options = { ...defaultOptions, subject: this.user.id };
+    const options = { ...defaultOptions, subject: this.userId };
     const token = await jwt.sign({}, process.env.JWT_SECRET, options);
     return token;
   }

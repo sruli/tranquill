@@ -2,10 +2,17 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const { expect } = require('chai');
 const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
-const app = require('../../../../src/app');
 const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebookFactory');
+const stubMiddleware = require('../../../helpers/stubMiddleware');
+
+const app = stubMiddleware({
+  './notebooks/contentBlocks': proxyquire('../../../../src/routes/v1/notebooks/contentBlocks', {
+    '../../../middlewares/ensureAuthentication': (req, res, next) => next(),
+  }),
+});
 
 describe('contentBlocks routes', () => {
   describe('POST /notebooks/:id/contentBlocks', () => {
@@ -24,7 +31,7 @@ describe('contentBlocks routes', () => {
       });
 
       afterEach(() => {
-        sinon.restore();
+        persistenceManagerSpy.restore();
       });
 
       it('manages the persistence of the blocks', async () => {
