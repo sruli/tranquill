@@ -22,10 +22,14 @@ describe('notebooks routes', () => {
         notebook = await notebookFactory.create('notebook');
       });
 
-      it('returns a presented notebook', async () => {
+      it('returns a presented notebook with contentBlocks', async () => {
         const { body } = await request(app).get(`/v1/notebooks/${notebook.id}`);
-        const presented = await NotebookPresenter.init({ notebook }).present();
+        const presented = await NotebookPresenter
+          .init({ notebook })
+          .present({ includeContentBlocks: true });
+
         expect(body).to.deep.equal(presented);
+        expect(body).to.have.own.property('contentBlocks');
       });
 
       it('returns OK status', async () => {

@@ -12,12 +12,17 @@ class NotebookPresenter {
     this.notebook = notebook;
   }
 
-  async present() {
-    return {
+  async present({ includeContentBlocks = false } = {}) {
+    const presented = {
       ...this.notebook.toJSON(),
       href: `${API_URL}/notebooks/${this.notebook.id}`,
-      contentBlocks: await presentContentBlocks(this.notebook),
     };
+
+    if (includeContentBlocks) {
+      presented.contentBlocks = await presentContentBlocks(this.notebook);
+    }
+
+    return presented;
   }
 }
 

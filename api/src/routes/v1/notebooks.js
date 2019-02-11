@@ -14,8 +14,13 @@ router.get('/notebooks/:id', ensureAuthentication, async (req, res) => {
     const presentedNotebook = await NotebookPresenter.init({ notebook }).present();
     return res.status(OK).json(presentedNotebook);
   }
+  if (!notebook) return res.status(NOT_FOUND).end();
 
-  return res.status(NOT_FOUND).end();
+  const presentedNotebook = await NotebookPresenter
+    .init({ notebook })
+    .present({ includeContentBlocks: true });
+
+  return res.status(OK).json(presentedNotebook);
 });
 
 module.exports = router;

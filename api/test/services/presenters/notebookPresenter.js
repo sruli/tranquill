@@ -14,7 +14,21 @@ describe('NotebookPresenter', () => {
       expect(presented).to.deep.equal({
         ...notebook.toJSON(),
         href: `${API_URL}/notebooks/${notebook.id}`,
-        contentBlocks: await contentBlocksPresenter(notebook),
+      });
+    });
+
+    context('when includeContentBlocks option is true', () => {
+      it('includes the contentBlocks for the notebook', async () => {
+        const notebook = await notebookFactory.create('notebook');
+        const presented = await NotebookPresenter
+          .init({ notebook })
+          .present({ includeContentBlocks: true });
+
+        expect(presented).to.deep.equal({
+          ...notebook.toJSON(),
+          href: `${API_URL}/notebooks/${notebook.id}`,
+          contentBlocks: await contentBlocksPresenter(notebook),
+        });
       });
     });
   });
