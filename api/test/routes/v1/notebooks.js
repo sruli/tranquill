@@ -4,8 +4,8 @@ const { expect } = require('chai');
 const { OK, NOT_FOUND } = require('http-status');
 const proxyquire = require('proxyquire');
 const notebookFactory = require('../../factories/notebookFactory');
-const { present } = require('../../../src/services/presenters/notebookPresenter');
 const stubMiddleware = require('../../helpers/stubMiddleware');
+const NotebookPresenter = require('../../../src/services/presenters/NotebookPresenter');
 
 const app = stubMiddleware({
   './notebooks': proxyquire('../../../src/routes/v1/notebooks', {
@@ -24,7 +24,7 @@ describe('notebooks routes', () => {
 
       it('returns a presented notebook', async () => {
         const { body } = await request(app).get(`/v1/notebooks/${notebook.id}`);
-        const presented = await present(notebook);
+        const presented = await NotebookPresenter.init({ notebook }).present();
         expect(body).to.deep.equal(presented);
       });
 
