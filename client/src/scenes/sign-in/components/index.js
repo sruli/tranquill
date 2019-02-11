@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import Errors from './Errors';
 import { Input, Button } from '../../../components/elements';
 import TranquillLogo from '../../../components/TranquillLogo';
-import { getEmail, getPassword, getErrors } from '../reducer';
+import { getEmail, getPassword, getErrors, getSubmitting } from '../reducer';
 import { formChanged, formSubmitted } from '../actions';
 import styles from './SignIn.module.scss';
 
-const hasErrors = ({ email, password }) => !!email || !!password;
-
-const SignIn = ({ email, password, onFormChanged, onSubmit, errors }) => (
+const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }) => (
   <React.Fragment>
     <div className="container-fluid min-vh-100">
       <div className="row min-vh-100 flex-column justify-content-center">
@@ -22,7 +20,7 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors }) => (
             <h6 className="text-muted font-weight-normal">Sign in to your Tranquill account</h6>
           </div>
 
-          <Errors hasErrors={hasErrors(errors)} errors={errors} />
+          <Errors errors={errors} />
 
           <div className="row">
             <div className="col">
@@ -49,7 +47,9 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors }) => (
                 </div>
                 <div className="form-row mb-md-3">
                   <div className="col">
-                    <Button disabled={hasErrors(errors)} className="w-100" type="lg-primary">Sign in</Button>
+                    <Button disabled={errors.length > 0 || submitting} className="w-100" type="lg-primary">
+                      Sign in
+                    </Button>
                   </div>
                 </div>
               </form>
@@ -75,16 +75,15 @@ SignIn.propTypes = {
   password: PropTypes.string.isRequired,
   onFormChanged: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  errors: PropTypes.shape({
-    email: PropTypes.bool,
-    password: PropTypes.bool,
-  }).isRequired,
+  errors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  submitting: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   email: getEmail(state),
   password: getPassword(state),
   errors: getErrors(state),
+  submitting: getSubmitting(state),
 });
 
 const mapDispatchToProps = dispatch => ({

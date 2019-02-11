@@ -1,9 +1,15 @@
-import { takeEvery, debounce, select, put, call } from 'redux-saga/effects';
+import { takeLatest, debounce, select, put, call } from 'redux-saga/effects';
 import api from '../../api';
 import validateForm from './validateForm';
-import { formValidated, FORM_SUBMITTED, FORM_CHANGED } from './actions';
 import { getEmail, getPassword, getValidate } from './reducer';
 import { DEBOUNCE_MILISECONDS } from './constants';
+import {
+  formValidated,
+  authenticationCompleted,
+  authenticationStarted,
+  FORM_SUBMITTED,
+  FORM_CHANGED,
+} from './actions';
 
 function* onFormChanged() {
   const validate = yield select(getValidate);
@@ -12,21 +18,28 @@ function* onFormChanged() {
   const email = yield select(getEmail);
   const password = yield select(getPassword);
   const { errors } = yield call(validateForm, { email, password });
+
   yield put(formValidated(errors));
 }
 
-function* onFormSubmitted() {
+function* submitForm() {
   const email = yield select(getEmail);
   const password = yield select(getPassword);
-  const { valid, errors } = yield call(validateForm, { email, password });
+  const { errors } = yield call(validateForm, { email, password });
+
   yield put(formValidated(errors));
-  if (!valid) return;
-  yield call(api.signInUser, { email, password });
+
+  if (errors.length > 0) return;
+
+  yield put(authenticationStarted());
+  const { ok, status } = yield call(api.signInUser, { email, password });
+
+  yield put(authenticationCompleted({ ok, status }));
 }
 
 function* signInSaga() {
   yield debounce(DEBOUNCE_MILISECONDS, FORM_CHANGED, onFormChanged);
-  yield takeEvery(FORM_SUBMITTED, onFormSubmitted);
+  yield takeLatest(FORM_SUBMITTED, submitForm);
 }
 
 export default signInSaga;

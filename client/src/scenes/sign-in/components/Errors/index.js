@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Errors.module.scss';
 
-const Message = ({ visible, content }) => (
-  <div className={`row mb-md-1 ${visible ? 'visible' : 'invisible'}`}>
+const Message = ({ content }) => (
+  <div className="row mb-md-1">
     <div className="col">
       { content }
     </div>
@@ -12,24 +12,18 @@ const Message = ({ visible, content }) => (
 
 Message.propTypes = {
   content: PropTypes.string.isRequired,
-  visible: PropTypes.bool.isRequired,
 };
 
-const Errors = ({ hasErrors, errors: { email, password } }) => (
-  <div className={`row ls-2 font-italic text-danger text-center ${styles.errors} ${hasErrors ? 'visble' : 'invisible'}`}>
+const Errors = ({ errors }) => (
+  <div className={`row ls-2 font-italic text-danger text-center ${styles.errors} ${errors.length > 0 ? 'visble' : 'invisible'}`}>
     <div className="col">
-      { <Message visible={!!email} content="Enter an email" /> }
-      { <Message visible={!!password} content="Enter a password" /> }
+      { errors.map(error => <Message content={error} key={error} />) }
     </div>
   </div>
 );
 
 Errors.propTypes = {
-  hasErrors: PropTypes.bool.isRequired,
-  errors: PropTypes.shape({
-    email: PropTypes.bool,
-    password: PropTypes.bool,
-  }).isRequired,
+  errors: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Errors;
