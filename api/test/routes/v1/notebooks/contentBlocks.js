@@ -4,6 +4,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
+const Notebook = require('../../../../src/models/Notebook');
 const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebookFactory');
 const { stubMiddleware } = require('../../../helpers/stubMiddleware');
@@ -19,27 +20,44 @@ describe('contentBlocks routes', () => {
     context('happy path', () => {
       let notebook;
       let persistenceManagerSpy;
-      let response;
+
+      const makeRequest = function makeRequest() {
+        return request(app)
+          .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
+          .send({ blocks: [{}, {}, {}] })
+          .accept('Accept', 'application/json');
+      };
 
       beforeEach(async () => {
         persistenceManagerSpy = sinon.stub(ContentBlocksPersistenceManager.prototype, 'manage');
         notebook = await notebookFactory.create('notebook');
-        response = await request(app)
-          .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
-          .send({ blocks: [{}, {}, {}] })
-          .accept('Accept', 'application/json');
       });
 
-      afterEach(() => {
+      afterEach(async () => {
         persistenceManagerSpy.restore();
       });
 
       it('manages the persistence of the blocks', async () => {
+        await makeRequest();
         expect(persistenceManagerSpy).to.have.been.called;
       });
 
-      it('returns ACCEPTED status', () => {
-        expect(response.statusCode).to.equal(ACCEPTED);
+      it('updates the updatedAt of the notebook', async () => {
+        const queryUpdatedAt = async () => {
+          const { updatedAt } = await Notebook.findById(notebook.id);
+          return updatedAt;
+        };
+
+        return expect(
+          () => makeRequest(),
+        ).to.alter(
+          () => queryUpdatedAt(),
+        );
+      });
+
+      it('returns ACCEPTED status', async () => {
+        const { statusCode } = await makeRequest();
+        expect(statusCode).to.equal(ACCEPTED);
       });
     });
 
