@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Notebook = require('./Notebook');
 const { SALT_ROUNDS } = require('../../config/bcrypt');
 
 // eslint-disable-next-line no-useless-escape
@@ -43,6 +44,11 @@ class UserClass {
   async correctPassword(password) {
     const correct = await bcrypt.compare(password, this.password);
     return correct;
+  }
+
+  async notebooks({ sort } = { sort: { createdAt: 'asc' } }) {
+    const notebooks = await Notebook.find({ user: this }).sort({ ...sort });
+    return notebooks;
   }
 }
 

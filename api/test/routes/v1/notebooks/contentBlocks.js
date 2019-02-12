@@ -6,7 +6,7 @@ const proxyquire = require('proxyquire');
 const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
 const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebookFactory');
-const stubMiddleware = require('../../../helpers/stubMiddleware');
+const { stubMiddleware } = require('../../../helpers/stubMiddleware');
 
 const app = stubMiddleware({
   './notebooks/contentBlocks': proxyquire('../../../../src/routes/v1/notebooks/contentBlocks', {

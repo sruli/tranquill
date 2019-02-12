@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const { expect } = require('chai');
+const moment = require('moment');
 const User = require('../../src/models/User');
 const userFactory = require('../factories/userFactory');
+const notebookFactory = require('../factories/notebookFactory');
 
 describe('User', () => {
   describe('email validation', () => {
@@ -116,6 +118,34 @@ describe('User', () => {
     it('returns false when password is not correct', async () => {
       const correct = await user.correctPassword('incorrect');
       expect(correct).to.be.false;
+    });
+  });
+
+  describe('prototype.notebooks()', () => {
+    let user;
+    let notebook1;
+    let notebook2;
+
+    beforeEach(async () => {
+      user = await userFactory.create('user');
+      const createdAt = moment().subtract(1, 'day').toDate();
+      notebook1 = await notebookFactory.create('notebook', { user, createdAt });
+      notebook2 = await notebookFactory.create('notebook', { user });
+      await notebookFactory.create('notebook');
+    });
+
+    it('returns all the notebooks for a user ordered by createdAt asc', async () => {
+      const notebooks = await user.notebooks();
+      expect(notebooks).to.have.lengthOf(2);
+      expect(notebooks[0].toJSON()).to.eql(notebook1.toJSON());
+      expect(notebooks[1].toJSON()).to.eql(notebook2.toJSON());
+    });
+
+    it('accepts an order argument', async () => {
+      const notebooks = await user.notebooks({ sort: { createdAt: 'desc' } });
+      expect(notebooks).to.have.lengthOf(2);
+      expect(notebooks[0].toJSON()).to.eql(notebook2.toJSON());
+      expect(notebooks[1].toJSON()).to.eql(notebook1.toJSON());
     });
   });
 });
