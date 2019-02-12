@@ -3,7 +3,7 @@ const request = require('supertest');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
+const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
 const Notebook = require('../../../../src/models/Notebook');
 const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebookFactory');
@@ -92,9 +92,9 @@ describe('contentBlocks routes', () => {
           .accept('Accept', 'application/json');
       });
 
-      it('returns UNPROCESSABLE_ENTITY status', () => {
+      it('returns BAD_REQUEST status', () => {
         const { statusCode } = response;
-        expect(statusCode).to.equal(UNPROCESSABLE_ENTITY);
+        expect(statusCode).to.equal(BAD_REQUEST);
       });
 
       it('provides an error message', () => {
@@ -114,9 +114,9 @@ describe('contentBlocks routes', () => {
           .accept('Accept', 'application/json');
       });
 
-      it('returns UNPROCESSABLE_ENTITY status', () => {
+      it('returns BAD_REQUEST status', () => {
         const { statusCode } = response;
-        expect(statusCode).to.equal(UNPROCESSABLE_ENTITY);
+        expect(statusCode).to.equal(BAD_REQUEST);
       });
 
       it('provides an error message', () => {

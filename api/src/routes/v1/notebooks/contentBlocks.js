@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const bodyParser = require('body-parser');
-const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
+const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
 const ContentBlocksPersistenceManager = require('../../../services/ContentBlocksPersistenceManager');
 const Notebook = require('../../../models/Notebook');
 const ensureAuthentication = require('../../../middlewares/ensureAuthentication');
@@ -23,6 +23,7 @@ router.post('/notebooks/:id/contentBlocks', ensureAuthentication, jsonParser, as
   const { blocks } = req.body;
 
   if (!blocks || !Array.isArray(blocks)) {
+    return res.status(BAD_REQUEST).json({
       message: 'Request must contain an array of blocks',
     });
   }
