@@ -3,6 +3,7 @@ const ContentBlock = require('../../src/models/ContentBlock');
 const ContentBlocksPersistenceManager = require('../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../factories/notebookFactory');
 const contentBlockFactory = require('../factories/contentBlockFactory');
+const timesMap = require('../helpers/timesMap');
 
 describe('ContentBlocksPersistenceManager', () => {
   describe('prototype.manage()', () => {
@@ -46,9 +47,7 @@ describe('ContentBlocksPersistenceManager', () => {
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
         contentBlocks = await Promise.all(
-          [...Array(2).keys()].map(() => (
-            contentBlockFactory.create('contentBlock', { notebook })
-          )),
+          timesMap(2, () => contentBlockFactory.create('contentBlock', { notebook })),
         );
         blocks = [{ ...contentBlocks[0].toObject(), text: 'New text' }];
       });

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { expect } = require('chai');
 const notebookFactory = require('../factories/notebookFactory');
 const contentBlockFactory = require('../factories/contentBlockFactory');
+const timesMap = require('../helpers/timesMap');
 
 describe('Notebook', () => {
   it('saves a notebook with timestamps', async () => {
@@ -28,9 +29,9 @@ describe('Notebook', () => {
 
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
-        await Promise.all([...Array(2).keys()].map(() => (
-          contentBlockFactory.create('contentBlock', { notebook })
-        )));
+        await Promise.all(
+          timesMap(2, () => contentBlockFactory.create('contentBlock', { notebook })),
+        );
       });
 
       it('retrieves the contentBlocks for a notebook', async () => {
