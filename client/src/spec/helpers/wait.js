@@ -1,4 +1,4 @@
-const wait = (timeoutLength = 1) => (
+const wait = (timeoutLength = 5) => (
   new Promise(resolve => setTimeout(resolve, timeoutLength))
 );
 
