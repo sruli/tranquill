@@ -1,5 +1,7 @@
-import { takeLatest, debounce, select, put, call } from 'redux-saga/effects';
+import { takeEvery, takeLatest, debounce, select, put, call } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 import api from '../../api';
+import transmuter from '../../api/transmuter';
 import validateForm from './validateForm';
 import { getEmail, getPassword, getValidate } from './reducer';
 import { DEBOUNCE_MILISECONDS } from './constants';
@@ -9,6 +11,7 @@ import {
   authenticationStarted,
   FORM_SUBMITTED,
   FORM_CHANGED,
+  AUTHENTICATION_COMPLETED,
 } from './actions';
 
 function* onFormChanged() {
@@ -37,9 +40,23 @@ function* submitForm() {
   yield put(authenticationCompleted({ ok, status }));
 }
 
+function* redirectUser(action) {
+  const { error } = action;
+  if (error) return;
+
+  const response = yield call(api.getNotebooks);
+  const { notebookPath } = transmuter.getNotebooks.fromServer(response);
+  if (notebookPath) {
+    yield put(push(notebookPath));
+  } else {
+    // Figure out what do do when there are no notebooks
+  }
+}
+
 function* signInSaga() {
   yield debounce(DEBOUNCE_MILISECONDS, FORM_CHANGED, onFormChanged);
   yield takeLatest(FORM_SUBMITTED, submitForm);
+  yield takeEvery(AUTHENTICATION_COMPLETED, redirectUser);
 }
 
 export default signInSaga;

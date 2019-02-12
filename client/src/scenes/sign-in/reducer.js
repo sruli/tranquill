@@ -74,6 +74,8 @@ const submittingReducer = (state = false, action) => {
   switch (action.type) {
     case AUTHENTICATION_STARTED:
       return true;
+    case AUTHENTICATION_COMPLETED:
+      return false;
     default:
       return state;
   }
