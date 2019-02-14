@@ -1,7 +1,15 @@
+@import '../../../scss/vars';
+
 .btn {
   border-radius: .125rem;
 }
 
 .lgBtn {
   font-size: 1rem !important;
+}
+
+.secondaryLink {
+  @include hover-focus {
+    color: darken($secondary, $emphasized-link-hover-darken-percentage) !important;
+  }
 }

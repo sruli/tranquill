@@ -10,6 +10,7 @@ const getButtonTypeClass = function getButtonTypeClass(type) {
     link: 'btn-link',
     'lg-primary': `btn-primary btn-lg px-md-5 py-md-3 text-uppercase ${styles.lgBtn}`,
     'outline-primary': `btn-outline-primary py-md-2 px-md-4 ${styles.outlineBtnPrimary}`,
+    'secondary-link': `text-secondary ${styles.secondaryLink}`,
   };
 
   return typeMap[type] || '';

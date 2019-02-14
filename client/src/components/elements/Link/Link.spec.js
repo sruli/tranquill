@@ -13,4 +13,14 @@ describe('Link', () => {
 
     expect(wrapper.find('a').hasClass('btn-outline-primary')).toBe(true);
   });
+
+  it('renders custom classNames', () => {
+    const wrapper = mount(
+      <MemoryRouter>
+        <Link className="custom" href="/">Click me</Link>
+      </MemoryRouter>,
+    );
+
+    expect(wrapper.find('a').hasClass('custom')).toBe(true);
+  });
 });
