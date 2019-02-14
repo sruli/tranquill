@@ -1,18 +1,18 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
-import AppNavbar from './index';
+import { PlainAppNavbar } from './index';
 
-describe('AppNavbar', () => {
+describe('PlainAppNavbar', () => {
   it('displays the tranquill logo', () => {
-    const wrapper = shallow(<AppNavbar />);
+    const wrapper = shallow(<PlainAppNavbar onSignOutClicked={() => {}} />);
     expect(wrapper.find('TranquillLogo')).toHaveLength(1);
   });
 
   it('displays an account link', () => {
     const wrapper = mount(
       <MemoryRouter>
-        <AppNavbar />
+        <PlainAppNavbar onSignOutClicked={() => {}} />
       </MemoryRouter>,
     );
 
@@ -22,7 +22,7 @@ describe('AppNavbar', () => {
   it('displays a sign out link', () => {
     const wrapper = mount(
       <MemoryRouter>
-        <AppNavbar />
+        <PlainAppNavbar onSignOutClicked={() => {}} />
       </MemoryRouter>,
     );
 

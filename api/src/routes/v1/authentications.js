@@ -25,4 +25,9 @@ router.post('/authentications', jsonParser, async (req, res) => {
   return res.status(NO_CONTENT).end();
 });
 
+router.delete('/authentications', (req, res) => {
+  res.clearCookie('authJWT');
+  res.status(NO_CONTENT).end();
+});
+
 module.exports = router;

@@ -35,9 +35,15 @@ const signInUser = async function signInUser({ email, password }) {
   return response;
 };
 
+const signOutUser = async function signOutUser() {
+  console.log('is this happening?');
+  await fetch('/v1/authentications', { method: 'delete' });
+};
+
 export default {
   getNotebooks,
   getNotebook,
   saveEditorState,
   signInUser,
+  signOutUser,
 };
