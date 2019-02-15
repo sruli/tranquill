@@ -1,4 +1,4 @@
-import draftJs from 'draft-js';
+import draftJS from 'draft-js';
 import { NOTEBOOK_RETRIEVED } from './actions';
 import { editorStateReducer } from './reducer';
 
@@ -17,14 +17,14 @@ describe('notebook reducer', () => {
       });
 
       afterEach(() => {
-        draftJs.EditorState.createEmpty.mockReset();
-        draftJs.EditorState.createWithContent.mockReset();
+        draftJS.EditorState.createEmpty.mockReset();
+        draftJS.EditorState.createWithContent.mockReset();
       });
 
       it('returns an empty editorState', () => {
         editorStateReducer(null, action);
-        expect(draftJs.EditorState.createEmpty).toHaveBeenCalled();
-        expect(draftJs.EditorState.createWithContent).not.toHaveBeenCalled();
+        expect(draftJS.EditorState.createEmpty).toHaveBeenCalled();
+        expect(draftJS.EditorState.createWithContent).not.toHaveBeenCalled();
       });
     });
 
@@ -41,14 +41,14 @@ describe('notebook reducer', () => {
       });
 
       afterEach(() => {
-        draftJs.EditorState.createEmpty.mockReset();
-        draftJs.EditorState.createWithContent.mockReset();
+        draftJS.EditorState.createEmpty.mockReset();
+        draftJS.EditorState.createWithContent.mockReset();
       });
 
       it('returns EditorState.createWithContent', () => {
         editorStateReducer(null, action);
-        expect(draftJs.EditorState.createEmpty).not.toHaveBeenCalled();
-        expect(draftJs.EditorState.createWithContent).toHaveBeenCalledWith(editorState);
+        expect(draftJS.EditorState.createEmpty).not.toHaveBeenCalled();
+        expect(draftJS.EditorState.createWithContent).toHaveBeenCalledWith(editorState);
       });
     });
   });
