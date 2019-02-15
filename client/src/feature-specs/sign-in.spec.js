@@ -1,13 +1,10 @@
 import api from '../api';
 import mountApp from '../spec/helpers/mountApp';
 import wait from '../spec/helpers/wait';
+import resetImportedMock from '../spec/helpers/resetImportedMock';
 import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
 
 jest.mock('../api');
-
-const resetApiMocks = () => {
-  Object.keys(api).forEach(k => api[k].mockReset());
-};
 
 const fillAndSubmitForm = async function fillAndSubmitForm({ wrapper, email, password }) {
   const form = wrapper.find('form');
@@ -34,7 +31,7 @@ describe('sign-in', () => {
     });
 
     afterEach(() => {
-      resetApiMocks();
+      resetImportedMock(api);
       wrapper.unmount();
     });
 
@@ -60,7 +57,7 @@ describe('sign-in', () => {
     });
 
     afterEach(() => {
-      resetApiMocks();
+      resetImportedMock(api);
       wrapper.unmount();
     });
 
@@ -88,7 +85,7 @@ describe('sign-in', () => {
     });
 
     afterEach(() => {
-      resetApiMocks();
+      resetImportedMock(api);
       wrapper.unmount();
     });
 
@@ -111,7 +108,7 @@ describe('sign-in', () => {
     });
 
     afterEach(() => {
-      resetApiMocks();
+      resetImportedMock(api);
       wrapper.unmount();
     });
 

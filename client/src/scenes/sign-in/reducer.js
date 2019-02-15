@@ -28,6 +28,11 @@ const emailReducer = (state = '', action) => {
 
       return state;
     }
+    case AUTHENTICATION_COMPLETED: {
+      const { error } = action;
+      if (error) return state;
+      return '';
+    }
     default:
       return state;
   }
@@ -43,6 +48,11 @@ const passwordReducer = (state = '', action) => {
       }
 
       return state;
+    }
+    case AUTHENTICATION_COMPLETED: {
+      const { error } = action;
+      if (error) return state;
+      return '';
     }
     default:
       return state;

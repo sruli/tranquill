@@ -3,6 +3,7 @@ import { push } from 'connected-react-router';
 import api from '../../api';
 import transmuter from '../../api/transmuter';
 import validateForm from './validateForm';
+import { setCookie } from '../../utils/cookieUtils';
 import { getEmail, getPassword, getValidate } from './reducer';
 import { DEBOUNCE_MILISECONDS } from './constants';
 import {
@@ -40,9 +41,11 @@ function* submitForm() {
   yield put(authenticationCompleted({ ok, status }));
 }
 
-function* redirectUser(action) {
+function* onAuthenticationCompleted(action) {
   const { error } = action;
   if (error) return;
+
+  setCookie({ authenticated: true });
 
   const response = yield call(api.getNotebooks);
   const { notebookPath } = transmuter.getNotebooks.fromServer(response);
@@ -56,7 +59,7 @@ function* redirectUser(action) {
 function* signInSaga() {
   yield debounce(DEBOUNCE_MILISECONDS, FORM_CHANGED, onFormChanged);
   yield takeLatest(FORM_SUBMITTED, submitForm);
-  yield takeEvery(AUTHENTICATION_COMPLETED, redirectUser);
+  yield takeEvery(AUTHENTICATION_COMPLETED, onAuthenticationCompleted);
 }
 
 export default signInSaga;
