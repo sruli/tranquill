@@ -7,12 +7,13 @@ const getNotebooks = async function getNotebooks() {
 };
 
 const getNotebook = async function getNotebook(id) {
-  const response = await fetch(`/v1/notebooks/${id}`).then(res => res.json());
+  const response = await fetch(`/v1/notebooks/${id}`);
+  if (response.ok) return response.json();
   return response;
 };
 
 const saveEditorState = async function saveEditorState({ notebookId, rawEditorState }) {
-  await fetch(`/v1/notebooks/${notebookId}/contentBlocks`, {
+  const response = await fetch(`/v1/notebooks/${notebookId}/contentBlocks`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -20,6 +21,8 @@ const saveEditorState = async function saveEditorState({ notebookId, rawEditorSt
     },
     body: JSON.stringify(rawEditorState),
   });
+
+  return response;
 };
 
 const signInUser = async function signInUser({ email, password }) {

@@ -8,8 +8,8 @@ import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
 jest.mock('../api');
 
 describe('notebook', () => {
-  beforeAll(() => stubAuth());
-  afterAll(() => unstubAuth());
+  beforeEach(() => stubAuth());
+  afterEach(() => unstubAuth());
 
   describe('when the notebook is loaded', () => {
     let wrapper;
@@ -37,6 +37,7 @@ describe('notebook', () => {
     beforeEach(async () => {
       window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse());
+      api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
@@ -87,6 +88,7 @@ describe('notebook', () => {
     beforeEach(async () => {
       window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: 1 }));
+      api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
