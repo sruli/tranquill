@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import has from 'has';
+import has from 'lodash/has';
 import { SCENE_NAME } from './constants';
 import {
   FORM_CHANGED,

@@ -1,4 +1,4 @@
-const has = require('has');
+const has = require('lodash/has');
 
 /**
  * From draft-js:
