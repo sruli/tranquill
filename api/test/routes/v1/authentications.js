@@ -1,7 +1,10 @@
 const request = require('supertest');
 const { expect } = require('chai');
 const { NO_CONTENT, BAD_REQUEST } = require('http-status');
+const jwt = require('jsonwebtoken');
 const app = require('../../../src/app');
+const TokenGenerator = require('../../../src/services/jwt/TokenGenerator');
+const TokenBlacklist = require('../../../src/services/jwt/TokenBlacklist');
 const userFactory = require('../../factories/userFactory');
 const parseCookie = require('../../helpers/parseCookie');
 const expectJWT = require('../../helpers/expectJWT');
@@ -87,8 +90,7 @@ describe('authentications routes', () => {
       it('sets jwt cookie', () => {
         const cookies = response.header['set-cookie'];
         const jwtCookie = cookies.find(cookie => cookie.match(/authJWT/));
-        const jwt = parseCookie(jwtCookie).authJWT;
-        expectJWT(jwt);
+        expectJWT(parseCookie(jwtCookie).authJWT);
       });
 
       it('sets jwt cookie as HttpOnly', () => {
@@ -102,6 +104,28 @@ describe('authentications routes', () => {
         const jwtCookie = cookies.find(cookie => cookie.match(/authJWT/));
         expect(parseCookie(jwtCookie).Secure).to.be.true;
       });
+    });
+  });
+
+  describe('DELETE /authentications', () => {
+    let response;
+    let authJWT;
+
+    beforeEach(async () => {
+      authJWT = await TokenGenerator.init({ userId: 'userId' }).generateToken();
+      response = await request(app)
+        .delete('/v1/authentications')
+        .set('Cookie', [`authJWT=${authJWT};`]);
+    });
+
+    it('blacklists the jwt', async () => {
+      const blacklisted = await TokenBlacklist.includes(jwt.decode(authJWT));
+      expect(blacklisted).to.be.true;
+    });
+
+    it('sets NO_CONTENT status', () => {
+      const { statusCode } = response;
+      expect(statusCode).to.equal(NO_CONTENT);
     });
   });
 });

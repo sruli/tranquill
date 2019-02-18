@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
+const uuidv4 = require('uuid/v4');
+const { EXPIRES_IN } = require('./constants');
 
 const defaultOptions = {
-  expiresIn: '15m',
+  expiresIn: EXPIRES_IN,
   issuer: 'Tranquill',
 };
 
@@ -16,8 +18,8 @@ class TokenGenerator {
   }
 
   async generateToken() {
-    const options = { ...defaultOptions, subject: this.userId };
-    const token = await jwt.sign({}, process.env.JWT_SECRET, options);
+    const opts = { ...defaultOptions, jwtid: uuidv4(), subject: this.userId };
+    const token = await jwt.sign({}, process.env.JWT_SECRET, opts);
     return token;
   }
 }

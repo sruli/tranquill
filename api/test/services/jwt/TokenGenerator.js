@@ -39,5 +39,10 @@ describe('TokenGenerator', () => {
       const decoded = jwt.decode(token);
       expect(decoded.sub).to.equal(user.id);
     });
+
+    it('sets a jwt id', () => {
+      const decoded = jwt.decode(token);
+      expect(decoded.jti).to.exist;
+    });
   });
 });
