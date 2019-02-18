@@ -1,6 +1,6 @@
 const request = require('supertest');
 const { expect } = require('chai');
-const { NO_CONTENT, BAD_REQUEST } = require('http-status');
+const { NO_CONTENT, BAD_REQUEST, NOT_FOUND } = require('http-status');
 const jwt = require('jsonwebtoken');
 const app = require('../../../src/app');
 const TokenGenerator = require('../../../src/services/jwt/TokenGenerator');
@@ -68,7 +68,16 @@ describe('authentications routes', () => {
     });
 
     context('when user is not found', () => {
+      let response;
+
+      beforeEach(async () => {
+        const body = { email: 'nonexistent@example.com', password: 'password' };
+        response = await request(app).post('/v1/authentications').send(body);
+      });
+
       it('sets NOT_FOUND status', () => {
+        const { statusCode } = response;
+        expect(statusCode).to.equal(NOT_FOUND);
       });
     });
 
