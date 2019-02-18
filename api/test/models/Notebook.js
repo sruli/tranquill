@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { expect } = require('chai');
 const notebookFactory = require('../factories/notebookFactory');
 const contentBlockFactory = require('../factories/contentBlockFactory');
+const timesMap = require('../helpers/timesMap');
 
 describe('Notebook', () => {
   it('saves a notebook with timestamps', async () => {
@@ -13,19 +14,12 @@ describe('Notebook', () => {
   context('when saving a notebook without a name', () => {
     it('raises a ValidationError', () => {
       const noName = async () => {
-        await notebookFactory.create('noName');
+        await notebookFactory.create('notebook', { name: null });
       };
-      expect(noName()).to.be.rejectedWith(mongoose.Error.ValidationError);
-    });
-
-    it('specifies that name is required', async () => {
-      try {
-        await notebookFactory.create('noName');
-        throw new Error('Force an exeption so that expectations execute no matter what.');
-      } catch (e) {
-        expect(e.errors).to.have.property('name');
-        expect(e.errors.name.message).to.equal('Path `name` is required.');
-      }
+      expect(noName()).to.be.rejectedWith(
+        mongoose.Error.ValidationError,
+        'Path `name` is required.',
+      );
     });
   });
 
@@ -35,9 +29,9 @@ describe('Notebook', () => {
 
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
-        await Promise.all([...Array(2).keys()].map(() => (
-          contentBlockFactory.create('contentBlock', { notebook })
-        )));
+        await Promise.all(
+          timesMap(2, () => contentBlockFactory.create('contentBlock', { notebook })),
+        );
       });
 
       it('retrieves the contentBlocks for a notebook', async () => {

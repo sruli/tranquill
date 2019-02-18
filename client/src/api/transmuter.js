@@ -1,6 +1,17 @@
 import { convertFromRaw } from 'draft-js';
+import url from 'url';
 
 export default {
+  getNotebooks: {
+    fromServer(response) {
+      const [latestNotebook] = response;
+      if (!latestNotebook) return {};
+
+      return {
+        notebookPath: url.parse(latestNotebook.href).pathname,
+      };
+    },
+  },
   getNotebook: {
     fromServer({ id, name, contentBlocks: { items } }) {
       const blocks = items.map((item) => {
@@ -8,7 +19,7 @@ export default {
         return rest;
       });
 
-      const editorState = blocks.length
+      const editorState = blocks.length > 0
         ? convertFromRaw({
           blocks,
           entityMap: {},

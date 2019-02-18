@@ -1,15 +1,16 @@
 import api from '../api';
 import mountApp from '../spec/helpers/mountApp';
 import wait from '../spec/helpers/wait';
+import { stubAuth, unstubAuth } from '../spec/helpers/authStubs';
+import resetImportedMock from '../spec/helpers/resetImportedMock';
 import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
 
 jest.mock('../api');
 
-const resetApiMocks = () => {
-  Object.keys(api).forEach(k => api[k].mockReset());
-};
-
 describe('notebook', () => {
+  beforeEach(() => stubAuth());
+  afterEach(() => unstubAuth());
+
   describe('when the notebook is loaded', () => {
     let wrapper;
 
@@ -21,8 +22,8 @@ describe('notebook', () => {
     });
 
     afterEach(async () => {
-      resetApiMocks();
-      await wrapper.unmount();
+      resetImportedMock(api);
+      wrapper.unmount();
     });
 
     it('displays the notebook name', () => {
@@ -36,13 +37,14 @@ describe('notebook', () => {
     beforeEach(async () => {
       window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse());
+      api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
 
     afterEach(async () => {
-      resetApiMocks();
-      await wrapper.unmount();
+      resetImportedMock(api);
+      wrapper.unmount();
     });
 
     it('loads the contentBlocks into the Editor', () => {
@@ -71,8 +73,8 @@ describe('notebook', () => {
     });
 
     afterEach(async () => {
-      resetApiMocks();
-      await wrapper.unmount();
+      resetImportedMock(api);
+      wrapper.unmount();
     });
 
     it('loads the Editor in an empty state', () => {
@@ -86,13 +88,14 @@ describe('notebook', () => {
     beforeEach(async () => {
       window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: 1 }));
+      api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
 
     afterEach(async () => {
-      resetApiMocks();
-      await wrapper.unmount();
+      resetImportedMock(api);
+      wrapper.unmount();
     });
 
     it('persists the editorState', async () => {
@@ -126,8 +129,8 @@ describe('notebook', () => {
     });
 
     afterEach(async () => {
-      resetApiMocks();
-      await wrapper.unmount();
+      resetImportedMock(api);
+      wrapper.unmount();
     });
 
     it('does not persist editor state', async () => {

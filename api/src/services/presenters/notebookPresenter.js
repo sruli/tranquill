@@ -2,12 +2,28 @@ const { present: presentContentBlocks } = require('./contentBlocksPresenter');
 
 const { API_URL } = process.env;
 
-const present = async function present(notebook) {
-  return {
-    ...notebook.toJSON(),
-    href: `${API_URL}/notebooks/${notebook.id}`,
-    contentBlocks: await presentContentBlocks(notebook),
-  };
-};
+class NotebookPresenter {
+  static init(args) {
+    const notebookPresenter = new NotebookPresenter(args);
+    return notebookPresenter;
+  }
 
-module.exports = { present };
+  constructor({ notebook }) {
+    this.notebook = notebook;
+  }
+
+  async present({ includeContentBlocks = false } = {}) {
+    const presented = {
+      ...this.notebook.toJSON(),
+      href: `${API_URL}/notebooks/${this.notebook.id}`,
+    };
+
+    if (includeContentBlocks) {
+      presented.contentBlocks = await presentContentBlocks(this.notebook);
+    }
+
+    return presented;
+  }
+}
+
+module.exports = NotebookPresenter;

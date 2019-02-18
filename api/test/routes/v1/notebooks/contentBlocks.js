@@ -2,37 +2,62 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const { expect } = require('chai');
 const sinon = require('sinon');
-const { ACCEPTED, NOT_FOUND, UNPROCESSABLE_ENTITY } = require('http-status');
-const app = require('../../../../src/app');
+const proxyquire = require('proxyquire');
+const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
+const Notebook = require('../../../../src/models/Notebook');
 const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebookFactory');
+const { stubMiddleware } = require('../../../helpers/stubMiddleware');
+
+const app = stubMiddleware({
+  './notebooks/contentBlocks': proxyquire('../../../../src/routes/v1/notebooks/contentBlocks', {
+    '../../../middlewares/ensureAuthentication': (req, res, next) => next(),
+  }),
+});
 
 describe('contentBlocks routes', () => {
   describe('POST /notebooks/:id/contentBlocks', () => {
     context('happy path', () => {
       let notebook;
       let persistenceManagerSpy;
-      let response;
+
+      const makeRequest = function makeRequest() {
+        return request(app)
+          .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
+          .send({ blocks: [{}, {}, {}] })
+          .accept('Accept', 'application/json');
+      };
 
       beforeEach(async () => {
         persistenceManagerSpy = sinon.stub(ContentBlocksPersistenceManager.prototype, 'manage');
         notebook = await notebookFactory.create('notebook');
-        response = await request(app)
-          .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
-          .send({ blocks: [{}, {}, {}] })
-          .accept('Accept', 'application/json');
       });
 
-      afterEach(() => {
-        sinon.restore();
+      afterEach(async () => {
+        persistenceManagerSpy.restore();
       });
 
       it('manages the persistence of the blocks', async () => {
+        await makeRequest();
         expect(persistenceManagerSpy).to.have.been.called;
       });
 
-      it('returns ACCEPTED status', () => {
-        expect(response.statusCode).to.equal(ACCEPTED);
+      it('updates the updatedAt of the notebook', async () => {
+        const queryUpdatedAt = async () => {
+          const { updatedAt } = await Notebook.findById(notebook.id);
+          return updatedAt;
+        };
+
+        return expect(
+          () => makeRequest(),
+        ).to.alter(
+          () => queryUpdatedAt(),
+        );
+      });
+
+      it('returns ACCEPTED status', async () => {
+        const { statusCode } = await makeRequest();
+        expect(statusCode).to.equal(ACCEPTED);
       });
     });
 
@@ -67,9 +92,9 @@ describe('contentBlocks routes', () => {
           .accept('Accept', 'application/json');
       });
 
-      it('returns UNPROCESSABLE_ENTITY status', () => {
+      it('returns BAD_REQUEST status', () => {
         const { statusCode } = response;
-        expect(statusCode).to.equal(UNPROCESSABLE_ENTITY);
+        expect(statusCode).to.equal(BAD_REQUEST);
       });
 
       it('provides an error message', () => {
@@ -89,9 +114,9 @@ describe('contentBlocks routes', () => {
           .accept('Accept', 'application/json');
       });
 
-      it('returns UNPROCESSABLE_ENTITY status', () => {
+      it('returns BAD_REQUEST status', () => {
         const { statusCode } = response;
-        expect(statusCode).to.equal(UNPROCESSABLE_ENTITY);
+        expect(statusCode).to.equal(BAD_REQUEST);
       });
 
       it('provides an error message', () => {

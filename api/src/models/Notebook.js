@@ -3,6 +3,7 @@ const ContentBlock = require('./ContentBlock');
 
 // TODO: add validation that name is unique per user
 const notebookSchema = mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   name: { type: String, required: true },
 }, {
   timestamps: true,

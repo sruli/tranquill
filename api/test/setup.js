@@ -5,9 +5,11 @@ const chaiAsPromised = require('chai-as-promised');
 const chaiChange = require('chai-change');
 const sinonChai = require('sinon-chai');
 const FactoryGirl = require('factory-girl');
+const redisClient = require('../config/redis');
 const { connectDB, closeDB } = require('../src/utilities/mongodbUtils');
 const Notebook = require('../src/models/Notebook');
 const ContentBlock = require('../src/models/ContentBlock');
+const User = require('../src/models/User');
 
 const { factory } = FactoryGirl;
 const adapter = new FactoryGirl.MongooseAdapter();
@@ -20,7 +22,7 @@ factory.setAdapter(adapter);
 
 before(async () => {
   connectDB();
-  await Promise.all([Notebook, ContentBlock].map(async (model) => {
+  await Promise.all([Notebook, ContentBlock, User].map(async (model) => {
     await model.deleteMany();
   }));
 });
@@ -31,4 +33,12 @@ after(() => {
 
 afterEach(async () => {
   await factory.cleanUp();
+});
+
+beforeEach(async () => {
+  await redisClient.flushdbAsync();
+});
+
+after(async () => {
+  await redisClient.quitAsync();
 });

@@ -8,16 +8,8 @@
   font-size: 1rem !important;
 }
 
-.outlineBtn {
-  font-size: .875rem;
-}
-
-.outlineBtnPrimary {
-  @extend .outlineBtn;
-
-  &:hover {
-    color: lighten($primary, 10%);
-    background-color: transparent;
-    border-color: lighten($primary, 10%);
+.secondaryLink {
+  @include hover-focus {
+    color: darken($secondary, $emphasized-link-hover-darken-percentage) !important;
   }
 }
