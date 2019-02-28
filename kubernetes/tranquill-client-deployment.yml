@@ -16,5 +16,5 @@ spec:
     spec:
       containers:
       - name: tranquill-client
-        image: us.gcr.io/tranquill/tranquill_client@sha256:f644b3aa474c8cc5cec701d736ca7b81c6aa34526719dd1861f791c0e1e97439
+        image: us.gcr.io/tranquill/tranquill_client@sha256:cc23ef737315a89a3648448e459ea1296abcf50e708c3b26a2d772d60e0693b9
         command: ["npm", "run", "start:production"]

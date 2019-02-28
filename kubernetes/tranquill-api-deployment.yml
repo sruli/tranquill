@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tranquill-api
-        image: us.gcr.io/tranquill/tranquill_api@sha256:d9de8587372efc99939586c3a7c9d7f2c1558026a0090dc523c58488d4fb1c69
+        image: us.gcr.io/tranquill/tranquill_api@sha256:c11dfc9d257480fd245e74cb3a30d57a4bde8e8203b161293c674ca481bc3194
         readinessProbe:
           httpGet:
             path: /healthy
@@ -28,7 +28,7 @@ spec:
         - name: API_PORT
           value: "8080"
         - name: CLIENT_URL
-          value: "http://tranquillapp.com"
+          value: "https://tranquillapp.com"
         - name: CLIENT_HOST
           value: "tranquillapp.com"
         - name: MONGO_DB_URI
