@@ -8,9 +8,15 @@ spec:
   tls:
     - secretName: tranquill-cert
   rules:
-  - http:
+  - host: tranquillapp.com
+    http:
       paths:
-      - path: /*
-        backend:
+      - backend:
           serviceName: tranquill-client
-          servicePort: 80
+          servicePort: 5000
+  - host: api.tranquillapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: tranquill-api
+          servicePort: 8080

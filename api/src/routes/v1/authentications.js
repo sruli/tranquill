@@ -21,7 +21,12 @@ router.post('/authentications', jsonParser, async (req, res) => {
 
   const { id: userId } = user;
   const token = await TokenGenerator.init({ userId }).generateToken();
-  res.cookie('authJWT', token, { httpOnly: true, secure: !devEnv() });
+  res.cookie('authJWT', token, {
+    httpOnly: true,
+    // secure: !devEnv() // UNCOMMENT ONCE API IS SSL!
+    secure: false, // REMOVE ONCE API IS SSL!
+    domain: devEnv() ? '' : process.env.CLIENT_HOST,
+  });
 
   return res.status(NO_CONTENT).end();
 });

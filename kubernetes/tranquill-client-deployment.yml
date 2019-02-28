@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: tranquill-client
   labels:
     app: tranquill-client
-  name: tranquill-client
 spec:
   replicas: 3
   selector:
@@ -16,5 +16,5 @@ spec:
     spec:
       containers:
       - name: tranquill-client
-        image: us.gcr.io/tranquill/tranquill_client@sha256:7d64cee1874408fdda61813c6ed804b230b5d8ab8b1e63e441700a47d84cf9fc
+        image: us.gcr.io/tranquill/tranquill_client@sha256:f644b3aa474c8cc5cec701d736ca7b81c6aa34526719dd1861f791c0e1e97439
         command: ["npm", "run", "start:production"]

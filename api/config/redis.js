@@ -1,8 +1,8 @@
 const redis = require('redis');
 const { promisify } = require('util');
 
-const { REDIS_URL, REDIS_DB } = process.env;
-const client = redis.createClient(REDIS_URL, { db: REDIS_DB });
+const { REDIS_HOST, REDIS_DB } = process.env;
+const client = redis.createClient({ host: REDIS_HOST, db: REDIS_DB });
 
 module.exports = {
   ...client,
