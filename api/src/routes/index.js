@@ -4,7 +4,8 @@ const apiV1 = require('./v1');
 
 const router = Router();
 
-router.get('/healthy', (req, res) => {
+// For Kubernetes health check
+router.get('/', (req, res) => {
   res.status(OK).end();
 });
 
