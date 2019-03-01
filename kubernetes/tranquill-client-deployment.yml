@@ -16,5 +16,10 @@ spec:
     spec:
       containers:
       - name: tranquill-client
-        image: us.gcr.io/tranquill/tranquill_client@sha256:cc23ef737315a89a3648448e459ea1296abcf50e708c3b26a2d772d60e0693b9
+        image: us.gcr.io/tranquill/tranquill_client@sha256:b14a636abab10e698d92bfffb36f5c76b3eed1ccf864d36e4db7acb638e90f43
+        env:
+        - name: CLIENT_PORT
+          value: "5000"
+        - name: CLIENT_HOST
+          value: "tranquillapp.com"
         command: ["npm", "run", "start:production"]

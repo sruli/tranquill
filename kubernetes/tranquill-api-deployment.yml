@@ -16,11 +16,7 @@ spec:
     spec:
       containers:
       - name: tranquill-api
-        image: us.gcr.io/tranquill/tranquill_api@sha256:c11dfc9d257480fd245e74cb3a30d57a4bde8e8203b161293c674ca481bc3194
-        readinessProbe:
-          httpGet:
-            path: /healthy
-            port: 8080
+        image: us.gcr.io/tranquill/tranquill_api@sha256:1baa497669a518d2cebffa5b3cfb901d5503e3ba029d9656221f96df60571eaf
         command: ["npm", "run", "start:production"]
         env:
         - name: NODE_ENV
