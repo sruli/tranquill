@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tranquill-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: tranquill-ip
+spec:
+  tls:
+    - secretName: tranquill-cert
+    - secretName: tranquill-wildcard-cert
+  rules:
+  - host: tranquillapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: tranquill-client
+          servicePort: 5000
+  - host: api.tranquillapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: tranquill-api
+          servicePort: 8080

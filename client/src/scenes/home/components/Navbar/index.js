@@ -7,7 +7,7 @@ import styles from './Navbar.module.scss';
 const Navbar = () => (
   <div className={`container-fluid fixed-top bg-white pt-md-2 ${styles.navbar}`}>
     <div className="row justify-content-center">
-      <nav className="navbar col-10">
+      <nav className="navbar col-md-10">
         <a className="navbar-brand" href="/"><TranquillLogo /></a>
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">

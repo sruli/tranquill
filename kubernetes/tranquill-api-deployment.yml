@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tranquill-api
+  labels:
+    app: tranquill-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tranquill-api
+  template:
+    metadata:
+      labels:
+        app: tranquill-api
+    spec:
+      containers:
+      - name: tranquill-api
+        image: us.gcr.io/tranquill/tranquill_api@sha256:1baa497669a518d2cebffa5b3cfb901d5503e3ba029d9656221f96df60571eaf
+        command: ["npm", "run", "start:production"]
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: API_PORT
+          value: "8080"
+        - name: API_URL
+          value: "https://api.tranquillapp.com"
+        - name: CLIENT_HOST
+          value: "tranquillapp.com"
+        - name: CLIENT_URL
+          value: "https://tranquillapp.com"
+        - name: MONGO_DB_URI
+          value: "mongodb://tranquill-mongo.default.svc.cluster.local:27017/tranquill_production"
+        - name: REDIS_HOST
+          value: "tranquill-redis.default.svc.cluster.local"
+        - name: REDIS_DB
+          value: "0"
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: env-secrets
+              key: JWT_SECRET

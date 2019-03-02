@@ -4,13 +4,10 @@ services:
     container_name: tranquill_client
     build: ./client
     restart: always
-    environment:
-      - REACT_APP_PORT=${REACT_APP_PORT}
-      - CLIENT_URL=${CLIENT_URL}
     expose:
-      - ${REACT_APP_PORT}
+      - ${CLIENT_PORT}
     ports:
-      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+      - ${CLIENT_PORT}:${CLIENT_PORT}
     volumes:
       - ./client/src:/tranquill/client/src
       - ./client/public:/tranquill/client/public
@@ -22,16 +19,19 @@ services:
     build: ./api
     restart: always
     environment:
-      - APP_SERVER_PORT=${APP_SERVER_PORT}
+      - API_PORT=${API_PORT}
       - NODE_ENV=${NODE_ENV}
       - MONGO_DB_URI=${MONGO_DB_URI}
       - API_URL=${API_URL}
+      - CLIENT_URL=${CLIENT_URL}
+      - CLIENT_HOST=${CLIENT_HOST}
       - JWT_SECRET=${JWT_SECRET}
-      - REDIS_URL=${REDIS_URL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_DB=${REDIS_DB}
     expose:
-      - ${APP_SERVER_PORT}
+      - ${API_PORT}
     ports:
-      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+      - ${API_PORT}:${API_PORT}
     volumes:
       - ./api/src:/tranquill/api/src
     links:

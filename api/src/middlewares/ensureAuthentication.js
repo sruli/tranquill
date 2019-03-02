@@ -20,7 +20,11 @@ const ensureAuthentication = async function ensureAuthentication(req, res, next)
     req.userId = decodedJWT.sub;
 
     const extendedToken = await TokenExtender.init({ decodedJWT }).extendToken();
-    res.cookie('authJWT', extendedToken, { httpOnly: true, secure: !devEnv() });
+    res.cookie('authJWT', extendedToken, {
+      httpOnly: true,
+      secure: !devEnv(),
+      domain: devEnv() ? '' : process.env.CLIENT_HOST,
+    });
 
     return next();
   } catch (e) {

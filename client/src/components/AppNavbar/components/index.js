@@ -9,7 +9,7 @@ import styles from './AppNavbar.module.scss';
 export const PlainAppNavbar = ({ onSignOutClicked }) => (
   <div className={`container-fluid fixed-top bg-white ${styles.navbar}`}>
     <div className="row justify-content-center">
-      <nav className="navbar col-10">
+      <nav className="navbar col-md-10">
         <a className="navbar-brand" href="/"><TranquillLogo /></a>
         <ul className="nav align-items-end">
           <li>

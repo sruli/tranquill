@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tranquill-redis
+spec:
+  selector:
+    matchLabels:
+      app: tranquill-redis
+  serviceName: tranquill-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tranquill-redis
+    spec:
+      containers:
+      - name: tranquill-redis
+        image: redis:5.0.3-alpine
+        ports:
+        - containerPort: 6379
+          name: tranquill-redis

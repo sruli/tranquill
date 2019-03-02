@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: tranquill-mongo
+  name: tranquill-mongo
+spec:
+  serviceName: tranquill-mongo
+  selector:
+    matchLabels:
+      app: tranquill-mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tranquill-mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: tranquill-mongo
+        image: mongo
+        ports:
+        - containerPort: 27017
+          name: tranquill-mongo
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "fast"
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
