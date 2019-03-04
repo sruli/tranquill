@@ -16,6 +16,8 @@ const app = express();
 
 app.set('trust proxy', true);
 
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
 app.use(morgan(...morganConfig));
 
 // For Kubernetes health check
