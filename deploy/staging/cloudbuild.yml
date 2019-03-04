@@ -4,7 +4,7 @@ steps:
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
-  - 'NODE_ENV=test'
+  - 'NODE_ENV=development'
   - 'REACT_APP_ENV=test'
   - 'REACT_APP_API_URL=http://localhost:8080'
   - 'MONGO_DB_URI=mongodb://localhost:27017/tranquill_test'
