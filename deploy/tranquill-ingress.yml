@@ -21,3 +21,15 @@ spec:
       - backend:
           serviceName: tranquill-api
           servicePort: 8080
+  - host: staging.tranquillapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: staging-client
+          servicePort: 5001
+  - host: staging-api.tranquillapp.com
+    http:
+      paths:
+      - backend:
+          serviceName: staging-api
+          servicePort: 8081

@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: tranquill-redis
+  name: staging-redis
 spec:
   selector:
     matchLabels:
-      app: tranquill-redis
-  serviceName: tranquill-app
+      app: staging-redis
+  serviceName: staging-redis
   replicas: 1
   template:
     metadata:
       labels:
-        app: tranquill-redis
+        app: staging-redis
     spec:
       containers:
-      - name: tranquill-redis
+      - name: staging-redis
         image: redis:5.0.3-alpine
         ports:
         - containerPort: 6379
-          name: tranquill-redis
+          name: staging-redis

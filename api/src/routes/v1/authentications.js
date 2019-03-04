@@ -24,7 +24,7 @@ router.post('/authentications', jsonParser, async (req, res) => {
   res.cookie('authJWT', token, {
     httpOnly: true,
     secure: !devEnv(),
-    domain: devEnv() ? '' : process.env.CLIENT_HOST,
+    domain: devEnv() ? '' : 'tranquillapp.com',
   });
 
   return res.status(NO_CONTENT).end();

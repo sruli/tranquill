@@ -1,5 +1,12 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+const fs = require('fs');
+
+// Conditionally set env vars since in cloud build env vars are set a part of the buil
+if (fs.existsSync(path.join(__dirname, '.env'))) {
+  // eslint-disable-next-line global-require
+  require('dotenv').config({ path: path.join(__dirname, '.env') });
+}
+
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const chaiChange = require('chai-change');

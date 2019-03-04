@@ -1,9 +1,13 @@
 const devEnv = function devEnv() {
-  return process.env.NODE_ENV === 'development';
+  return process.env.REACT_APP_ENV === 'development';
 };
 
 const prodEnv = function prodEnv() {
-  return process.env.NODE_ENV === 'production';
+  return process.env.REACT_APP_ENV === 'production';
 };
 
-module.exports = { devEnv, prodEnv };
+const stagingEnv = function stagingEnv() {
+  return process.env.REACT_APP_ENV === 'staging';
+};
+
+module.exports = { devEnv, prodEnv, stagingEnv };

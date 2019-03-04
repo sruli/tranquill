@@ -1,0 +1,57 @@
+steps:
+- name: 'docker/compose:1.15.0'
+  args: ['up', '-d']
+  id: 'docker-compose'
+  env:
+  - 'CLIENT_PORT=3000'
+  - 'API_PORT=8080'
+  - 'NODE_ENV=test'
+  - 'MONGO_DB_URI=mongodb://localhost:27017/tranquill_test'
+  - 'API_URL=http://localhost:8080'
+  - 'CLIENT_URL=http://localhost:3000'
+  - 'CLIENT_HOST=localhost'
+  - 'JWT_SECRET=secret'
+  - 'REDIS_HOST=127.0.0.1'
+  - 'REDIS_DB=1'
+  - 'REDIS_PORT=6379'
+  - 'MONGO_DB_PORT=27017'
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test']
+  dir: 'client'
+  id: 'test-client'
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test']
+  dir: 'api'
+  id: 'test-api'
+  waitFor: ['docker-compose']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/tranquill_client:$REVISION_ID', '.']
+  dir: 'client'
+  id: 'build-client-image'
+  waitFor: ['test-client', 'test-api']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us.gcr.io/$PROJECT_ID/tranquill_client:$REVISION_ID']
+  dir: 'client'
+  id: 'push-client-image'
+  waitFor: ['build-client-image']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/tranquill_api:$REVISION_ID', '.']
+  dir: 'api'
+  id: 'build-api-image'
+  waitFor: ['test-client', 'test-api']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us.gcr.io/$PROJECT_ID/tranquill_api:$REVISION_ID']
+  dir: 'api'
+  id: 'push-api-image'
+  waitFor: ['build-api-image']
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['set', 'image', 'deployment/tranquill-client', 'tranquill_client=us.gcr.io/$PROJECT_ID/tranquill_client:$REVISION_ID']
+  dir: 'client'
+  waitFor: ['push-client-image', 'push-api-image']
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['set', 'image', 'deployment/tranquill_api', 'tranquill_api=us.gcr.io/$PROJECT_ID/tranquill_api:$REVISION_ID']
+  dir: 'api'
+  waitFor: ['push-client-image', 'push-api-image']
+images:
+  ['us.gcr.io/$PROJECT_ID/tranquill_client:$REVISION_ID', 'us.gcr.io/$PROJECT_ID/tranquill_api:$REVISION_ID']
+tags: ['${_ENV}']

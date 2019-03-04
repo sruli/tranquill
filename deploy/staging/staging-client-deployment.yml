@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staging-client
+  labels:
+    app: staging-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: staging-client
+  template:
+    metadata:
+      labels:
+        app: staging-client
+    spec:
+      containers:
+      - name: staging-client
+        image: us.gcr.io/tranquill/staging_client@sha256:5fa3dbe0801afa9ffd4f9adffcc611afe047e717455e726d96cc3e454fe2a26c
+        env:
+        - name: REACT_APP_ENV
+          value: "staging"
+        - name: CLIENT_PORT
+          value: "5000"
+        - name: CLIENT_HOST
+          value: "staging.tranquillapp.com"
+        command: ["npm", "run", "start:staging"]
