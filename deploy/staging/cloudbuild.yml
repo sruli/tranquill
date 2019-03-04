@@ -18,14 +18,29 @@ steps:
   - 'MONGO_DB_PORT=27017'
   id: 'docker-compose'
 - name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'client'
+  env:
+  - 'NODE_ENV=development'
+  id: 'install-client-dependencies'
+  waitFor: ['-']
+- name: 'gcr.io/cloud-builders/npm'
   args: ['test']
   dir: 'client'
   id: 'test-client'
+  waitFor: ['docker-compose', 'install-client-dependencies']
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'api'
+  env:
+  - 'NODE_ENV=development'
+  id: 'install-api-dependencies'
+  waitFor: ['-']
 - name: 'gcr.io/cloud-builders/npm'
   args: ['test']
   dir: 'api'
   id: 'test-api'
-  waitFor: ['docker-compose']
+  waitFor: ['docker-compose', 'install-api-dependencies']
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   dir: 'client'
