@@ -56,4 +56,6 @@ services:
     image: redis
     expose:
       - ${REDIS_PORT}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
     restart: always
