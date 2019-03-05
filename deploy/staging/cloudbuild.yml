@@ -40,6 +40,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/npm'
   args: ['test']
+  dir: 'api'
   env:
   - 'NODE_ENV=test'
   id: 'test-api'
@@ -67,6 +68,7 @@ steps:
 
 - name: 'gcr.io/cloud-builders/npm'
   args: ['test']
+  dir: 'client'
   id: 'test-client'
   waitFor: ['client-bash']
 
