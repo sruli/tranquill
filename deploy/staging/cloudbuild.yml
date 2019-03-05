@@ -1,6 +1,6 @@
 steps:
 - name: 'docker/compose:1.15.0'
-  args: ['up', '--build', '--force-recreate']
+  args: ['up', '-d', '--build', '--force-recreate']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
