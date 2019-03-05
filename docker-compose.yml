@@ -42,7 +42,7 @@ services:
       - redis
     command: npm start
   mongodb:
-    container_name: tranquill_mongodb
+    container_name: mongodb
     image: mongo
     expose:
       - ${MONGO_DB_PORT}
@@ -52,7 +52,7 @@ services:
     ports:
       - ${MONGO_DB_PORT}:${MONGO_DB_PORT}
   redis:
-    container_name: tranquill_redis
+    container_name: redis
     image: redis
     expose:
       - ${REDIS_PORT}

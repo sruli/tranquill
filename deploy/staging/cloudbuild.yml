@@ -7,7 +7,7 @@ steps:
   - 'NODE_ENV=development'
   - 'REACT_APP_ENV=test'
   - 'REACT_APP_API_URL=http://localhost:8080'
-  - 'MONGO_DB_URI=mongodb://localhost:27017/tranquill_test'
+  - 'MONGO_DB_URI=mongodb://mongodb:27017/tranquill_test'
   - 'API_URL=http://localhost:8080'
   - 'CLIENT_URL=http://localhost:3000'
   - 'CLIENT_HOST=localhost'
@@ -17,39 +17,29 @@ steps:
   - 'REDIS_PORT=6379'
   - 'MONGO_DB_PORT=27017'
   id: 'docker-compose'
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-  dir: 'client'
-  env:
-  - 'NODE_ENV=development'
-  id: 'install-client-dependencies'
-  waitFor: ['-']
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['test']
-  dir: 'client'
-  id: 'test-client'
-  waitFor: ['docker-compose', 'install-client-dependencies']
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-  dir: 'api'
-  env:
-  - 'NODE_ENV=development'
-  id: 'install-api-dependencies'
-  waitFor: ['-']
+
+- name: 'docker/compose:1.15.0'
+  args: ['exec', 'api', 'bash']
+  id: 'api-bash'
+  waitFor: ['docker-compose']
+
 - name: 'gcr.io/cloud-builders/npm'
   args: ['test']
   env:
   - 'NODE_ENV=test'
-  - 'MONGO_DB_URI=mongodb://localhost:27017/tranquill_test'
-  - 'API_URL=http://localhost:8080'
-  - 'CLIENT_URL=http://localhost:3000'
-  - 'JWT_SECRET=secret'
-  - 'REDIS_HOST=redis'
-  - 'REDIS_PORT=6379'
-  - 'REDIS_DB=1'
-  dir: 'api'
   id: 'test-api'
-  waitFor: ['docker-compose', 'install-api-dependencies']
+  waitFor: ['api-bash']
+
+- name: 'docker/compose:1.15.0'
+  args: ['exec', 'client', 'bash']
+  id: 'client-bash'
+  waitFor: ['docker-compose']
+
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test']
+  id: 'test-client'
+  waitFor: ['client-bash']
+
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   dir: 'client'
@@ -58,34 +48,42 @@ steps:
   - 'REACT_APP_API_URL=staging-api.tranquillapp.com'
   id: 'build-client-bundle'
   waitFor: ['test-client', 'test-api']
+
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', '.']
   dir: 'client'
   id: 'build-client-image'
   waitFor: ['build-client-bundle']
+
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID']
   dir: 'client'
   id: 'push-client-image'
   waitFor: ['build-client-image']
+
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID', '.']
   dir: 'api'
   id: 'build-api-image'
   waitFor: ['test-client', 'test-api']
+
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
   dir: 'api'
   id: 'push-api-image'
   waitFor: ['build-api-image']
+
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['set', 'image', 'deployment/staging-client', 'staging_client=us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID']
   dir: 'client'
   waitFor: ['push-client-image', 'push-api-image']
+
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['set', 'image', 'deployment/staging-api', 'staging_api=us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
   dir: 'api'
   waitFor: ['push-client-image', 'push-api-image']
+
 images:
   ['us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
+
 tags: ['${_ENV}']
