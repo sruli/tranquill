@@ -19,11 +19,11 @@ steps:
   id: 'docker-compose'
 
 - name: 'docker/compose:1.15.0'
-  args: ['exec', '-T', 'api', 'bash']
+  args: ['exec', '-T', 'api', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
-  - 'NODE_ENV=development'
+  - 'NODE_ENV=test'
   - 'REACT_APP_ENV=test'
   - 'REACT_APP_API_URL=http://localhost:8080'
   - 'MONGO_DB_URI=mongodb://mongodb:27017/tranquill_test'
@@ -35,23 +35,15 @@ steps:
   - 'REDIS_DB=1'
   - 'REDIS_PORT=6379'
   - 'MONGO_DB_PORT=27017'
-  id: 'api-bash'
-  waitFor: ['docker-compose']
-
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['test']
-  dir: '/tranquill/api'
-  env:
-  - 'NODE_ENV=test'
   id: 'test-api'
-  waitFor: ['api-bash']
+  waitFor: ['docker-compose']
 
 - name: 'docker/compose:1.15.0'
-  args: ['exec', '-T', 'client', 'bash']
+  args: ['exec', '-T', 'client', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
-  - 'NODE_ENV=development'
+  - 'NODE_ENV=test'
   - 'REACT_APP_ENV=test'
   - 'REACT_APP_API_URL=http://localhost:8080'
   - 'MONGO_DB_URI=mongodb://mongodb:27017/tranquill_test'
@@ -63,14 +55,8 @@ steps:
   - 'REDIS_DB=1'
   - 'REDIS_PORT=6379'
   - 'MONGO_DB_PORT=27017'
-  id: 'client-bash'
-  waitFor: ['docker-compose']
-
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['test']
-  dir: '/tranquill/client'
   id: 'test-client'
-  waitFor: ['client-bash']
+  waitFor: ['docker-compose']
 
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
