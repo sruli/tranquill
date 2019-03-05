@@ -19,7 +19,7 @@ steps:
   id: 'docker-compose'
 
 - name: 'docker/compose:1.15.0'
-  args: ['exec', 'api', 'bash']
+  args: ['exec', '-T', 'api', 'bash']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
@@ -46,7 +46,7 @@ steps:
   waitFor: ['api-bash']
 
 - name: 'docker/compose:1.15.0'
-  args: ['exec', 'client', 'bash']
+  args: ['exec', '-T', 'client', 'bash']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
