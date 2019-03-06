@@ -1,5 +1,5 @@
 steps:
-- name: 'docker/compose:1.15.0'
+- name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['up', '-d', '--build', '--force-recreate']
   env:
   - 'NODE_ENV=development'
@@ -19,7 +19,7 @@ steps:
   - 'REDIS_PORT=6379'
   id: 'docker-compose'
 
-- name: 'docker/compose:1.15.0'
+- name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['exec', '-T', '-e', 'NODE_ENV=test', 'api', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
@@ -40,7 +40,7 @@ steps:
   id: 'test-api'
   waitFor: ['docker-compose']
 
-- name: 'docker/compose:1.15.0'
+- name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['exec', '-T', '-e', 'NODE_ENV=test', 'client', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
