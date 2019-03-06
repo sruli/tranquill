@@ -62,13 +62,19 @@ steps:
   waitFor: ['docker-compose']
 
 - name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'client'
+  id: 'client-npm-install'
+  waitFor: ['test-client', 'test-api']
+
+- name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
   dir: 'client'
   env:
   - 'REACT_APP_ENV=staging'
   - 'REACT_APP_API_URL=staging-api.tranquillapp.com'
   id: 'build-client-bundle'
-  waitFor: ['test-client', 'test-api']
+  waitFor: ['client-npm-install']
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', '.']
