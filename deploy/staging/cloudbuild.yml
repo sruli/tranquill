@@ -20,7 +20,7 @@ steps:
   id: 'docker-compose'
 
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
-  args: ['exec', '-T', 'api', 'NODE_ENV=test', 'npm', 'test']
+  args: ['exec', '-T', 'api', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
@@ -41,7 +41,7 @@ steps:
   waitFor: ['docker-compose']
 
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
-  args: ['exec', '-T', 'client', 'NODE_ENV=test', 'npm', 'test']
+  args: ['exec', '-T', 'client', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'

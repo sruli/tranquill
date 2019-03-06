@@ -6,7 +6,7 @@
     "start": "nodemon ./src/app",
     "start:production": "node ./src/app",
     "start:staging": "node ./src/app",
-    "test": "mocha --file test/setup.js --recursive"
+    "test": "NODE_ENV=test mocha --file test/setup.js --recursive"
   },
   "devDependencies": {
     "chai": "^4.2.0",
