@@ -116,7 +116,4 @@ steps:
   dir: 'api'
   waitFor: ['push-client-image', 'push-api-image']
 
-images:
-  ['us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
-
 tags: ['${_ENV}']
