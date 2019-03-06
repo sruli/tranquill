@@ -102,11 +102,17 @@ steps:
 
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['set', 'image', 'deployment/staging-client', 'staging_client=us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID']
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-east4-c'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=tranquill'
   dir: 'client'
   waitFor: ['push-client-image', 'push-api-image']
 
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['set', 'image', 'deployment/staging-api', 'staging_api=us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-east4-c'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=tranquill'
   dir: 'api'
   waitFor: ['push-client-image', 'push-api-image']
 
