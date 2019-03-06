@@ -1,6 +1,33 @@
 steps:
+
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'client'
+  id: 'client-npm-install'
+
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build']
+  dir: 'client'
+  env:
+  - 'REACT_APP_ENV=staging'
+  - 'REACT_APP_API_URL=https://staging-api.tranquillapp.com'
+  id: 'build-client-bundle'
+  waitFor: ['client-npm-install']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', '.']
+  dir: 'client'
+  id: 'build-client-image'
+  waitFor: ['build-client-bundle']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID', '.']
+  dir: 'api'
+  id: 'build-api-image'
+  waitFor: ['-']
+
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
-  args: ['up', '-d', '--build', '--force-recreate']
+  args: ['up', '-d']
   env:
   - 'NODE_ENV=development'
   - 'CLIENT_PORT=3000'
@@ -18,6 +45,7 @@ steps:
   - 'REDIS_DB=1'
   - 'REDIS_PORT=6379'
   id: 'docker-compose'
+  waitFor: ['build-client-image', 'build-api-image']
 
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['exec', '-T', 'api', 'npm', 'test']
@@ -61,44 +89,17 @@ steps:
   id: 'test-client'
   waitFor: ['docker-compose']
 
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-  dir: 'client'
-  id: 'client-npm-install'
-  waitFor: ['test-client', 'test-api']
-
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['run', 'build']
-  dir: 'client'
-  env:
-  - 'REACT_APP_ENV=staging'
-  - 'REACT_APP_API_URL=staging-api.tranquillapp.com'
-  id: 'build-client-bundle'
-  waitFor: ['client-npm-install']
-
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', '.']
-  dir: 'client'
-  id: 'build-client-image'
-  waitFor: ['build-client-bundle']
-
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID']
   dir: 'client'
   id: 'push-client-image'
-  waitFor: ['build-client-image']
-
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID', '.']
-  dir: 'api'
-  id: 'build-api-image'
-  waitFor: ['test-client', 'test-api']
+  waitFor: ['test-client']
 
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
   dir: 'api'
   id: 'push-api-image'
-  waitFor: ['build-api-image']
+  waitFor: ['test-api']
 
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['set', 'image', 'deployment/staging-client', 'staging-client=us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID']
@@ -115,8 +116,5 @@ steps:
   - 'CLOUDSDK_CONTAINER_CLUSTER=tranquill'
   dir: 'api'
   waitFor: ['push-client-image', 'push-api-image']
-
-images:
-  ['us.gcr.io/$PROJECT_ID/staging_client:$REVISION_ID', 'us.gcr.io/$PROJECT_ID/staging_api:$REVISION_ID']
 
 tags: ['${_ENV}']
