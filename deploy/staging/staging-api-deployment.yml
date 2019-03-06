@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: staging-api
-        image: us.gcr.io/tranquill/staging_api@sha256:172955988459185608c8c432a99c43b3821ef4249372fc296ab52a01c5f9de12
+        image: us.gcr.io/tranquill/staging_api:0cc98c519344d965b232e36ea14ece44afb4f0b1
         command: ["npm", "run", "start:staging"]
         env:
         - name: NODE_ENV
