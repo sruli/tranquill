@@ -2,7 +2,6 @@ steps:
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['up', '-d', '--build', '--force-recreate']
   env:
-  - 'CI=true'
   - 'NODE_ENV=development'
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
@@ -23,7 +22,6 @@ steps:
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['exec', '-T', 'api', 'npm', 'test']
   env:
-  - 'CI=true'
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
   - 'NODE_ENV=test'
@@ -45,7 +43,6 @@ steps:
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
   args: ['exec', '-T', 'client', 'npm', 'test']
   env:
-  - 'CI=true'
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
   - 'NODE_ENV=test'

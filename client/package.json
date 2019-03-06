@@ -28,7 +28,7 @@
     "start:production": "node ./src/server.js",
     "start:staging": "node ./src/server.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --no-watch",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
