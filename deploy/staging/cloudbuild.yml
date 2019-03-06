@@ -2,13 +2,13 @@ steps:
 - name: 'docker/compose:1.15.0'
   args: ['up', '-d', '--build', '--force-recreate']
   env:
+  - 'NODE_ENV=development'
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
-  - 'NODE_ENV=development'
   - 'REACT_APP_ENV=test'
   - 'REACT_APP_API_URL=http://localhost:8080'
-  - 'MONGO_DB_URL=mongodb://mongodb:27017/tranquill_development'
-  - 'MONGO_DB_NAME=tranquill_development'
+  - 'MONGO_DB_URL=mongodb://mongodb:27017/tranquill_test'
+  - 'MONGO_DB_NAME=tranquill_test'
   - 'MONGO_DB_PORT=27017'
   - 'API_URL=http://localhost:8080'
   - 'CLIENT_URL=http://localhost:3000'
@@ -20,7 +20,7 @@ steps:
   id: 'docker-compose'
 
 - name: 'docker/compose:1.15.0'
-  args: ['exec', '-T', 'api', 'npm', 'test']
+  args: ['exec', '-T', '-e', 'NODE_ENV=test', 'api', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
@@ -41,7 +41,7 @@ steps:
   waitFor: ['docker-compose']
 
 - name: 'docker/compose:1.15.0'
-  args: ['exec', '-T', 'client', 'npm', 'test']
+  args: ['exec', '-T', '-e', 'NODE_ENV=test', 'client', 'npm', 'test']
   env:
   - 'CLIENT_PORT=3000'
   - 'API_PORT=8080'
