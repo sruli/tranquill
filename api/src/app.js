@@ -10,8 +10,6 @@ const morganConfig = require('../config/morgan');
 const corsConfig = require('../config/cors');
 const enforceSSL = require('./middlewares/enforceSSL');
 
-connectDB();
-
 const app = express();
 
 app.set('trust proxy', true);
@@ -30,6 +28,12 @@ app.use(cookieParser());
 app.use(routes);
 
 if (!testEnv()) {
-  app.listen(process.env.API_PORT);
+  (function connectDBAndStartServer() {
+    connectDB().then(() => {
+      app.listen(process.env.API_PORT, () => {
+        console.log(`Server running on port ${process.env.API_PORT}`);
+      });
+    });
+  }());
 }
 module.exports = app;

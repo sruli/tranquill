@@ -1,12 +1,3 @@
-const path = require('path');
-const fs = require('fs');
-
-// Conditionally set env vars since in cloud build env vars are set a part of the buil
-if (fs.existsSync(path.join(__dirname, '.env'))) {
-  // eslint-disable-next-line global-require
-  require('dotenv').config({ path: path.join(__dirname, '.env') });
-}
-
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const chaiChange = require('chai-change');
@@ -28,7 +19,7 @@ chai.use(sinonChai);
 factory.setAdapter(adapter);
 
 before(async () => {
-  connectDB();
+  await connectDB();
   await Promise.all([Notebook, ContentBlock, User].map(async (model) => {
     await model.deleteMany();
   }));

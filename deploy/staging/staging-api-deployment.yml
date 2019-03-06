@@ -29,7 +29,7 @@ spec:
           value: "staging.tranquillapp.com"
         - name: CLIENT_URL
           value: "https://staging.tranquillapp.com"
-        - name: MONGO_DB_URI
+        - name: MONGO_DB_URL
           value: "mongodb://staging-mongo.default.svc.cluster.local:27017/tranquill_staging"
         - name: REDIS_HOST
           value: "staging-redis.default.svc.cluster.local"

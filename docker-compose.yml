@@ -24,7 +24,8 @@ services:
     environment:
       - API_PORT=${API_PORT}
       - NODE_ENV=${NODE_ENV}
-      - MONGO_DB_URI=${MONGO_DB_URI}
+      - MONGO_DB_URL=${MONGO_DB_URL}
+      - MONGO_DB_NAME=${MONGO_DB_NAME}
       - API_URL=${API_URL}
       - CLIENT_URL=${CLIENT_URL}
       - CLIENT_HOST=${CLIENT_HOST}

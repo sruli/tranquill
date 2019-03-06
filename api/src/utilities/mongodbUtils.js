@@ -1,24 +1,32 @@
 const mongoose = require('mongoose');
 
-const { env: { MONGO_DB_URI } } = process;
+const { MONGO_DB_URL, MONGO_DB_NAME } = process.env;
 
-const NOISY = process.env.NODE_ENV === 'development';
-
-const connectDB = () => {
-  const { readyState } = mongoose.connection;
-  const { disconnected } = mongoose.Connection.STATES;
-
-  if (readyState !== disconnected) return;
-
-  mongoose.connect(MONGO_DB_URI, { useNewUrlParser: true, useCreateIndex: true })
-    .then(() => NOISY && console.log('MongoDB is connected'))
-    .catch(() => {
-      if (NOISY) console.log('MongoDB connection unsuccessful, retry after 5 seconds.');
-      setTimeout(connectDB, 5000);
-    });
+const wait = function wait() {
+  return new Promise(resolve => setTimeout(resolve, 5000));
 };
 
-const closeDB = () => {
+const connectDB = async function connectDB() {
+  async function connect() {
+    try {
+      await mongoose.connect(MONGO_DB_URL, { useNewUrlParser: true, useCreateIndex: true });
+      console.log('MongoDB is connected');
+    } catch (e) {
+      console.log('MongoDB connection unsuccessful, retry after 5 seconds.');
+      await wait();
+      await connect();
+    }
+  }
+
+  console.log('MONGO_DB_NAME:', MONGO_DB_NAME);
+  console.log('MONGO_DB_URL:', MONGO_DB_URL);
+  const existing = mongoose.connections.find(({ name }) => name === MONGO_DB_NAME);
+  if (!existing || existing.readyState === mongoose.Connection.STATES.disconnected) {
+    await connect();
+  }
+};
+
+const closeDB = function closeDB() {
   const { readyState } = mongoose.connection;
   const { connected } = mongoose.Connection.STATES;
 
@@ -27,7 +35,7 @@ const closeDB = () => {
   mongoose.connection.close();
 };
 
-const dropDB = () => {
+const dropDB = function dropDB() {
   if (mongoose.connection.db) {
     mongoose.connection.db.dropDatabase().catch(() => {});
   }
