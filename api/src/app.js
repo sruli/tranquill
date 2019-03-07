@@ -28,12 +28,10 @@ app.use(cookieParser());
 app.use(routes);
 
 if (!testEnv()) {
-  (function connectDBAndStartServer() {
-    connectDB().then(() => {
-      app.listen(process.env.API_PORT, () => {
-        console.log(`Server running on port ${process.env.API_PORT}`);
-      });
+  connectDB().then(() => {
+    app.listen(process.env.API_PORT, () => {
+      console.log(`Server running on port ${process.env.API_PORT}`);
     });
-  }());
+  });
 }
 module.exports = app;

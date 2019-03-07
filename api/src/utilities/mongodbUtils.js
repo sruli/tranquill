@@ -18,8 +18,6 @@ const connectDB = async function connectDB() {
     }
   }
 
-  console.log('MONGO_DB_NAME:', MONGO_DB_NAME);
-  console.log('MONGO_DB_URL:', MONGO_DB_URL);
   const existing = mongoose.connections.find(({ name }) => name === MONGO_DB_NAME);
   if (!existing || existing.readyState === mongoose.Connection.STATES.disconnected) {
     await connect();
