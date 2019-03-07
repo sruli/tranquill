@@ -1,22 +1,23 @@
 import url from 'url';
-import { API_URL } from '../constants';
+
+const apiURL = process.env.REACT_APP_API_URL;
 
 const getNotebooks = async function getNotebooks() {
   const queryString = url.format({ query: { sort: JSON.stringify({ updatedAt: 'desc' }) } });
-  const response = await fetch(`${API_URL}/v1/notebooks?${queryString}`, {
+  const response = await fetch(`${apiURL}/v1/notebooks?${queryString}`, {
     credentials: 'include',
   }).then(res => res.json());
   return response;
 };
 
 const getNotebook = async function getNotebook(id) {
-  const response = await fetch(`${API_URL}/v1/notebooks/${id}`, { credentials: 'include' });
+  const response = await fetch(`${apiURL}/v1/notebooks/${id}`, { credentials: 'include' });
   if (response.ok) return response.json();
   return response;
 };
 
 const saveEditorState = async function saveEditorState({ notebookId, rawEditorState }) {
-  const response = await fetch(`${API_URL}/v1/notebooks/${notebookId}/contentBlocks`, {
+  const response = await fetch(`${apiURL}/v1/notebooks/${notebookId}/contentBlocks`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ const saveEditorState = async function saveEditorState({ notebookId, rawEditorSt
 };
 
 const signInUser = async function signInUser({ email, password }) {
-  const response = await fetch(`${API_URL}/v1/authentications`, {
+  const response = await fetch(`${apiURL}/v1/authentications`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ const signInUser = async function signInUser({ email, password }) {
 };
 
 const signOutUser = async function signOutUser() {
-  await fetch(`${API_URL}/v1/authentications`, {
+  await fetch(`${apiURL}/v1/authentications`, {
     method: 'delete',
     credentials: 'include',
   });

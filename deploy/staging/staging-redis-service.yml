@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: staging-redis
+  labels:
+    app: staging-redis
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: staging-redis
+  ports:
+  - port: 6380
+    name: staging-redis
+    targetPort: 6379

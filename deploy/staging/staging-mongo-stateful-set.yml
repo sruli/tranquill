@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: staging-mongo
+  name: staging-mongo
+spec:
+  serviceName: staging-mongo
+  selector:
+    matchLabels:
+      app: staging-mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: staging-mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: staging-mongo
+        image: mongo
+        ports:
+        - containerPort: 27017
+          name: staging-mongo
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-persistent-storage
+      annotations:
+        volume.beta.kubernetes.io/storage-class: "fast"
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi

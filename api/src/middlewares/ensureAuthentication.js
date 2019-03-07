@@ -23,7 +23,7 @@ const ensureAuthentication = async function ensureAuthentication(req, res, next)
     res.cookie('authJWT', extendedToken, {
       httpOnly: true,
       secure: !devEnv(),
-      domain: devEnv() ? '' : process.env.CLIENT_HOST,
+      domain: devEnv() ? '' : 'tranquillapp.com',
     });
 
     return next();

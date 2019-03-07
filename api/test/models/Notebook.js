@@ -16,7 +16,7 @@ describe('Notebook', () => {
       const noName = async () => {
         await notebookFactory.create('notebook', { name: null });
       };
-      expect(noName()).to.be.rejectedWith(
+      return expect(noName()).to.be.rejectedWith(
         mongoose.Error.ValidationError,
         'Path `name` is required.',
       );

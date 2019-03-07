@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staging-api
+  labels:
+    app: staging-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: staging-api
+  template:
+    metadata:
+      labels:
+        app: staging-api
+    spec:
+      containers:
+      - name: staging-api
+        image: us.gcr.io/tranquill/staging_api:0cc98c519344d965b232e36ea14ece44afb4f0b1
+        command: ["npm", "run", "start:staging"]
+        env:
+        - name: NODE_ENV
+          value: "staging"
+        - name: API_PORT
+          value: "8080"
+        - name: API_URL
+          value: "https://staging-api.tranquillapp.com"
+        - name: CLIENT_HOST
+          value: "staging.tranquillapp.com"
+        - name: CLIENT_URL
+          value: "https://staging.tranquillapp.com"
+        - name: MONGO_DB_URL
+          value: "mongodb://staging-mongo.default.svc.cluster.local:27017/tranquill_staging"
+        - name: REDIS_HOST
+          value: "staging-redis.default.svc.cluster.local"
+        - name: REDIS_DB
+          value: "2"
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: env-secrets
+              key: STAGING_JWT_SECRET

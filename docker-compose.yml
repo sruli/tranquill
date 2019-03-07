@@ -4,6 +4,9 @@ services:
     container_name: tranquill_client
     build: ./client
     restart: always
+    environment:
+      - REACT_APP_ENV=${REACT_APP_ENV}
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
     expose:
       - ${CLIENT_PORT}
     ports:
@@ -21,7 +24,8 @@ services:
     environment:
       - API_PORT=${API_PORT}
       - NODE_ENV=${NODE_ENV}
-      - MONGO_DB_URI=${MONGO_DB_URI}
+      - MONGO_DB_URL=${MONGO_DB_URL}
+      - MONGO_DB_NAME=${MONGO_DB_NAME}
       - API_URL=${API_URL}
       - CLIENT_URL=${CLIENT_URL}
       - CLIENT_HOST=${CLIENT_HOST}
@@ -39,7 +43,7 @@ services:
       - redis
     command: npm start
   mongodb:
-    container_name: tranquill_mongodb
+    container_name: mongodb
     image: mongo
     expose:
       - ${MONGO_DB_PORT}
@@ -49,8 +53,10 @@ services:
     ports:
       - ${MONGO_DB_PORT}:${MONGO_DB_PORT}
   redis:
-    container_name: tranquill_redis
+    container_name: redis
     image: redis
     expose:
       - ${REDIS_PORT}
     restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
