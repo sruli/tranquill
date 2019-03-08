@@ -17,6 +17,7 @@ steps:
   - 'REDIS_HOST=redis'
   - 'REDIS_DB=1'
   - 'REDIS_PORT=6379'
+  secretEnv: ['MAILCHIMP_API_KEY']
   id: 'docker-compose'
 
 - name: 'gcr.io/$PROJECT_ID/docker-compose'
@@ -37,6 +38,7 @@ steps:
   - 'REDIS_HOST=redis'
   - 'REDIS_DB=1'
   - 'REDIS_PORT=6379'
+  secretEnv: ['MAILCHIMP_API_KEY']
   id: 'test-api'
   waitFor: ['docker-compose']
 
@@ -58,6 +60,7 @@ steps:
   - 'REDIS_HOST=redis'
   - 'REDIS_DB=1'
   - 'REDIS_PORT=6379'
+  secretEnv: ['MAILCHIMP_API_KEY']
   id: 'test-client'
   waitFor: ['docker-compose']
 
@@ -117,3 +120,7 @@ steps:
   waitFor: ['push-client-image', 'push-api-image']
 
 tags: ['${_ENV}']
+secrets:
+  - kmsKeyName: 'projects/tranquill/locations/global/keyRings/tranquill/cryptoKeys/general'
+    secretEnv:
+      MAILCHIMP_API_KEY: CiQA9/KxRxvQ4LJBZr8z6oC1aHMSYAshFIcDU82scURQZRHD68USTgAHEGtFn08hX76bAwYVObHaKFWxtdxWyUh95ysuy4cpcDVg/8SXQULQaBcWB28lgqq3dX9UOkg15GMQ1TiuZEnvKXLHLdxYw8FYTFa0sQ==

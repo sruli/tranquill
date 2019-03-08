@@ -3,6 +3,9 @@ const chaiAsPromised = require('chai-as-promised');
 const chaiChange = require('chai-change');
 const sinonChai = require('sinon-chai');
 const FactoryGirl = require('factory-girl');
+const { Polly } = require('@pollyjs/core');
+const NodeHttpAdapter = require('@pollyjs/adapter-node-http');
+const FSPersister = require('@pollyjs/persister-fs');
 const redisClient = require('../config/redis');
 const { connectDB, closeDB } = require('../src/utilities/mongodbUtils');
 const Notebook = require('../src/models/Notebook');
@@ -17,6 +20,9 @@ chai.use(chaiChange);
 chai.use(sinonChai);
 
 factory.setAdapter(adapter);
+
+Polly.register(NodeHttpAdapter);
+Polly.register(FSPersister);
 
 before(async () => {
   await connectDB();
