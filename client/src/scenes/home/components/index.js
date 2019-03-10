@@ -25,14 +25,14 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
           <div className="row mb-md-4">
             <div className="col">
               <h5 className="font-weight-normal">
-                Use Tranquill to develope your thoughts. Everything is encrypted so what you write is yours alone.
+                Use Tranquill notebooks to develope your thoughts. Everything is encrypted so what you write is yours alone.
               </h5>
             </div>
           </div>
           <div className="row mb-md-4">
             <div className="col">
               <h5 className="font-weight-normal">
-                Curently in limited Alpha. Wanna be added to the list? Leave your email and we&#39;ll let you know as soon as you can join.
+                Coming soon. Leave us your email and you&#39;ll be the first to know when Tranquill is live.
               </h5>
             </div>
           </div>
