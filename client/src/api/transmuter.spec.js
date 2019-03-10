@@ -91,4 +91,32 @@ describe('transmuter', () => {
       });
     });
   });
+
+  describe('submitEmailSignup', () => {
+    describe('when status is subscribed', () => {
+      it('returns the correct response', () => {
+        expect(
+          transmuter.submitEmailSignup.fromServer({ status: 'subscribed' }),
+        ).toEqual({ ok: true });
+      });
+    });
+
+    describe('when status is not subsscribed', () => {
+      describe('when email is already member', () => {
+        it('returns the correct response', () => {
+          expect(
+            transmuter.submitEmailSignup.fromServer({ status: 400, title: 'Member Exists' }),
+          ).toEqual({ ok: true });
+        });
+      });
+
+      describe('when email is not already member', () => {
+        it('returns the correct response', () => {
+          expect(
+            transmuter.submitEmailSignup.fromServer({ status: 400 }),
+          ).toEqual({ ok: false });
+        });
+      });
+    });
+  });
 });

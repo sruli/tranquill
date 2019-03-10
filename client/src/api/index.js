@@ -51,10 +51,29 @@ const signOutUser = async function signOutUser() {
   });
 };
 
+const submitEmailSignup = async function submitEmailSignup({ email }) {
+  const response = await fetch(`${apiURL}/v1/emailSignups`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ email }),
+  });
+
+  try {
+    return await response.json();
+  } catch (e) {
+    return response;
+  }
+};
+
 export default {
   getNotebooks,
   getNotebook,
   saveEditorState,
   signInUser,
   signOutUser,
+  submitEmailSignup,
 };

@@ -40,7 +40,7 @@ TestApp.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
 };
 
-const mountApp = ({ path = '/' }) => {
+const mountApp = ({ path = '/' } = {}) => {
   const history = createMemoryHistory({ initialEntries: [path] });
   const sagaMiddleware = createSagaMiddleware();
   const routingMiddleware = routerMiddleware(history);
