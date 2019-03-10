@@ -20,14 +20,14 @@ class NotebookEditor extends React.Component {
     this.draftEditor = React.createRef();
   }
 
-  // componentDidMount() {
-  //   const focus = async () => {
-  //     const focused = await this.setEditorFocus();
-  //     if (!focused) focus();
-  //   };
+  async componentDidMount() {
+    const focus = async () => {
+      const focused = await this.setEditorFocus();
+      if (!focused) await focus();
+    };
 
-  //   focus();
-  // }
+    await focus();
+  }
 
   async setEditorFocus() {
     const { editorState, triggerEditorChange } = this.props;
