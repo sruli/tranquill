@@ -1,4 +1,10 @@
+@import '../../../scss/vars';
+
 .display {
   font-family: 'Metropolis-Semibold';
   line-height: 1;
+}
+
+.error {
+  font-size: $font-size-sm;
 }

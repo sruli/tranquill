@@ -53,4 +53,10 @@ export default {
       };
     },
   },
+  submitEmailSignup: {
+    fromServer({ status, title }) {
+      const ok = status === 'subscribed' || title === 'Member Exists';
+      return { ok };
+    },
+  },
 };

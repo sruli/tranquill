@@ -32,12 +32,15 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_DB=${REDIS_DB}
+      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
     expose:
       - ${API_PORT}
     ports:
       - ${API_PORT}:${API_PORT}
     volumes:
       - ./api/src:/tranquill/api/src
+      - ./api/lib:/tranquill/api/lib
+      - ./api/test:/tranquill/api/test
     links:
       - mongodb
       - redis

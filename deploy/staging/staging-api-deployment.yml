@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: staging-api
-        image: us.gcr.io/tranquill/staging_api:0cc98c519344d965b232e36ea14ece44afb4f0b1
+        image: us.gcr.io/tranquill/staging_api:6fb126c8a01620e616b6bc3077bb75eac9bff9f1
         command: ["npm", "run", "start:staging"]
         env:
         - name: NODE_ENV
@@ -40,3 +40,8 @@ spec:
             configMapKeyRef:
               name: env-secrets
               key: STAGING_JWT_SECRET
+        - name: MAILCHIMP_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: env-secrets
+              key: MAILCHIMP_API_KEY

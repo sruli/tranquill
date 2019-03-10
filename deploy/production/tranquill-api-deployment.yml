@@ -40,3 +40,8 @@ spec:
             configMapKeyRef:
               name: env-secrets
               key: JWT_SECRET
+        - name: MAILCHIMP_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: env-secrets
+              key: MAILCHIMP_API_KEY
