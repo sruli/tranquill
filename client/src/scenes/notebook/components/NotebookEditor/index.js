@@ -15,38 +15,6 @@ class NotebookEditor extends React.Component {
     return getDefaultKeyBinding(e);
   }
 
-  constructor(props) {
-    super(props);
-    this.draftEditor = React.createRef();
-  }
-
-  async componentDidMount() {
-    const focus = async () => {
-      const focused = await this.setEditorFocus();
-      if (!focused) await focus();
-    };
-
-    await focus();
-  }
-
-  async setEditorFocus() {
-    const { editorState, triggerEditorChange } = this.props;
-
-    const focused = await new Promise((resolve) => {
-      setTimeout(() => {
-        if (editorState) {
-          const focusedEditorState = EditorState.moveFocusToEnd(editorState);
-          triggerEditorChange(focusedEditorState);
-          resolve(true);
-        }
-
-        resolve(false);
-      }, 100);
-    });
-
-    return focused;
-  }
-
   render() {
     const { editorState, triggerEditorChange } = this.props;
 
@@ -58,7 +26,6 @@ class NotebookEditor extends React.Component {
             onChange={triggerEditorChange}
             placeholder="Start typing something…" // i18n!
             keyBindingFn={NotebookEditor.keyBindingFn}
-            ref={this.draftEditor}
             spellCheck
           />
         </div>

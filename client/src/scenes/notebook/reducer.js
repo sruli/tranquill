@@ -40,10 +40,14 @@ export const editorStateReducer = (state = null, action) => {
       const { editorState } = action.payload;
 
       if (editorState) {
-        return EditorState.createWithContent(editorState);
+        return EditorState.moveFocusToEnd(
+          EditorState.createWithContent(editorState),
+        );
       }
 
-      return EditorState.createEmpty();
+      return EditorState.moveFocusToEnd(
+        EditorState.createEmpty(),
+      );
     }
     case EDITOR_CHANGED: {
       const { editorState } = action.payload;
