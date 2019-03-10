@@ -25,6 +25,7 @@ class NotebookEditor extends React.Component {
       const focused = await this.setEditorFocus();
       if (!focused) focus();
     };
+
     focus();
   }
 
@@ -34,10 +35,12 @@ class NotebookEditor extends React.Component {
     const focused = await new Promise((resolve) => {
       setTimeout(() => {
         if (editorState) {
+          console.log('EDITORSTATE:', editorState);
           const focusedEditorState = EditorState.moveFocusToEnd(editorState);
           triggerEditorChange(focusedEditorState);
           resolve(true);
         }
+
         resolve(false);
       }, 100);
     });
