@@ -34,8 +34,9 @@ class NotebookEditor extends React.Component {
 
     const focused = await new Promise((resolve) => {
       setTimeout(() => {
-        if (editorState) {
-          console.log('EDITORSTATE:', editorState);
+        console.log('EDITORSTATE:', editorState);
+        if (editorState) console.log('CLASSNAME:', editorState.constructor.name);
+        if (editorState && editorState.constructor.name === 'EditorState') {
           const focusedEditorState = EditorState.moveFocusToEnd(editorState);
           triggerEditorChange(focusedEditorState);
           resolve(true);
