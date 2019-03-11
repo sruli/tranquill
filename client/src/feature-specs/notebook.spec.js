@@ -15,7 +15,6 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: 1 }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
@@ -35,7 +34,6 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse());
       api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
@@ -52,8 +50,6 @@ describe('notebook', () => {
     });
 
     it('focuses the editor at the end of the text', async () => {
-      await wait(200); // wait for editorState to load and to set the focus
-      wrapper.update();
       const editorState = wrapper.find('DraftEditor').prop('editorState');
       const lastContentBlock = editorState.getCurrentContent().getLastBlock();
       const selection = editorState.getSelection();
@@ -65,7 +61,6 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      window.scrollTo = () => {};
       const contentBlocks = { href: '', items: [] };
       api.getNotebook.mockResolvedValue(getNotebookResponse({ contentBlocks }));
       const { app } = await mountApp({ path: '/notebooks/1' });
@@ -86,7 +81,7 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      window.scrollTo = () => {};
+      window.getSelection = () => ({});
       api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: 1 }));
       api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
@@ -101,7 +96,7 @@ describe('notebook', () => {
     it('persists the editorState', async () => {
       const editorContent = wrapper.find('.public-DraftEditor-content');
       await editorContent.simulate('beforeInput', { data: 'Some text' });
-      await wait(1); // wait 1ms for saga throttle
+      await wait(100);
       wrapper.update();
       const saveArgs = api.saveEditorState.mock.calls[0][0];
       expect(saveArgs.notebookId).toBeTruthy();
@@ -111,7 +106,7 @@ describe('notebook', () => {
     it('includes the position of each content block in the saveEditorState() payload', async () => {
       const editorContent = wrapper.find('.public-DraftEditor-content');
       await editorContent.simulate('beforeInput', { data: 'Some text' });
-      await wait(1); // wait 1ms for saga throttle
+      await wait(100);
       wrapper.update();
       const saveArgs = api.saveEditorState.mock.calls[0][0];
       expect(saveArgs.rawEditorState.blocks[0]).toHaveProperty('position', 0);
@@ -122,7 +117,6 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      window.scrollTo = () => {};
       api.getNotebook.mockResolvedValue(getNotebookResponse({ name: 'Notebook', id: null }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
@@ -136,7 +130,7 @@ describe('notebook', () => {
     it('does not persist editor state', async () => {
       const editorContent = wrapper.find('.public-DraftEditor-content');
       await editorContent.simulate('beforeInput', { data: 'Some text' });
-      await wait(1); // wait 1ms for saga throttle
+      await wait();
       wrapper.update();
       expect(api.saveEditorState).not.toHaveBeenCalled();
     });

@@ -38,8 +38,16 @@ export const editorStateReducer = (state = null, action) => {
   switch (action.type) {
     case NOTEBOOK_RETRIEVED: {
       const { editorState } = action.payload;
-      if (editorState) return EditorState.createWithContent(editorState);
-      return EditorState.createEmpty();
+
+      if (editorState) {
+        return EditorState.moveFocusToEnd(
+          EditorState.createWithContent(editorState),
+        );
+      }
+
+      return EditorState.moveFocusToEnd(
+        EditorState.createEmpty(),
+      );
     }
     case EDITOR_CHANGED: {
       const { editorState } = action.payload;
