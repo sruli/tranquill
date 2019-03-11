@@ -25,7 +25,7 @@ describe('EmailSignupButton', () => {
       const button = shallow(
         <EmailSignupButton disabled={false} formStatus={FORM_STATUS.UNSUBMITTED} />,
       );
-      expect(button.dive().text()).toMatch(/add me/i);
+      expect(button.dive().text()).toMatch(/gimme a shout/i);
     });
   });
 
@@ -34,7 +34,7 @@ describe('EmailSignupButton', () => {
       const button = shallow(
         <EmailSignupButton disabled={false} formStatus={FORM_STATUS.SUBMITTED} />,
       );
-      expect(button.dive().text()).toMatch(/added/i);
+      expect(button.dive().text()).toMatch(/okay/i);
     });
   });
 });

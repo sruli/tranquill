@@ -5,7 +5,7 @@ import { FORM_STATUS } from '../../constants';
 
 const EmailSignupButton = ({ disabled, formStatus }) => (
   <Button type="lg-primary" disabled={disabled}>
-    { formStatus === FORM_STATUS.SUBMITTED ? 'Added' : 'Add me' }
+    { formStatus === FORM_STATUS.SUBMITTED ? 'Okay' : 'Gimme a shout' }
   </Button>
 );
 

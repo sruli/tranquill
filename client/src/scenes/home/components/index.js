@@ -17,22 +17,30 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
     <div className="container-fluid min-vh-100 pt-5">
       <div className="row">
         <div className="col-md-5 offset-md-1 pt-5">
-          <div className="row mb-md-5">
+          <div className="row mb-4">
             <div className="col">
-              <h1 className={`display-1 ls-5 ${styles.display}`}>Create notebooks—Build ideas.</h1>
+              <h1 className={`display-2 d-md-block d-none ls-5 ${styles.display}`}>Grab a notebook—</h1>
+              <h1 className={`display-4 d-md-none ls-4 ${styles.display}`}>Grab a notebook—</h1>
             </div>
           </div>
-          <div className="row mb-md-4">
+          <div className="row mb-4">
             <div className="col">
               <h5 className="font-weight-normal">
-                Use Tranquill notebooks to develope your thoughts. Everything is encrypted so what you write is yours alone.
+                Get ideas out of your head and into concepts you can run with. Every notebook is encrypted so you and your ideas have the privacy to grow confidently.
               </h5>
             </div>
           </div>
-          <div className="row mb-md-4">
+          <div className="row">
+            <div className="col">
+              <h4 className="ls-2 mb-md-2">
+                Hold that thought…
+              </h4>
+            </div>
+          </div>
+          <div className="row mb-4">
             <div className="col">
               <h5 className="font-weight-normal">
-                Coming soon. Leave us your email and you&#39;ll be the first to know when Tranquill is live.
+                We&#39;re working hard to get Tranquill live. If you leave your email we&#39;ll give a shout when it&#39;s ready for ya.
               </h5>
             </div>
           </div>
@@ -49,7 +57,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
                       disabled={formStatus === FORM_STATUS.SUBMITTED}
                     />
                   </div>
-                  <div className="col-auto">
+                  <div className="col col-md-auto">
                     <EmailSignupButton disabled={buttonDisabled} formStatus={formStatus} />
                   </div>
                 </div>
