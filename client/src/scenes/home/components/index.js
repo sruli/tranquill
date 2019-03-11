@@ -37,7 +37,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
               </h4>
             </div>
           </div>
-          <div className="row mb-4">
+          <div className="row mb-5 mb-md-4">
             <div className="col">
               <h5 className="font-weight-normal ls-2 ls-md-1">
                 We&#39;re working hard to get Tranquill live. If you leave your email we&#39;ll give a shout when it&#39;s ready for ya.
