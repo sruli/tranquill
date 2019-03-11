@@ -26,7 +26,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
           <div className="row mb-4">
             <div className="col">
               <h5 className="font-weight-normal ls-2 ls-md-1">
-                Get ideas out of your head and into concepts you can run with. Every notebook is encrypted so you and your ideas have privacy to grow confidently.
+                Put your thoughts to words and bring them to life. Every notebook is encrypted so you and your ideas have privacy to grow.
               </h5>
             </div>
           </div>
@@ -40,7 +40,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
           <div className="row mb-5 mb-md-4">
             <div className="col">
               <h5 className="font-weight-normal ls-2 ls-md-1">
-                We&#39;re working hard to get Tranquill live. If you leave your email we&#39;ll give a shout when it&#39;s ready for ya.
+                We&#39;re working hard to get Tranquill live. If you leave your email we&#39;ll give a shout when it&#39;s ready.
               </h5>
             </div>
           </div>
