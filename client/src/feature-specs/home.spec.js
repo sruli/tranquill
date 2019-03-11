@@ -22,7 +22,7 @@ describe('home', () => {
       it('loads with the correct button state', () => {
         const button = wrapper.find('form').find('Button');
         expect(button.prop('disabled')).toBe(false);
-        expect(button.text()).toMatch(/add me/i);
+        expect(button.text()).toMatch(/gimme a shout/i);
       });
     });
 
@@ -60,7 +60,7 @@ describe('home', () => {
         it('sets the correct button state', () => {
           const button = wrapper.find('form').find('Button');
           expect(button.prop('disabled')).toBe(true);
-          expect(button.text()).toMatch(/added/i);
+          expect(button.text()).toMatch(/okay/i);
         });
 
         it('does not show an error', () => {
@@ -88,7 +88,7 @@ describe('home', () => {
         it('sets the correct button state', () => {
           const button = wrapper.find('form').find('Button');
           expect(button.prop('disabled')).toBe(true);
-          expect(button.text()).toMatch(/add me/i);
+          expect(button.text()).toMatch(/gimme a shout/i);
         });
 
         it('displays the error', () => {

@@ -17,22 +17,30 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
     <div className="container-fluid min-vh-100 pt-5">
       <div className="row">
         <div className="col-md-5 offset-md-1 pt-5">
-          <div className="row mb-md-5">
+          <div className="row mb-4">
             <div className="col">
-              <h1 className={`display-1 ls-5 ${styles.display}`}>Create notebooks—Build ideas.</h1>
+              <h1 className={`display-2 d-md-block d-none ls-5 ${styles.display}`}>Grab a notebook—</h1>
+              <h1 className={`display-4 d-md-none ls-4 ${styles.display}`}>Grab a notebook—</h1>
             </div>
           </div>
-          <div className="row mb-md-4">
+          <div className="row mb-4">
             <div className="col">
-              <h5 className="font-weight-normal">
-                Use Tranquill notebooks to develope your thoughts. Everything is encrypted so what you write is yours alone.
+              <h5 className="font-weight-normal ls-2 ls-md-1">
+                Put your thoughts to words and bring them to life. Every notebook is encrypted so you and your ideas have privacy to grow.
               </h5>
             </div>
           </div>
-          <div className="row mb-md-4">
+          <div className="row">
             <div className="col">
-              <h5 className="font-weight-normal">
-                Coming soon. Leave us your email and you&#39;ll be the first to know when Tranquill is live.
+              <h4 className="ls-3 ls-md-2 mb-md-2">
+                Hold that thought…
+              </h4>
+            </div>
+          </div>
+          <div className="row mb-5 mb-md-4">
+            <div className="col">
+              <h5 className="font-weight-normal ls-2 ls-md-1">
+                We&#39;re working hard to get Tranquill live. Leave your email and you&#39;ll get a shout when it&#39;s ready.
               </h5>
             </div>
           </div>
@@ -40,7 +48,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
             <div className="col">
               <form noValidate onSubmit={onSubmit}>
                 <div className="form-row align-items-end">
-                  <div className="col">
+                  <div className="col-6 col-md-7">
                     <Input
                       type="email"
                       placeholder="Email"
@@ -49,7 +57,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
                       disabled={formStatus === FORM_STATUS.SUBMITTED}
                     />
                   </div>
-                  <div className="col-auto">
+                  <div className="col-6 col-md-5">
                     <EmailSignupButton disabled={buttonDisabled} formStatus={formStatus} />
                   </div>
                 </div>
