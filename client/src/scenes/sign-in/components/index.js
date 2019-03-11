@@ -12,11 +12,11 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
   <React.Fragment>
     <div className="container-fluid min-vh-100">
       <div className="row min-vh-100 flex-column justify-content-center">
-        <div className="col-3 offset-1">
-          <div className="row justify-content-center mb-md-3">
+        <div className="col-10 col-md-3 offset-1">
+          <div className="row justify-content-center mb-3">
             <TranquillLogo size="lg" />
           </div>
-          <div className="row justify-content-center mb-md-5">
+          <div className="row justify-content-center mb-5">
             <h6 className="text-muted font-weight-normal">Sign in to your Tranquill account</h6>
           </div>
 
@@ -24,8 +24,8 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
 
           <div className="row">
             <div className="col">
-              <form noValidate className="pt-md-5" onSubmit={onSubmit}>
-                <div className="form-row mb-md-4">
+              <form noValidate className="pt-5" onSubmit={onSubmit}>
+                <div className="form-row mb-4">
                   <div className="col">
                     <Input
                       type="email"
@@ -35,7 +35,7 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
                     />
                   </div>
                 </div>
-                <div className="form-row mb-md-3">
+                <div className="form-row mb-3">
                   <div className="col">
                     <Input
                       type="password"
@@ -45,7 +45,7 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
                     />
                   </div>
                 </div>
-                <div className="form-row mb-md-3">
+                <div className="form-row mb-3">
                   <div className="col">
                     <Button disabled={errors.length > 0 || submitting} className="w-100" type="lg-primary">
                       Sign in
@@ -56,11 +56,11 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
             </div>
           </div>
           <div className={`row ls-2 ${styles.small}`}>
-            <div className="col">
-              Don&#39;t have an account?
+            <div className="col-12 mb-2">
+              Don&#39;t have an account?&nbsp;
               <a href="/get-started">Create account.</a>
             </div>
-            <div className="col text-right">
+            <div className="col-12">
               <a href="/forgot-password">Forgot password?</a>
             </div>
           </div>
