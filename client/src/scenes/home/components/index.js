@@ -48,7 +48,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
             <div className="col">
               <form noValidate onSubmit={onSubmit}>
                 <div className="form-row align-items-end">
-                  <div className="col">
+                  <div className="col-6 col-md-7">
                     <Input
                       type="email"
                       placeholder="Email"
@@ -57,7 +57,7 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
                       disabled={formStatus === FORM_STATUS.SUBMITTED}
                     />
                   </div>
-                  <div className="col col-md-auto">
+                  <div className="col-6 col-md-5">
                     <EmailSignupButton disabled={buttonDisabled} formStatus={formStatus} />
                   </div>
                 </div>

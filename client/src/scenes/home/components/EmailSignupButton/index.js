@@ -4,7 +4,7 @@ import { Button } from '../../../../components/elements';
 import { FORM_STATUS } from '../../constants';
 
 const EmailSignupButton = ({ disabled, formStatus }) => (
-  <Button type="lg-primary" disabled={disabled}>
+  <Button type="lg-primary" disabled={disabled} className="w-100">
     { formStatus === FORM_STATUS.SUBMITTED ? 'Okay' : 'Gimme a shout' }
   </Button>
 );
