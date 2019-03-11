@@ -11,6 +11,7 @@
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
+    .ls#{$infix}-0 { letter-spacing: 0 !important; }
     .ls#{$infix}-1 { letter-spacing: -0.02rem !important; }
     .ls#{$infix}-2 { letter-spacing: -0.05rem !important; }
     .ls#{$infix}-3 { letter-spacing: -0.1rem !important; }

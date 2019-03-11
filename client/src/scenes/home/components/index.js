@@ -25,21 +25,21 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
           </div>
           <div className="row mb-4">
             <div className="col">
-              <h5 className="font-weight-normal">
-                Get ideas out of your head and into concepts you can run with. Every notebook is encrypted so you and your ideas have the privacy to grow confidently.
+              <h5 className="font-weight-normal ls-2 ls-md-1">
+                Get ideas out of your head and into concepts you can run with. Every notebook is encrypted so you and your ideas have privacy to grow confidently.
               </h5>
             </div>
           </div>
           <div className="row">
             <div className="col">
-              <h4 className="ls-2 mb-md-2">
+              <h4 className="ls-3 ls-md-2 mb-md-2">
                 Hold that thought…
               </h4>
             </div>
           </div>
           <div className="row mb-4">
             <div className="col">
-              <h5 className="font-weight-normal">
+              <h5 className="font-weight-normal ls-2 ls-md-1">
                 We&#39;re working hard to get Tranquill live. If you leave your email we&#39;ll give a shout when it&#39;s ready for ya.
               </h5>
             </div>
