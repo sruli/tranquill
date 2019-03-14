@@ -18,7 +18,7 @@ const getNotebook = async function getNotebook(id) {
 
 const saveEditorState = async function saveEditorState({ notebookId, rawEditorState }) {
   const response = await fetch(`${apiURL}/v1/notebooks/${notebookId}/contentBlocks`, {
-    method: 'post',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -32,7 +32,7 @@ const saveEditorState = async function saveEditorState({ notebookId, rawEditorSt
 
 const signInUser = async function signInUser({ email, password }) {
   const response = await fetch(`${apiURL}/v1/authentications`, {
-    method: 'post',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -46,14 +46,14 @@ const signInUser = async function signInUser({ email, password }) {
 
 const signOutUser = async function signOutUser() {
   await fetch(`${apiURL}/v1/authentications`, {
-    method: 'delete',
+    method: 'DELETE',
     credentials: 'include',
   });
 };
 
 const submitEmailSignup = async function submitEmailSignup({ email }) {
   const response = await fetch(`${apiURL}/v1/emailSignups`, {
-    method: 'post',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
