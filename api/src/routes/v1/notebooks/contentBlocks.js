@@ -29,7 +29,8 @@ router.post('/notebooks/:id/contentBlocks', ensureAuthentication, jsonParser, as
   }
 
   ContentBlocksPersistenceManager.init({ notebook, blocks }).manage();
-  await notebook.updateOne();
+
+  await notebook.touch();
 
   return res.status(ACCEPTED).end();
 });
