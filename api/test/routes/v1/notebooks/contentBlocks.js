@@ -61,6 +61,41 @@ describe('contentBlocks routes', () => {
       });
     });
 
+    context('when a user has more than one notebook', () => {
+      let notebook2;
+      let persistenceManagerSpy;
+
+      const makeRequest = function makeRequest() {
+        return request(app)
+          .post(`/v1/notebooks/${notebook2.id}/contentBlocks`)
+          .send({ blocks: [{}, {}, {}] })
+          .accept('Accept', 'application/json');
+      };
+
+      beforeEach(async () => {
+        persistenceManagerSpy = sinon.stub(ContentBlocksPersistenceManager.prototype, 'manage');
+        await notebookFactory.create('notebook');
+        notebook2 = await notebookFactory.create('notebook');
+      });
+
+      afterEach(async () => {
+        persistenceManagerSpy.restore();
+      });
+
+      it('updates the updatedAt of the correct notebook', async () => {
+        const queryUpdatedAt = async () => {
+          const { updatedAt } = await Notebook.findById(notebook2.id);
+          return updatedAt;
+        };
+
+        return expect(
+          () => makeRequest(),
+        ).to.alter(
+          () => queryUpdatedAt(),
+        );
+      });
+    });
+
     context('when the notebook could not be found', () => {
       let response;
 

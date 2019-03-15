@@ -86,4 +86,16 @@ describe('Notebook', () => {
       expect(notebook.toJSON()).to.deep.equal(expected);
     });
   });
+
+  describe('.prototype.touch()', () => {
+    it('updates the updatedAt timestamp', async () => {
+      const notebook = await notebookFactory.create('notebook');
+
+      return expect(
+        () => notebook.touch(),
+      ).to.alter(
+        () => notebook.updatedAt,
+      );
+    });
+  });
 });

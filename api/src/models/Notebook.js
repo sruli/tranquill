@@ -30,6 +30,11 @@ class NotebookClass {
       updatedAt: updatedAt.toISOString(),
     };
   }
+
+  async touch() {
+    this.markModified('updatedAt');
+    await this.save();
+  }
 }
 
 notebookSchema.loadClass(NotebookClass);
