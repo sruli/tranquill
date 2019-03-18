@@ -27,6 +27,13 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet.noSniff());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'"],
+    connectSrc: ["'self'", process.env.REACT_APP_API_URL],
+  },
+}));
 
 app.use(express.static(path.join(__dirname, '../build'), {
   setHeaders: (res, filePath) => {
