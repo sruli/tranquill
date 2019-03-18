@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, '../build'), {
 
 app.use((req, res) => {
   res.status(OK).sendFile(path.join(__dirname, '../build/index.html'), {
-    headers: { 'Cache-Control': 'co-cache' },
+    headers: { 'Cache-Control': 'no-cache' },
   });
 });
 
