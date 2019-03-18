@@ -28,6 +28,8 @@ app.use((req, res, next) => {
 
 app.use(helmet.noSniff());
 app.use(helmet.frameguard());
+app.use(helmet.xssFilter());
+app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
