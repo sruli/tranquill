@@ -20,6 +20,8 @@ spec:
         env:
         - name: REACT_APP_ENV
           value: "staging"
+        - name: REACT_APP_API_URL
+          value: "https://staging-api.tranquillapp.com"
         - name: CLIENT_PORT
           value: "5000"
         - name: CLIENT_HOST
