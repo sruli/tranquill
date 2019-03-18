@@ -18,6 +18,10 @@ spec:
       - name: tranquill-client
         image: us.gcr.io/tranquill/tranquill_client@sha256:b14a636abab10e698d92bfffb36f5c76b3eed1ccf864d36e4db7acb638e90f43
         env:
+        - name: REACT_APP_ENV
+          value: "production"
+        - name: REACT_APP_API_URL
+          value: "https://api.tranquillapp.com"
         - name: CLIENT_PORT
           value: "5000"
         - name: CLIENT_HOST
