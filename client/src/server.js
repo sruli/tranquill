@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const { OK, MOVED_PERMANENTLY } = require('http-status');
+const { devEnv } = require('./utils/envUtils');
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.get('/healthy', (req, res) => {
 });
 
 app.use((req, res, next) => {
-  if (req.protocol === 'http') {
+  if (!devEnv() && req.protocol === 'http') {
     const host = process.env.CLIENT_HOST || 'tranquillapp.com';
     return res.redirect(MOVED_PERMANENTLY, `https://${host}${req.originalUrl}`);
   }
