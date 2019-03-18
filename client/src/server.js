@@ -26,6 +26,8 @@ app.use((req, res, next) => {
   return next();
 });
 
+app.use(helmet.noSniff());
+
 app.use(express.static(path.join(__dirname, '../build'), {
   setHeaders: (res, filePath) => {
     if (/build\/static\/(css|js|media)/.test(filePath)) {
