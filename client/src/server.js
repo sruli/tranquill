@@ -26,10 +26,20 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../build'), {
+  setHeaders: (res, filePath) => {
+    if (/build\/static\/(css|js|media)/.test(filePath)) {
+      res.set('Cache-Control', 'max-age=2592000');
+    } else {
+      res.set('Cache-Control', 'no-cache');
+    }
+  },
+}));
 
 app.use((req, res) => {
-  res.status(OK).sendFile(path.join(__dirname, '../build/index.html'));
+  res.status(OK).sendFile(path.join(__dirname, '../build/index.html'), {
+    headers: { 'Cache-Control': 'co-cache' },
+  });
 });
 
 app.listen(process.env.CLIENT_PORT || 3000);
