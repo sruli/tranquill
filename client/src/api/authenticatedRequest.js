@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 import { UNAUTHORIZED } from 'http-status';
 import { SCENE_PATH as signInPath } from '../scenes/sign-in';
-import { setCookie } from '../utils/cookieUtils';
+import { setCookie } from '../utilities/cookieUtils';
 
 export default function* authenticatedRequest({ request, requestArgs = [], callback }) {
   const response = yield call(request, ...requestArgs);

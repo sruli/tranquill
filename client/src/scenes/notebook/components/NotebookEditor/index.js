@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Editor, EditorState, getDefaultKeyBinding } from 'draft-js';
-import enforceCursorLocation from '../../../../utils/cursorUtils';
+import enforceCursorLocation from '../../../../utilities/cursorUtils';
 import 'draft-js/dist/Draft.css';
 import styles from './NotebookEditor.module.scss';
 import './DraftEditorStyles.scss';
