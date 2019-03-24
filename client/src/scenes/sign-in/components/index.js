@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Errors from './Errors';
@@ -8,67 +8,73 @@ import { getEmail, getPassword, getErrors, getSubmitting } from '../reducer';
 import { formChanged, formSubmitted } from '../actions';
 import styles from './SignIn.module.scss';
 
-const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }) => (
-  <React.Fragment>
-    <div className="container-fluid min-vh-100">
-      <div className="row min-vh-100 flex-column justify-content-center">
-        <div className="col-10 col-md-3 offset-1">
-          <div className="row justify-content-center mb-3">
-            <TranquillLogo size="lg" />
-          </div>
-          <div className="row justify-content-center mb-5">
-            <h6 className="text-muted font-weight-normal">Sign in to your Tranquill account</h6>
-          </div>
+const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }) => {
+  const emailInput = useRef(null);
+  useEffect(() => emailInput.current.focus(), []);
 
-          <Errors errors={errors} />
+  return (
+    <React.Fragment>
+      <div className="container-fluid min-vh-100">
+        <div className="row min-vh-100 flex-column justify-content-center">
+          <div className="col-10 col-md-3 offset-1">
+            <div className="row justify-content-center mb-3">
+              <TranquillLogo size="lg" />
+            </div>
+            <div className="row justify-content-center mb-5">
+              <h6 className="text-muted font-weight-normal">Sign in to your Tranquill account</h6>
+            </div>
 
-          <div className="row">
-            <div className="col">
-              <form noValidate className="pt-5" onSubmit={onSubmit}>
-                <div className="form-row mb-4">
-                  <div className="col">
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      value={email}
-                      onChange={e => onFormChanged({ email: e.target.value })}
-                    />
+            <Errors errors={errors} />
+
+            <div className="row">
+              <div className="col">
+                <form noValidate className="pt-5" onSubmit={onSubmit}>
+                  <div className="form-row mb-4">
+                    <div className="col">
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={e => onFormChanged({ email: e.target.value })}
+                        ref={emailInput}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form-row mb-3">
-                  <div className="col">
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={e => onFormChanged({ password: e.target.value })}
-                    />
+                  <div className="form-row mb-3">
+                    <div className="col">
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={e => onFormChanged({ password: e.target.value })}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form-row mb-3">
-                  <div className="col">
-                    <Button disabled={errors.length > 0 || submitting} className="w-100" type="lg-primary">
-                      Sign in
-                    </Button>
+                  <div className="form-row mb-3">
+                    <div className="col">
+                      <Button disabled={errors.length > 0 || submitting} className="w-100" type="lg-primary">
+                        Sign in
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
-          </div>
-          <div className={`row ls-2 ${styles.small}`}>
-            <div className="col-12 mb-2">
-              Don&#39;t have an account?&nbsp;
-              <a href="/get-started">Create account.</a>
-            </div>
-            <div className="col-12">
-              <a href="/forgot-password">Forgot password?</a>
+            <div className={`row ls-2 ${styles.small}`}>
+              <div className="col-12 mb-2">
+                Don&#39;t have an account?&nbsp;
+                <a href="/get-started">Create account.</a>
+              </div>
+              <div className="col-12">
+                <a href="/forgot-password">Forgot password?</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </React.Fragment>
-);
+    </React.Fragment>
+  );
+};
 
 SignIn.propTypes = {
   email: PropTypes.string.isRequired,
