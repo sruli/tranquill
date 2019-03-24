@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tranquill-client
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: tranquill-client
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tranquill-client
-        image: us.gcr.io/tranquill/tranquill_client@sha256:b14a636abab10e698d92bfffb36f5c76b3eed1ccf864d36e4db7acb638e90f43
+        image: us.gcr.io/tranquill/tranquill_client:c43397408342fc9d24c4c2aed909691334dbe54e
         env:
         - name: REACT_APP_ENV
           value: "production"

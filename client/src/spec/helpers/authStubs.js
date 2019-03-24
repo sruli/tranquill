@@ -1,4 +1,4 @@
-import { setCookie } from '../../utils/cookieUtils';
+import { setCookie } from '../../utilities/cookieUtils';
 
 export const stubAuth = function stubAuth() {
   setCookie({ authenticated: true });

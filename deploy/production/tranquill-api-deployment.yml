@@ -5,7 +5,7 @@ metadata:
   labels:
     app: tranquill-api
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: tranquill-api
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tranquill-api
-        image: us.gcr.io/tranquill/tranquill_api@sha256:1baa497669a518d2cebffa5b3cfb901d5503e3ba029d9656221f96df60571eaf
+        image: us.gcr.io/tranquill/tranquill_api:c43397408342fc9d24c4c2aed909691334dbe54e
         command: ["npm", "run", "start:production"]
         env:
         - name: NODE_ENV

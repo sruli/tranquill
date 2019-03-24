@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Input = ({ type, placeholder, value, onChange, disabled }) => (
+const Input = React.forwardRef(({ type, placeholder, value, onChange, disabled }, ref) => (
   <input
     type={type}
     className="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none"
@@ -9,8 +9,9 @@ const Input = ({ type, placeholder, value, onChange, disabled }) => (
     value={value}
     onChange={onChange}
     disabled={disabled}
+    ref={ref}
   />
-);
+));
 
 Input.defaultProps = {
   type: 'text',

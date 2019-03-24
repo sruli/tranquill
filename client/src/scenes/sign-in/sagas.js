@@ -3,7 +3,7 @@ import { push } from 'connected-react-router';
 import api from '../../api';
 import transmuter from '../../api/transmuter';
 import validateForm from './validateForm';
-import { setCookie } from '../../utils/cookieUtils';
+import { setCookie } from '../../utilities/cookieUtils';
 import { getEmail, getPassword, getValidate } from './reducer';
 import { DEBOUNCE_MILISECONDS } from './constants';
 import {

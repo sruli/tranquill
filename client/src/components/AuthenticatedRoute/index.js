@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { cookieToObject } from '../../utils/cookieUtils';
+import { cookieToObject } from '../../utilities/cookieUtils';
 
 const AuthenticatedRoute = ({ component: Component, ...rest }) => (
   <Route

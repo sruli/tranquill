@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const { OK, MOVED_PERMANENTLY } = require('http-status');
-const { devEnv } = require('./utils/envUtils');
+const { devEnv } = require('./utilities/envUtils');
 
 const app = express();
 
