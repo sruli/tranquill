@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const notebookFactory = require('../../factories/notebookFactory');
 const NotebookPresenter = require('../../../src/services/presenters/NotebookPresenter');
-const { present: contentBlocksPresenter } = require('../../../src/services/presenters/contentBlocksPresenter');
+const ContentBlocksPresenter = require('../../../src/services/presenters/ContentBlocksPresenter');
 
 const { API_URL } = process.env;
 
@@ -24,10 +24,10 @@ describe('NotebookPresenter', () => {
           .init({ notebook })
           .present({ includeContentBlocks: true });
 
-        expect(presented).to.deep.equal({
+        expect(presented).to.eql({
           ...notebook.toJSON(),
           href: `${API_URL}/notebooks/${notebook.id}`,
-          contentBlocks: await contentBlocksPresenter(notebook),
+          contentBlocks: await ContentBlocksPresenter.init({ notebook }).present(),
         });
       });
     });

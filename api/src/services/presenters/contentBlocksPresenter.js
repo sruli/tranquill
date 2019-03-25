@@ -1,12 +1,23 @@
 const { API_URL } = process.env;
 
-const present = async function present(notebook) {
-  const contentBlocks = await notebook.contentBlocks();
+class ContentBlocksPresenter {
+  static init(args) {
+    const contentBlocksPresenter = new ContentBlocksPresenter(args);
+    return contentBlocksPresenter;
+  }
 
-  return {
-    href: `${API_URL}/notebooks/${notebook.id}/contentBlocks`,
-    items: contentBlocks.map(contentBlock => contentBlock.toJSON()),
-  };
-};
+  constructor({ notebook }) {
+    this.notebook = notebook;
+  }
 
-module.exports = { present };
+  async present() {
+    const contentBlocks = await this.notebook.contentBlocks();
+
+    return {
+      href: `${API_URL}/notebooks/${this.notebook.id}/contentBlocks`,
+      items: contentBlocks.map(contentBlock => contentBlock.toJSON()),
+    };
+  }
+}
+
+module.exports = ContentBlocksPresenter;

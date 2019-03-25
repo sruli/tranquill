@@ -1,4 +1,4 @@
-const { present: presentContentBlocks } = require('./contentBlocksPresenter');
+const ContentBlocksPresenter = require('./ContentBlocksPresenter');
 
 const { API_URL } = process.env;
 
@@ -13,13 +13,14 @@ class NotebookPresenter {
   }
 
   async present({ includeContentBlocks = false } = {}) {
+    const { notebook } = this;
     const presented = {
-      ...this.notebook.toJSON(),
-      href: `${API_URL}/notebooks/${this.notebook.id}`,
+      ...notebook.toJSON(),
+      href: `${API_URL}/notebooks/${notebook.id}`,
     };
 
     if (includeContentBlocks) {
-      presented.contentBlocks = await presentContentBlocks(this.notebook);
+      presented.contentBlocks = await ContentBlocksPresenter.init({ notebook }).present();
     }
 
     return presented;

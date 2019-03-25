@@ -1,11 +1,11 @@
 const { expect } = require('chai');
 const notebookFactory = require('../../factories/notebookFactory');
 const contentBlockFactory = require('../../factories/contentBlockFactory');
-const { present } = require('../../../src/services/presenters/contentBlocksPresenter');
+const ContentBlocksPresenter = require('../../../src/services/presenters/ContentBlocksPresenter');
 
 const { API_URL } = process.env;
 
-describe('contentBlocksPresenter', () => {
+describe('ContentBlocksPresenter', () => {
   describe('.present()', () => {
     let notebook;
     let contentBlock;
@@ -16,7 +16,7 @@ describe('contentBlocksPresenter', () => {
     });
 
     it('presents the contentBlocks for a notebook', async () => {
-      const presented = await present(notebook);
+      const presented = await ContentBlocksPresenter.init({ notebook }).present();
       expect(presented).to.deep.equal({
         href: `${API_URL}/notebooks/${notebook.id}/contentBlocks`,
         items: [contentBlock.toJSON()],
