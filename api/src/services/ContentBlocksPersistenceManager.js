@@ -13,7 +13,7 @@ class ContentBlocksPersistenceManager {
   }
 
   async manage() {
-    let existingBlocks = { ...await this.notebook.contentBlocks() };
+    let existingBlocks = { ...await this.notebook.contentBlocksQuery() };
 
     await Promise.all(this.blocks.map((block) => {
       const existingKey = findKey(existingBlocks, ({ key }) => key === block.key);

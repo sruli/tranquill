@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const ContentBlock = require('./ContentBlock');
 
+const modelName = 'Notebook';
+
 // TODO: add validation that name is unique per user
 const notebookSchema = mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -12,12 +14,14 @@ const notebookSchema = mongoose.Schema({
 // TODO: removing a notebook removes all associated content blocks
 
 class NotebookClass {
-  async contentBlocks() {
-    const contentBlocks = await ContentBlock
-      .find({ notebook: this })
-      .sort({ position: 'asc' });
+  contentBlocksQuery(options) {
+    let query = ContentBlock.find({ notebook: this });
 
-    return contentBlocks;
+    if (options) {
+      query = query.setOptions(options);
+    }
+
+    return query;
   }
 
   toJSON() {
@@ -39,6 +43,6 @@ class NotebookClass {
 
 notebookSchema.loadClass(NotebookClass);
 
-const Notebook = mongoose.model('Notebook', notebookSchema);
+const Notebook = mongoose.model(modelName, notebookSchema);
 
 module.exports = Notebook;

@@ -15,6 +15,7 @@ factory.define('contentBlock', ContentBlock, async () => {
     inlineStyleRanges: [],
     entityRanges: [],
     data: {},
+    position: factory.sequence('ContentBlock.position', n => n - 1),
   };
 });
 

@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const notebookFactory = require('../../factories/notebookFactory');
+const contentBlockFactory = require('../../factories/contentBlockFactory');
 const NotebookPresenter = require('../../../src/services/presenters/NotebookPresenter');
 const ContentBlocksPresenter = require('../../../src/services/presenters/ContentBlocksPresenter');
 
@@ -11,7 +12,7 @@ describe('NotebookPresenter', () => {
       const notebook = await notebookFactory.create('notebook');
       const presented = await NotebookPresenter.init({ notebook }).present();
 
-      expect(presented).to.deep.equal({
+      expect(presented).to.eql({
         ...notebook.toJSON(),
         href: `${API_URL}/notebooks/${notebook.id}`,
       });
@@ -27,7 +28,28 @@ describe('NotebookPresenter', () => {
         expect(presented).to.eql({
           ...notebook.toJSON(),
           href: `${API_URL}/notebooks/${notebook.id}`,
-          contentBlocks: await ContentBlocksPresenter.init({ notebook }).present(),
+          contentBlocks: await ContentBlocksPresenter.init({
+            notebook,
+            contentBlocks: [],
+          }).present(),
+        });
+      });
+
+      it('includes the contentBlocks in their correct order', async () => {
+        const notebook = await notebookFactory.create('notebook');
+        const contentBlock1 = await contentBlockFactory.create('contentBlock', { notebook: notebook.id });
+        const contentBlock2 = await contentBlockFactory.create('contentBlock', { notebook: notebook.id });
+        const presented = await NotebookPresenter
+          .init({ notebook })
+          .present({ includeContentBlocks: true });
+
+        expect(presented).to.eql({
+          ...notebook.toJSON(),
+          href: `${API_URL}/notebooks/${notebook.id}`,
+          contentBlocks: await ContentBlocksPresenter.init({
+            notebook,
+            contentBlocks: [contentBlock1, contentBlock2],
+          }).present(),
         });
       });
     });

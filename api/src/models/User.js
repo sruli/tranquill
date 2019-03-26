@@ -6,6 +6,8 @@ const { SALT_ROUNDS } = require('../../config/bcrypt');
 // eslint-disable-next-line no-useless-escape
 const emailRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 
+const modelName = 'User';
+
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, match: emailRegex, index: true, trim: true },
   password: { type: String, minlength: 8, maxlength: 72 },
@@ -16,7 +18,7 @@ const userSchema = mongoose.Schema({
 
 userSchema.path('email').validate({
   validator: async function validateEmailUniqueness(email) {
-    const existing = await this.model('User').findOne({ email });
+    const existing = await this.model(modelName).findOne({ email });
     if (!existing) return true;
     if (existing.id === this.id) return true;
     return false;
@@ -54,6 +56,6 @@ class UserClass {
 
 userSchema.loadClass(UserClass);
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model(modelName, userSchema);
 
 module.exports = User;

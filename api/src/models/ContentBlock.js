@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const fetchLimitDefault = 10;
+
 // TODO: ensure that `key` is unique per user
 // TODO: create compound index for notebook id and key
 const contentBlockSchema = mongoose.Schema({
@@ -54,3 +56,4 @@ contentBlockSchema.loadClass(ContentBlockClass);
 const ContentBlock = mongoose.model('ContentBlock', contentBlockSchema);
 
 module.exports = ContentBlock;
+module.exports.FETCH_LIMIT_DEFAULT = fetchLimitDefault;

@@ -1,3 +1,4 @@
+const ContentBlock = require('../../models/ContentBlock');
 const ContentBlocksPresenter = require('./ContentBlocksPresenter');
 
 const { API_URL } = process.env;
@@ -13,14 +14,23 @@ class NotebookPresenter {
   }
 
   async present({ includeContentBlocks = false } = {}) {
-    const { notebook } = this;
     const presented = {
-      ...notebook.toJSON(),
-      href: `${API_URL}/notebooks/${notebook.id}`,
+      ...this.notebook.toJSON(),
+      href: `${API_URL}/notebooks/${this.notebook.id}`,
     };
 
     if (includeContentBlocks) {
-      presented.contentBlocks = await ContentBlocksPresenter.init({ notebook }).present();
+      const queryOptions = { limit: ContentBlock.FETCH_LIMIT_DEFAULT, sort: { position: 'desc' } };
+      const contentBlocks = await this.notebook
+        .contentBlocksQuery(queryOptions)
+        .then(blocks => blocks.reverse());
+
+      const contentBlocksPresenter = ContentBlocksPresenter.init({
+        contentBlocks,
+        notebook: this.notebook,
+      });
+
+      presented.contentBlocks = await contentBlocksPresenter.present();
     }
 
     return presented;
