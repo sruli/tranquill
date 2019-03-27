@@ -22,14 +22,14 @@ describe('ContentBlocksPersistenceManager', () => {
         ];
       });
 
-      it('creates new contentBlocks for blocks that do not exist yet', async () => {
-        await expect(
+      it('creates new contentBlocks for blocks that do not exist yet', () => (
+        expect(
           () => ContentBlocksPersistenceManager.init({ notebook, blocks }).manage(),
         ).to.alter(
           () => ContentBlock.countDocuments(),
           { by: 1 },
-        );
-      });
+        )
+      ));
 
       it('updates contentBlocks that already exist', async () => {
         await ContentBlocksPersistenceManager.init({ notebook, blocks }).manage();
