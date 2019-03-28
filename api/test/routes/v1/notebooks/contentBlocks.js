@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
 const Notebook = require('../../../../src/models/Notebook');
-const ContentBlocksPersistenceManager = require('../../../../src/services/ContentBlocksPersistenceManager');
+const ContentBlocksPersistenceManager = require('../../../../src/services/contentBlocks/ContentBlocksPersistenceManager');
 const notebookFactory = require('../../../factories/notebookFactory');
 const { stubMiddleware } = require('../../../helpers/stubMiddleware');
 
@@ -23,7 +23,7 @@ describe('contentBlocks routes', () => {
 
       const makeRequest = function makeRequest() {
         return request(app)
-          .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
+          .post(`/v1/notebooks/${notebook.id}/contentBlocks?offset=0`)
           .send({ blocks: [{}, {}, {}] })
           .accept('Accept', 'application/json');
       };
@@ -157,6 +157,50 @@ describe('contentBlocks routes', () => {
       it('provides an error message', () => {
         const { message } = response.body;
         expect(message).to.equal('Request must contain an array of blocks');
+      });
+    });
+
+    context('when offset isNil()', () => {
+      let response;
+
+      beforeEach(async () => {
+        const notebook = await notebookFactory.create('notebook');
+        response = await request(app)
+          .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
+          .send({ blocks: [] })
+          .accept('Accept', 'application/json');
+      });
+
+      it('returns BAD_REQUEST status', () => {
+        const { statusCode } = response;
+        expect(statusCode).to.equal(BAD_REQUEST);
+      });
+
+      it('provides an error message', () => {
+        const { message } = response.body;
+        expect(message).to.equal('Request must contain a offset with an Integer value');
+      });
+    });
+
+    context('when offset is not a number', () => {
+      let response;
+
+      beforeEach(async () => {
+        const notebook = await notebookFactory.create('notebook');
+        response = await request(app)
+          .post(`/v1/notebooks/${notebook.id}/contentBlocks?offset=notanumber`)
+          .send({ blocks: [] })
+          .accept('Accept', 'application/json');
+      });
+
+      it('returns BAD_REQUEST status', () => {
+        const { statusCode } = response;
+        expect(statusCode).to.equal(BAD_REQUEST);
+      });
+
+      it('provides an error message', () => {
+        const { message } = response.body;
+        expect(message).to.equal('Request must contain a offset with an Integer value');
       });
     });
   });

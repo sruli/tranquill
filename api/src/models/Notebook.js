@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const tap = require('lodash/tap');
 const ContentBlock = require('./ContentBlock');
 
 const modelName = 'Notebook';
@@ -14,14 +15,11 @@ const notebookSchema = mongoose.Schema({
 // TODO: removing a notebook removes all associated content blocks
 
 class NotebookClass {
-  contentBlocksQuery(options) {
-    let query = ContentBlock.find({ notebook: this });
-
-    if (options) {
-      query = query.setOptions(options);
-    }
-
-    return query;
+  contentBlocksQuery({ query, options } = {}) {
+    return tap(ContentBlock.find({ notebook: this }), (q) => {
+      if (query) q.setQuery(query);
+      if (options) q.setOptions(options);
+    });
   }
 
   toJSON() {

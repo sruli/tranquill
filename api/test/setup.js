@@ -24,11 +24,15 @@ factory.setAdapter(adapter);
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
 
-before(async () => {
-  await connectDB();
+const flushMongoDB = async function flushMongoDB() {
   await Promise.all([Notebook, ContentBlock, User].map(async (model) => {
     await model.deleteMany();
   }));
+};
+
+before(async () => {
+  await connectDB();
+  await flushMongoDB();
 });
 
 after(() => {
@@ -36,7 +40,7 @@ after(() => {
 });
 
 afterEach(async () => {
-  await factory.cleanUp();
+  await Promise.all([factory.cleanUp(), flushMongoDB()]);
 });
 
 beforeEach(async () => {

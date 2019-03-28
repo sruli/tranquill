@@ -21,7 +21,7 @@ describe('ContentBlocksPresenter', () => {
       let contentBlocks;
 
       beforeEach(async () => {
-        contentBlocks = await notebook.contentBlocksQuery({ skip: 2, limit: 2, sort: { position: 'asc' } });
+        contentBlocks = await notebook.contentBlocksQuery({ options: { skip: 2, limit: 2, sort: { position: 'asc' } } });
       });
 
       it('presents the contentBlocks for a notebook', async () => {
@@ -47,7 +47,7 @@ describe('ContentBlocksPresenter', () => {
       let contentBlocks;
 
       beforeEach(async () => {
-        contentBlocks = await notebook.contentBlocksQuery({ sort: { position: 'asc' } });
+        contentBlocks = await notebook.contentBlocksQuery({ options: { sort: { position: 'asc' } } });
       });
 
       it('sets previous to null', async () => {
@@ -60,7 +60,7 @@ describe('ContentBlocksPresenter', () => {
       let contentBlocks;
 
       beforeEach(async () => {
-        contentBlocks = await notebook.contentBlocksQuery({ sort: { position: 'asc' } });
+        contentBlocks = await notebook.contentBlocksQuery({ options: { sort: { position: 'asc' } } });
       });
 
       it('sets next to null', async () => {
@@ -73,7 +73,7 @@ describe('ContentBlocksPresenter', () => {
       let contentBlocks;
 
       beforeEach(async () => {
-        contentBlocks = await notebook.contentBlocksQuery({ skip: 1, limit: 2, sort: { position: 'asc' } });
+        contentBlocks = await notebook.contentBlocksQuery({ options: { skip: 1, limit: 2, sort: { position: 'asc' } } });
       });
 
       it('sets the previous offset to 0', async () => {

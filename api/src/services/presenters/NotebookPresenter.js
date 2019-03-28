@@ -20,9 +20,9 @@ class NotebookPresenter {
     };
 
     if (includeContentBlocks) {
-      const queryOptions = { limit: ContentBlock.FETCH_LIMIT_DEFAULT, sort: { position: 'desc' } };
+      const options = { limit: ContentBlock.FETCH_LIMIT_DEFAULT, sort: { position: 'desc' } };
       const contentBlocks = await this.notebook
-        .contentBlocksQuery(queryOptions)
+        .contentBlocksQuery({ options })
         .then(blocks => blocks.reverse());
 
       const contentBlocksPresenter = ContentBlocksPresenter.init({

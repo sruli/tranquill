@@ -19,7 +19,7 @@ describe('contentBlock', () => {
 
       await contentBlockFactory.create('contentBlock', { notebook, key: 'dup' });
 
-      expect(createWithDuplicateKey()).to.be.rejectedWith(
+      return expect(createWithDuplicateKey()).to.be.rejectedWith(
         mongoose.Error.ValidationError,
         'Key has already been taken.',
       );

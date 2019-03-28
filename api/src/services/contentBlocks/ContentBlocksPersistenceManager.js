@@ -1,5 +1,6 @@
 const findKey = require('lodash/findKey');
-const ContentBlock = require('../models/ContentBlock');
+const ContentBlock = require('../../models/ContentBlock');
+const ContentBlockFactory = require('./ContentBlockFactory');
 
 class ContentBlocksPersistenceManager {
   static init(args) {
@@ -7,21 +8,25 @@ class ContentBlocksPersistenceManager {
     return manager;
   }
 
-  constructor({ notebook, blocks }) {
+  constructor({ notebook, blocks, options = {} }) {
+    if (!Number.isInteger(options.offset)) {
+      throw (new TypeError('Invalid arguments: `options.offset` must be an integer'));
+    }
+
     this.notebook = notebook;
     this.blocks = blocks;
+    this.offset = options.offset;
   }
 
   async manage() {
-    let existingBlocks = { ...await this.notebook.contentBlocksQuery() };
+    const query = { position: { $gte: this.offset } };
+    let existingBlocks = { ...await this.notebook.contentBlocksQuery({ query }) };
 
     await Promise.all(this.blocks.map((block) => {
       const existingKey = findKey(existingBlocks, ({ key }) => key === block.key);
 
       if (existingKey === undefined) {
-        const { notebook } = this;
-        const contentBlock = new ContentBlock({ ...block, notebook });
-        return contentBlock.save();
+        return ContentBlockFactory.init({ block, notebook: this.notebook }).create();
       }
 
       const { [existingKey]: contentBlock, ...rest } = existingBlocks;

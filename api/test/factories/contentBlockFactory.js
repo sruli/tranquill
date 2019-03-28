@@ -1,5 +1,5 @@
 const { factory } = require('factory-girl');
-const generateRandomKey = require('../helpers/generateRandomKey');
+const ContentBlockKeyGenerator = require('../../src/services/contentBlocks/ContentBlockKeyGenerator');
 const ContentBlock = require('../../src/models/ContentBlock');
 const notebookFactory = require('./notebookFactory');
 
@@ -8,7 +8,7 @@ factory.define('contentBlock', ContentBlock, async () => {
 
   return {
     notebook,
-    key: generateRandomKey(),
+    key: ContentBlockKeyGenerator.init().generateRandomKey(),
     text: 'Some text',
     type: 'unstyled',
     depth: 0,

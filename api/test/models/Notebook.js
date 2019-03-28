@@ -53,6 +53,22 @@ describe('Notebook', () => {
       });
     });
 
+    describe('with options params', () => {
+      let notebook;
+
+      beforeEach(async () => {
+        notebook = await notebookFactory.create('notebook');
+        await contentBlockFactory.create('contentBlock', { notebook, position: 0 });
+        await contentBlockFactory.create('contentBlock', { notebook, position: 1 });
+      });
+
+      it('returns the contentBlocks based on the option params', async () => {
+        const contentBlocks = await notebook.contentBlocksQuery({ options: { limit: 1, sort: { position: 'desc' } } });
+        expect(contentBlocks).to.have.lengthOf(1);
+        expect(contentBlocks[0].position).to.equal(1);
+      });
+    });
+
     describe('with query params', () => {
       let notebook;
 
@@ -63,9 +79,10 @@ describe('Notebook', () => {
       });
 
       it('returns the contentBlocks based on the query params', async () => {
-        const contentBlocks = await notebook.contentBlocksQuery({ limit: 1, sort: { position: 'desc' } });
+        const query = notebook.contentBlocksQuery({ query: { position: 0 } });
+        const contentBlocks = await query;
         expect(contentBlocks).to.have.lengthOf(1);
-        expect(contentBlocks[0].position).to.equal(1);
+        expect(contentBlocks[0].position).to.equal(0);
       });
     });
   });
