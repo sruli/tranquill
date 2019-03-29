@@ -4,6 +4,7 @@ const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
 const isNil = require('lodash/isNil');
 const ContentBlocksPersistenceManager = require('../../../services/contentBlocks/ContentBlocksPersistenceManager');
 const Notebook = require('../../../models/Notebook');
+const User = require('../../../models/User');
 const ensureAuthentication = require('../../../middlewares/ensureAuthentication');
 
 const jsonParser = bodyParser.json();
@@ -16,7 +17,8 @@ router.post('/notebooks/:id/contentBlocks', ensureAuthentication, jsonParser, as
   const { blocks } = req.body;
   const { offset } = req.query;
 
-  const notebook = await Notebook.findById(id);
+  const user = await User.findById(req.userId);
+  const notebook = await user.notebooksQuery().findOne({ _id: id });
 
   if (!notebook) {
     return res.status(NOT_FOUND).json({

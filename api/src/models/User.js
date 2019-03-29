@@ -48,9 +48,9 @@ class UserClass {
     return correct;
   }
 
-  async notebooks({ sort } = { sort: { createdAt: 'asc' } }) {
-    const notebooks = await Notebook.find({ user: this }).sort({ ...sort });
-    return notebooks;
+  notebooksQuery({ options } = {}) {
+    const sort = (options && options.sort) || { createdAt: 'asc' };
+    return Notebook.find({ user: this }).sort(sort);
   }
 }
 

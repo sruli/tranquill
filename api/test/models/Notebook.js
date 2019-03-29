@@ -23,7 +23,7 @@ describe('Notebook', () => {
     });
   });
 
-  describe('prototype.contentBlocks()', () => {
+  describe('prototype.contentBlocksQuery()', () => {
     describe('happy path', () => {
       let notebook;
 

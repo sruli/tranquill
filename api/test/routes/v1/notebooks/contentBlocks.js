@@ -2,26 +2,34 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const { expect } = require('chai');
 const sinon = require('sinon');
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
 const Notebook = require('../../../../src/models/Notebook');
 const ContentBlocksPersistenceManager = require('../../../../src/services/contentBlocks/ContentBlocksPersistenceManager');
+const userFactory = require('../../../factories/userFactory');
 const notebookFactory = require('../../../factories/notebookFactory');
-const { stubMiddleware } = require('../../../helpers/stubMiddleware');
+const { stubMiddleware, ensureAuthenticationStub } = require('../../../helpers/stubMiddleware');
 
-const app = stubMiddleware({
-  './notebooks/contentBlocks': proxyquire('../../../../src/routes/v1/notebooks/contentBlocks', {
-    '../../../middlewares/ensureAuthentication': (req, res, next) => next(),
-  }),
-});
+const stubContentBlocksMiddleware = function stubContentBlocksMiddleware({ ensureAuthentication }) {
+  const app = stubMiddleware({
+    './notebooks/contentBlocks': proxyquire('../../../../src/routes/v1/notebooks/contentBlocks', {
+      '../../../middlewares/ensureAuthentication': ensureAuthentication,
+    }),
+  });
+
+  return app;
+};
 
 describe('contentBlocks routes', () => {
   describe('POST /notebooks/:id/contentBlocks', () => {
     context('happy path', () => {
+      let user;
       let notebook;
       let persistenceManagerSpy;
 
       const makeRequest = function makeRequest() {
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         return request(app)
           .post(`/v1/notebooks/${notebook.id}/contentBlocks?offset=0`)
           .send({ blocks: [{}, {}, {}] })
@@ -29,8 +37,9 @@ describe('contentBlocks routes', () => {
       };
 
       beforeEach(async () => {
+        user = await userFactory.create('user');
+        notebook = await notebookFactory.create('notebook', { user });
         persistenceManagerSpy = sinon.stub(ContentBlocksPersistenceManager.prototype, 'manage');
-        notebook = await notebookFactory.create('notebook');
       });
 
       afterEach(async () => {
@@ -62,10 +71,13 @@ describe('contentBlocks routes', () => {
     });
 
     context('when a user has more than one notebook', () => {
+      let user;
       let notebook2;
       let persistenceManagerSpy;
 
       const makeRequest = function makeRequest() {
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         return request(app)
           .post(`/v1/notebooks/${notebook2.id}/contentBlocks`)
           .send({ blocks: [{}, {}, {}] })
@@ -74,8 +86,9 @@ describe('contentBlocks routes', () => {
 
       beforeEach(async () => {
         persistenceManagerSpy = sinon.stub(ContentBlocksPersistenceManager.prototype, 'manage');
-        await notebookFactory.create('notebook');
-        notebook2 = await notebookFactory.create('notebook');
+        user = await userFactory.create('user');
+        await notebookFactory.create('notebook', { user });
+        notebook2 = await notebookFactory.create('notebook', { user });
       });
 
       afterEach(async () => {
@@ -100,6 +113,9 @@ describe('contentBlocks routes', () => {
       let response;
 
       beforeEach(async () => {
+        const user = await userFactory.create('user');
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         response = await request(app)
           .post(`/v1/notebooks/${mongoose.Types.ObjectId()}/contentBlocks`)
           .send({ blocks: [{}] })
@@ -121,7 +137,10 @@ describe('contentBlocks routes', () => {
       let response;
 
       beforeEach(async () => {
-        const notebook = await notebookFactory.create('notebook');
+        const user = await userFactory.create('user');
+        const notebook = await notebookFactory.create('notebook', { user });
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         response = await request(app)
           .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
           .accept('Accept', 'application/json');
@@ -142,7 +161,10 @@ describe('contentBlocks routes', () => {
       let response;
 
       beforeEach(async () => {
-        const notebook = await notebookFactory.create('notebook');
+        const user = await userFactory.create('user');
+        const notebook = await notebookFactory.create('notebook', { user });
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         response = await request(app)
           .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
           .send({ blocks: 'wrong value' })
@@ -164,7 +186,10 @@ describe('contentBlocks routes', () => {
       let response;
 
       beforeEach(async () => {
-        const notebook = await notebookFactory.create('notebook');
+        const user = await userFactory.create('user');
+        const notebook = await notebookFactory.create('notebook', { user });
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         response = await request(app)
           .post(`/v1/notebooks/${notebook.id}/contentBlocks`)
           .send({ blocks: [] })
@@ -186,7 +211,10 @@ describe('contentBlocks routes', () => {
       let response;
 
       beforeEach(async () => {
-        const notebook = await notebookFactory.create('notebook');
+        const user = await userFactory.create('user');
+        const notebook = await notebookFactory.create('notebook', { user });
+        const ensureAuthentication = ensureAuthenticationStub(user);
+        const app = stubContentBlocksMiddleware({ ensureAuthentication });
         response = await request(app)
           .post(`/v1/notebooks/${notebook.id}/contentBlocks?offset=notanumber`)
           .send({ blocks: [] })

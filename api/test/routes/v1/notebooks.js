@@ -2,23 +2,22 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const { expect } = require('chai');
 const { OK, NOT_FOUND, BAD_REQUEST } = require('http-status');
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 const url = require('url');
 const userFactory = require('../../factories/userFactory');
 const notebookFactory = require('../../factories/notebookFactory');
 const NotebookPresenter = require('../../../src/services/presenters/NotebookPresenter');
-const { stubMiddleware, defaultMiddlewareFunc } = require('../../helpers/stubMiddleware');
+const { stubMiddleware, ensureAuthenticationStub } = require('../../helpers/stubMiddleware');
 
 const stubNotebooksMiddleware = function stubNotebooksMiddleware({ ensureAuthentication } = {}) {
   const app = stubMiddleware({
     './notebooks': proxyquire('../../../src/routes/v1/notebooks', {
-      '../../middlewares/ensureAuthentication': ensureAuthentication || defaultMiddlewareFunc,
+      '../../middlewares/ensureAuthentication': ensureAuthentication,
     }),
   });
 
   return app;
 };
-
 
 describe('notebooks routes', () => {
   describe('GET /notebooks', () => {
@@ -33,12 +32,7 @@ describe('notebooks routes', () => {
         notebookFactory.create('notebook', { user, name: 'c' }),
       ]);
 
-      app = stubNotebooksMiddleware({
-        ensureAuthentication: (req, res, next) => {
-          req.userId = user.id;
-          return next();
-        },
-      });
+      app = stubNotebooksMiddleware({ ensureAuthentication: ensureAuthenticationStub(user) });
     });
 
     it('responds with OK status', async () => {
@@ -91,8 +85,9 @@ describe('notebooks routes', () => {
 
     context('when the notebook exists', () => {
       beforeEach(async () => {
-        app = stubNotebooksMiddleware();
-        notebook = await notebookFactory.create('notebook');
+        const user = await userFactory.create('user');
+        notebook = await notebookFactory.create('notebook', { user });
+        app = stubNotebooksMiddleware({ ensureAuthentication: ensureAuthenticationStub(user) });
       });
 
       it('returns a presented notebook with contentBlocks', async () => {
@@ -112,6 +107,11 @@ describe('notebooks routes', () => {
     });
 
     context('when the notebook does not exist', () => {
+      beforeEach(async () => {
+        const user = await userFactory.create('user');
+        app = stubNotebooksMiddleware({ ensureAuthentication: ensureAuthenticationStub(user) });
+      });
+
       it('returns NOT FOUND status', async () => {
         const fakeId = mongoose.Types.ObjectId();
         const { statusCode } = await request(app).get(`/v1/notebooks/${fakeId}`);

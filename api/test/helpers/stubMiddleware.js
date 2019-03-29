@@ -1,7 +1,5 @@
 const proxyquire = require('proxyquire');
 
-const defaultMiddlewareFunc = (req, res, next) => next();
-
 const stubMiddleware = function stubMiddleware(stubObj) {
   const app = proxyquire('../../src/app', {
     './routes': proxyquire('../../src/routes', {
@@ -14,4 +12,17 @@ const stubMiddleware = function stubMiddleware(stubObj) {
   return app;
 };
 
-module.exports = { stubMiddleware, defaultMiddlewareFunc };
+const ensureAuthenticationStub = function authMiddlewareStub(user) {
+  return (req, res, next) => {
+    req.userId = user.id;
+    return next();
+  };
+};
+
+const defaultMiddlewareFunc = (req, res, next) => next();
+
+module.exports = {
+  stubMiddleware,
+  ensureAuthenticationStub,
+  defaultMiddlewareFunc,
+};
