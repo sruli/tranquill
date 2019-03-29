@@ -4,21 +4,21 @@ const { ACCEPTED, NOT_FOUND, BAD_REQUEST } = require('http-status');
 const isNil = require('lodash/isNil');
 const ContentBlocksPersistenceManager = require('../../../services/contentBlocks/ContentBlocksPersistenceManager');
 const Notebook = require('../../../models/Notebook');
-const User = require('../../../models/User');
 const ensureAuthentication = require('../../../middlewares/ensureAuthentication');
+const setCurrentUser = require('../../../middlewares/setCurrentUser');
 
 const jsonParser = bodyParser.json();
 const router = Router();
 
 // TODO: Add GET to align with the href in the contentBlocksPresenter
 
-router.post('/notebooks/:id/contentBlocks', ensureAuthentication, jsonParser, async (req, res) => {
+router.post('/notebooks/:id/contentBlocks', ensureAuthentication, setCurrentUser, jsonParser, async (req, res) => {
   const { id } = req.params;
   const { blocks } = req.body;
   const { offset } = req.query;
+  const { currentUser } = res.locals;
 
-  const user = await User.findById(req.userId);
-  const notebook = await user.notebooksQuery().findOne({ _id: id });
+  const notebook = await currentUser.notebooksQuery().findOne({ _id: id });
 
   if (!notebook) {
     return res.status(NOT_FOUND).json({
