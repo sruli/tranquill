@@ -16,8 +16,8 @@ const getNotebook = async function getNotebook(id) {
   return response;
 };
 
-const saveEditorState = async function saveEditorState({ notebookId, rawEditorState }) {
-  const response = await fetch(`${apiURL}/v1/notebooks/${notebookId}/contentBlocks`, {
+const saveEditorState = async function saveEditorState({ notebookId, rawEditorState, offset }) {
+  const response = await fetch(`${apiURL}/v1/notebooks/${notebookId}/contentBlocks?offset=${offset}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

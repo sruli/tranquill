@@ -32,6 +32,7 @@ describe('transmuter', () => {
               ],
               entityMap: {},
             }),
+            offset: 0,
           };
 
           expect(transmuter.getNotebook.fromServer(response)).toEqual(expectedResult);
@@ -70,6 +71,7 @@ describe('transmuter', () => {
             ],
             entityMap: {},
           },
+          offset: 0,
         };
       });
 
@@ -83,6 +85,7 @@ describe('transmuter', () => {
             ],
             entityMap: {},
           },
+          offset: 0,
         };
 
         expect(

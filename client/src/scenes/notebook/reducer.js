@@ -8,6 +8,7 @@ import { RESET } from '../../constants';
 export const getNotebookId = state => state[SCENE_NAME].id;
 export const getNotebookName = state => state[SCENE_NAME].name;
 export const getEditorState = state => state[SCENE_NAME].editorState;
+export const getOffset = state => state[SCENE_NAME].offset;
 
 // reducers
 const idReducer = (state = '', action) => {
@@ -58,10 +59,20 @@ export const editorStateReducer = (state = null, action) => {
   }
 };
 
+const offsetReducer = (state = null, action) => {
+  switch (action.type) {
+    case NOTEBOOK_RETRIEVED:
+      return action.payload.offset;
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
   id: idReducer,
   name: nameReducer,
   editorState: editorStateReducer,
+  offset: offsetReducer,
 });
 
 export default reducer;

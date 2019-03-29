@@ -22,6 +22,7 @@ const getNotebookResponse = (overrides = {}) => {
           updatedAt: '2019-01-22T06:47:37.962Z',
         },
       ],
+      offset: 0,
     },
   };
 
