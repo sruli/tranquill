@@ -13,7 +13,9 @@ export default {
     },
   },
   getNotebook: {
-    fromServer({ id, name, contentBlocks: { items } }) {
+    fromServer(response) {
+      const { id, name, contentBlocks: { items, offset } } = response;
+
       const blocks = items.map((item) => {
         const { createdAt, updatedAt, notebook, position, ...rest } = item;
         return rest;
@@ -28,6 +30,7 @@ export default {
 
       return {
         editorState,
+        offset,
         notebook: { id, name },
       };
     },
@@ -37,11 +40,11 @@ export default {
      * Adds a position to the content blocks so they can be persisted and
      * later retrieved & displayed in their correct order.
      */
-    toServer({ notebookId, rawEditorState }) {
+    toServer({ notebookId, rawEditorState, offset }) {
       const { blocks } = rawEditorState;
       const blocksWithPosition = blocks.map((block, index) => ({
         ...block,
-        position: index,
+        position: offset + index,
       }));
 
       return {
@@ -50,6 +53,7 @@ export default {
           ...rawEditorState,
           blocks: blocksWithPosition,
         },
+        offset,
       };
     },
   },

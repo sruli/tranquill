@@ -61,7 +61,7 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      const contentBlocks = { href: '', items: [] };
+      const contentBlocks = { href: '', items: [], offset: 0 };
       api.getNotebook.mockResolvedValue(getNotebookResponse({ contentBlocks }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();

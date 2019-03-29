@@ -27,12 +27,12 @@ function* loadNotebook() {
 }
 
 function* saveEditorState(action) {
-  const { editorState } = action.payload;
+  const { editorState, offset } = action.payload;
   const notebookId = yield select(getNotebookId);
   if (!notebookId) return;
 
   const rawEditorState = convertToRaw(editorState.getCurrentContent());
-  const params = transmuter.saveEditorState.toServer({ notebookId, rawEditorState });
+  const params = transmuter.saveEditorState.toServer({ notebookId, rawEditorState, offset });
   yield* authenticatedRequest({ request: api.saveEditorState, requestArgs: [params] });
 }
 
