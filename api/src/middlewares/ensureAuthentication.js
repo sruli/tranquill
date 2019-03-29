@@ -17,7 +17,7 @@ const ensureAuthentication = async function ensureAuthentication(req, res, next)
       return res.status(UNAUTHORIZED).json({ message: 'Token no longer valid' });
     }
 
-    req.userId = decodedJWT.sub;
+    res.locals.userId = decodedJWT.sub;
 
     const extendedToken = await TokenExtender.init({ decodedJWT }).extendToken();
     res.cookie('authJWT', extendedToken, {

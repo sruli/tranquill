@@ -14,11 +14,10 @@ describe('setCurrentUser', () => {
     beforeEach(async () => {
       user = await userFactory.create('user');
       req = createRequest();
-      res = createResponse();
+      res = createResponse({ locals: { userId: user.id } });
     });
 
     it('sets the currentUser', async () => {
-      req.userId = user.id;
       await setCurrentUser(req, res, () => {});
       expect(res.locals.currentUser.toJSON()).to.eql(user.toJSON());
     });
@@ -30,11 +29,10 @@ describe('setCurrentUser', () => {
 
     beforeEach(() => {
       req = createRequest();
-      res = createResponse();
+      res = createResponse({ locals: { userId: mongoose.Types.ObjectId() } });
     });
 
     it('returns NOT_FOUND status', async () => {
-      req.userId = mongoose.Types.ObjectId();
       await setCurrentUser(req, res, () => {});
       expect(res.statusCode).to.equal(NOT_FOUND);
     });
