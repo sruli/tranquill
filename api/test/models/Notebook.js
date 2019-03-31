@@ -41,7 +41,7 @@ describe('Notebook', () => {
 
       it('does not retrieve contentBlocks that belong to a different notebook', async () => {
         const differentNotebook = await notebookFactory.create('notebook');
-        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook });
+        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook, position: 0 });
 
         expect(
           await differentNotebook.contentBlocksQuery(),
@@ -83,6 +83,15 @@ describe('Notebook', () => {
         const contentBlocks = await query;
         expect(contentBlocks).to.have.lengthOf(1);
         expect(contentBlocks[0].position).to.equal(0);
+      });
+
+      it('does not retrieve contentBlocks that belong to a different notebook', async () => {
+        const differentNotebook = await notebookFactory.create('notebook');
+        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook, position: 0 });
+
+        expect(
+          await differentNotebook.contentBlocksQuery({ query: { position: 0 } }),
+        ).to.have.lengthOf(1);
       });
     });
   });

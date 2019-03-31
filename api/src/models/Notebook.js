@@ -17,7 +17,7 @@ const notebookSchema = mongoose.Schema({
 class NotebookClass {
   contentBlocksQuery({ query, options } = {}) {
     return tap(ContentBlock.find({ notebook: this }), (q) => {
-      if (query) q.setQuery(query);
+      if (query) q.merge(query);
       if (options) q.setOptions(options);
     });
   }
