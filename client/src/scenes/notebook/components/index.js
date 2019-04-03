@@ -1,61 +1,24 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react';
 import AppNavbar from '../../../components/AppNavbar';
 import NotebookEditor from './NotebookEditor';
 import NameSection from './NameSection';
-import { getLoadMoreUrl, getLoadingBusy } from '../reducer';
-import { loadMoreContent } from '../actions';
 import styles from './Notebook.module.scss';
 
-// TODO: see if I can move the load more functionality to the NotebookEditor component
-const Notebook = ({ loadMoreUrl, onPageTopScroll, loadingBusy }) => {
-  useEffect(() => {
-    const loadMoreContentListener = () => {
-      if (window.pageYOffset === 0 && loadMoreUrl != null && !loadingBusy) {
-        onPageTopScroll(loadMoreUrl);
-      }
-    };
+const Notebook = () => (
+  <React.Fragment>
+    <AppNavbar />
 
-    window.addEventListener('scroll', loadMoreContentListener);
-    return () => window.removeEventListener('scroll', loadMoreContentListener);
-  });
-
-  return (
-    <React.Fragment>
-      <AppNavbar />
-
-      <div className={`container-fluid min-vh-100 d-flex flex-column ${styles.notebook}`}>
-        <div className="row mt-5 flex-grow-1">
-          <div className="col-7 offset-1">
-            <NotebookEditor />
-          </div>
-          <div className={`col-3 position-fixed ${styles.sideBar}`}>
-            <NameSection />
-          </div>
+    <div className={`container-fluid min-vh-100 d-flex flex-column ${styles.notebook}`}>
+      <div className="row mt-5 flex-grow-1">
+        <div className="col-7 offset-1">
+          <NotebookEditor />
+        </div>
+        <div className={`col-3 position-fixed ${styles.sideBar}`}>
+          <NameSection />
         </div>
       </div>
-    </React.Fragment>
-  );
-};
+    </div>
+  </React.Fragment>
+);
 
-Notebook.defaultProps = {
-  loadMoreUrl: null,
-};
-
-Notebook.propTypes = {
-  loadMoreUrl: PropTypes.string,
-  loadingBusy: PropTypes.bool.isRequired,
-  onPageTopScroll: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  loadMoreUrl: getLoadMoreUrl(state),
-  loadingBusy: getLoadingBusy(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-  onPageTopScroll: loadMoreUrl => dispatch(loadMoreContent(loadMoreUrl)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Notebook);
+export default Notebook;
