@@ -1,4 +1,3 @@
-import { convertFromRaw } from 'draft-js';
 import url from 'url';
 
 export default {
@@ -21,15 +20,8 @@ export default {
         return rest;
       });
 
-      const editorState = blocks.length > 0
-        ? convertFromRaw({
-          blocks,
-          entityMap: {},
-        })
-        : null;
-
       return {
-        editorState,
+        blocks,
         offset,
         loadMoreUrl: previous,
         notebook: { id, name },

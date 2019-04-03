@@ -45,11 +45,12 @@ const nameReducer = (state = '', action) => {
 export const editorStateReducer = (state = null, action) => {
   switch (action.type) {
     case NOTEBOOK_RETRIEVED: {
-      const { editorState } = action.payload;
+      const { blocks } = action.payload;
 
-      if (editorState) {
+      if (blocks.length > 0) {
+        const content = convertFromRaw({ blocks, entityMap: {} });
         return EditorState.moveFocusToEnd(
-          EditorState.createWithContent(editorState),
+          EditorState.createWithContent(content),
         );
       }
 
@@ -69,10 +70,10 @@ export const editorStateReducer = (state = null, action) => {
       const combinedBlockMap = newBlockMap.concat(currentBlockMap);
       const combinedContentState = ContentState.createFromBlockArray(combinedBlockMap.toArray());
 
-      const newEditorState = EditorState.push(state, combinedContentState, 'insert-fragment');
-      const newEditorStateWithSelection = EditorState.forceSelection(newEditorState, currentSelection);
+      const newState = EditorState.push(state, combinedContentState, 'insert-fragment');
+      const newStateWithSelection = EditorState.forceSelection(newState, currentSelection);
 
-      return newEditorStateWithSelection;
+      return newStateWithSelection;
     }
     case EDITOR_CHANGED: {
       const { editorState } = action.payload;
