@@ -67,4 +67,51 @@ describe('notebook-pagination', () => {
       expect(selection.getFocusOffset()).toEqual(lastContentBlock.getLength());
     });
   });
+
+  describe('when more content is loading', () => {
+    let eventMap;
+    let wrapper;
+
+    beforeEach(async () => {
+      eventMap = {};
+      window.addEventListener = jest.fn((event, cb) => {
+        eventMap[event] = cb;
+      });
+
+      const initialContentBlocks = contentBlocksApi.get({
+        offset: 11,
+        previous: 'http://localhost:8080/notebooks/5c374963bb3224058cf7d2aa/contentBlocks?offset=1&limit=10',
+      });
+      api.getNotebook.mockResolvedValue(getNotebookResponse({
+        contentBlocks: initialContentBlocks,
+      }));
+
+      const loadMoreMock = () => (
+        new Promise(resolve => setTimeout(
+          () => resolve(contentBlocksApi.get({
+            offset: 1,
+            previous: 'http://localhost:8080/notebooks/5c374963bb3224058cf7d2aa/contentBlocks?offset=0&limit=1',
+          })),
+          10,
+        ))
+      );
+      api.loadMoreContent.mockImplementation(loadMoreMock);
+
+      const { app } = await mountApp({ path: '/notebooks/1' });
+      await wait();
+      wrapper = app.update();
+    });
+
+    afterEach(() => {
+      resetImportedMock(api);
+      wrapper.unmount();
+    });
+
+    it('does not load more content', async () => {
+      eventMap.scroll();
+      await wait(5).then(() => wrapper.update());
+      eventMap.scroll();
+      expect(api.loadMoreContent).toHaveBeenCalledTimes(1);
+    });
+  });
 });

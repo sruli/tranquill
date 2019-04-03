@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import AppNavbar from '../../../components/AppNavbar';
 import NotebookEditor from './NotebookEditor';
 import NameSection from './NameSection';
-import { getLoadMoreUrl } from '../reducer';
+import { getLoadMoreUrl, getLoadingBusy } from '../reducer';
 import { loadMoreContent } from '../actions';
 import styles from './Notebook.module.scss';
 
 // TODO: see if I can move the load more functionality to the NotebookEditor component
-const Notebook = ({ loadMoreUrl, onPageTopScroll }) => {
+const Notebook = ({ loadMoreUrl, onPageTopScroll, loadingBusy }) => {
   useEffect(() => {
     const loadMoreContentListener = () => {
-      if (window.pageYOffset === 0 && loadMoreUrl != null) {
+      if (window.pageYOffset === 0 && loadMoreUrl != null && !loadingBusy) {
         onPageTopScroll(loadMoreUrl);
       }
     };
@@ -45,11 +45,13 @@ Notebook.defaultProps = {
 
 Notebook.propTypes = {
   loadMoreUrl: PropTypes.string,
+  loadingBusy: PropTypes.bool.isRequired,
   onPageTopScroll: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   loadMoreUrl: getLoadMoreUrl(state),
+  loadingBusy: getLoadingBusy(state),
 });
 
 const mapDispatchToProps = dispatch => ({

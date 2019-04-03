@@ -1,8 +1,13 @@
 import { combineReducers } from 'redux';
 import { EditorState, ContentState, convertFromRaw } from 'draft-js';
-import { NOTEBOOK_RETRIEVED, MORE_CONTENT_RETRIEVED, EDITOR_CHANGED } from './actions';
 import { SCENE_NAME } from './constants';
 import { RESET } from '../../constants';
+import {
+  NOTEBOOK_RETRIEVED,
+  LOAD_MORE_CONTENT,
+  MORE_CONTENT_RETRIEVED,
+  EDITOR_CHANGED,
+} from './actions';
 
 // selectors
 export const getNotebookId = state => state[SCENE_NAME].id;
@@ -10,6 +15,7 @@ export const getNotebookName = state => state[SCENE_NAME].name;
 export const getEditorState = state => state[SCENE_NAME].editorState;
 export const getOffset = state => state[SCENE_NAME].offset;
 export const getLoadMoreUrl = state => state[SCENE_NAME].loadMoreUrl;
+export const getLoadingBusy = state => state[SCENE_NAME].loadingBusy;
 
 // reducers
 const idReducer = (state = '', action) => {
@@ -97,12 +103,24 @@ const loadMoreUrlReducer = (state = null, action) => {
   }
 };
 
+const loadingBusyReducer = (state = false, action) => {
+  switch (action.type) {
+    case LOAD_MORE_CONTENT:
+      return true;
+    case MORE_CONTENT_RETRIEVED:
+      return false;
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
   id: idReducer,
   name: nameReducer,
   editorState: editorStateReducer,
   offset: offsetReducer,
   loadMoreUrl: loadMoreUrlReducer,
+  loadingBusy: loadingBusyReducer,
 });
 
 export default reducer;
