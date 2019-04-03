@@ -3,7 +3,8 @@ import mountApp from '../spec/helpers/mountApp';
 import wait from '../spec/helpers/wait';
 import { stubAuth, unstubAuth } from '../spec/helpers/authStubs';
 import resetImportedMock from '../spec/helpers/resetImportedMock';
-import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
+import getNotebookResponse from '../spec/fixtures/apiResponses/getNotebookResponse';
+import contentBlocks from '../spec/fixtures/apiResponses/contentBlocks';
 
 jest.mock('../api');
 
@@ -20,7 +21,7 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetImportedMock(api);
       wrapper.unmount();
     });
@@ -35,12 +36,11 @@ describe('notebook', () => {
 
     beforeEach(async () => {
       api.getNotebook.mockResolvedValue(getNotebookResponse());
-      api.saveEditorState.mockResolvedValue({});
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetImportedMock(api);
       wrapper.unmount();
     });
@@ -61,13 +61,14 @@ describe('notebook', () => {
     let wrapper;
 
     beforeEach(async () => {
-      const contentBlocks = { href: '', items: [], offset: 0 };
-      api.getNotebook.mockResolvedValue(getNotebookResponse({ contentBlocks }));
+      api.getNotebook.mockResolvedValue(getNotebookResponse({
+        contentBlocks: contentBlocks.get({ items: [] }),
+      }));
       const { app } = await mountApp({ path: '/notebooks/1' });
       wrapper = app.update();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetImportedMock(api);
       wrapper.unmount();
     });
@@ -88,7 +89,7 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetImportedMock(api);
       wrapper.unmount();
     });
@@ -122,7 +123,7 @@ describe('notebook', () => {
       wrapper = app.update();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       resetImportedMock(api);
       wrapper.unmount();
     });

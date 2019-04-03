@@ -30,6 +30,12 @@ const saveEditorState = async function saveEditorState({ notebookId, rawEditorSt
   return response;
 };
 
+const loadMoreContent = async function loadMoreContent(loadMoreUrl) {
+  const response = await fetch(loadMoreUrl, { credentials: 'include' });
+  if (response.ok) return response.json();
+  return response;
+};
+
 const signInUser = async function signInUser({ email, password }) {
   const response = await fetch(`${apiURL}/v1/authentications`, {
     method: 'POST',
@@ -73,6 +79,7 @@ export default {
   getNotebooks,
   getNotebook,
   saveEditorState,
+  loadMoreContent,
   signInUser,
   signOutUser,
   submitEmailSignup,

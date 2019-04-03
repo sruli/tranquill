@@ -14,7 +14,7 @@ export default {
   },
   getNotebook: {
     fromServer(response) {
-      const { id, name, contentBlocks: { items, offset } } = response;
+      const { id, name, contentBlocks: { items, offset, previous } } = response;
 
       const blocks = items.map((item) => {
         const { createdAt, updatedAt, notebook, position, ...rest } = item;
@@ -31,7 +31,24 @@ export default {
       return {
         editorState,
         offset,
+        loadMoreUrl: previous,
         notebook: { id, name },
+      };
+    },
+  },
+  loadMoreContent: {
+    fromServer(response) {
+      const { items, offset, previous } = response;
+
+      const blocks = items.map((item) => {
+        const { createdAt, updatedAt, notebook, position, ...rest } = item;
+        return rest;
+      });
+
+      return {
+        blocks,
+        offset,
+        loadMoreUrl: previous,
       };
     },
   },

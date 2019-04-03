@@ -1,5 +1,5 @@
 import { convertFromRaw } from 'draft-js';
-import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
+import getNotebookResponse from '../spec/fixtures/apiResponses/getNotebookResponse';
 import transmuter from './transmuter';
 
 describe('transmuter', () => {
@@ -25,7 +25,7 @@ describe('transmuter', () => {
                   depth: 0,
                   entityRanges: [],
                   inlineStyleRanges: [],
-                  key: 'aergj',
+                  key: response.contentBlocks.items[0].key,
                   text: 'Some text',
                   type: 'unstyled',
                 },
@@ -33,6 +33,7 @@ describe('transmuter', () => {
               entityMap: {},
             }),
             offset: 0,
+            loadMoreUrl: null,
           };
 
           expect(transmuter.getNotebook.fromServer(response)).toEqual(expectedResult);
