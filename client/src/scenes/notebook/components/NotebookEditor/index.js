@@ -9,32 +9,24 @@ import './DraftEditorStyles.scss';
 import { getEditorState, getOffset } from '../../reducer';
 import { editorChanged } from '../../actions';
 
-class NotebookEditor extends React.Component {
-  static keyBindingFn(e) {
-    enforceCursorLocation(e);
-    return getDefaultKeyBinding(e);
-  }
+const keyBindingFn = function keyBindingFn(e) {
+  enforceCursorLocation(e);
+  return getDefaultKeyBinding(e);
+};
 
-  render() {
-    const { editorState, offset, triggerEditorChange } = this.props;
-
-    if (editorState) {
-      return (
-        <div className={`${styles.editor} pb-5 h-100 ls-1`}>
-          <Editor
-            editorState={editorState}
-            onChange={newEditorState => triggerEditorChange(newEditorState, offset)}
-            placeholder="Start typing something…" // i18n!
-            keyBindingFn={NotebookEditor.keyBindingFn}
-            spellCheck
-          />
-        </div>
-      );
-    }
-
-    return null;
-  }
-}
+const NotebookEditor = ({ editorState, offset, triggerEditorChange }) => (
+  editorState && (
+    <div className={`${styles.editor} pb-5 h-100 ls-1`}>
+      <Editor
+        editorState={editorState}
+        onChange={newEditorState => triggerEditorChange(newEditorState, offset)}
+        placeholder="Start typing something…" // i18n!
+        keyBindingFn={keyBindingFn}
+        spellCheck
+      />
+    </div>
+  )
+);
 
 NotebookEditor.defaultProps = {
   editorState: null,
