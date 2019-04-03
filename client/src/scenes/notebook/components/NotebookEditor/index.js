@@ -9,6 +9,8 @@ import './DraftEditorStyles.scss';
 import { getEditorState, getOffset, getLoadMoreUrl, getLoadingBusy } from '../../reducer';
 import { editorChanged, loadMoreContent } from '../../actions';
 
+const loadMoreOffset = 100;
+
 const keyBindingFn = function keyBindingFn(e) {
   enforceCursorLocation(e);
   return getDefaultKeyBinding(e);
@@ -24,7 +26,7 @@ const NotebookEditor = ({
 }) => {
   useEffect(() => {
     const loadMoreContentListener = () => {
-      if (window.pageYOffset === 0 && loadMoreUrl != null && !loadingBusy) {
+      if (window.pageYOffset <= loadMoreOffset && loadMoreUrl != null && !loadingBusy) {
         onPageTopScroll(loadMoreUrl);
       }
     };
