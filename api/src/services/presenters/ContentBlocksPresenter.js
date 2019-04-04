@@ -5,7 +5,7 @@ const { API_URL } = process.env;
 const getCurrentHref = function getCurrentHref(notebook, firstContentBlock, limit) {
   const { position } = firstContentBlock;
 
-  return `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=${position}&limit=${limit}`;
+  return `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=${position}&limit=${limit}`;
 };
 
 const getPreviousHref = function getPreviousHref(notebook, firstContentBlock, currentLimit) {
@@ -18,7 +18,7 @@ const getPreviousHref = function getPreviousHref(notebook, firstContentBlock, cu
   const offset = Math.max(position - currentLimit, 0);
   const limit = Math.min(position, currentLimit);
 
-  return `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=${offset}&limit=${limit}`;
+  return `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=${offset}&limit=${limit}`;
 };
 
 const getNextHref = function getNextHref(notebook, lastContentBlock, total, limit) {
@@ -30,7 +30,7 @@ const getNextHref = function getNextHref(notebook, lastContentBlock, total, limi
     return null;
   }
 
-  return `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=${nextPosition}&limit=${limit}`;
+  return `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=${nextPosition}&limit=${limit}`;
 };
 
 class ContentBlocksPresenter {

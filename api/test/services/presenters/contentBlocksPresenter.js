@@ -32,13 +32,13 @@ describe('ContentBlocksPresenter', () => {
         }).present();
 
         expect(presented).to.eql({
-          href: `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=2&limit=2`,
+          href: `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=2&limit=2`,
           items: contentBlocks.map(contentBlock => contentBlock.toJSON()),
           total: 6,
           limit: 2,
           offset: 2,
-          previous: `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=0&limit=2`,
-          next: `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=4&limit=2`,
+          previous: `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=0&limit=2`,
+          next: `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=4&limit=2`,
         });
       });
     });
@@ -106,7 +106,7 @@ describe('ContentBlocksPresenter', () => {
         }).present();
 
         expect(presented).to.eql({
-          href: `${API_URL}/notebooks/${notebook.id}/contentBlocks?offset=0&limit=10`,
+          href: `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=0&limit=10`,
           items: [],
           total: 6,
           limit: 10,
