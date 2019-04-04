@@ -70,8 +70,10 @@ export const editorStateReducer = (state = null, action) => {
       const combinedBlockMap = newBlockMap.concat(currentBlockMap);
       const combinedContentState = ContentState.createFromBlockArray(combinedBlockMap.toArray());
 
-      const newState = EditorState.push(state, combinedContentState, 'insert-fragment');
-      const newStateWithSelection = EditorState.forceSelection(newState, currentSelection);
+      const stateNoUndo = EditorState.set(state, { allowUndo: false });
+      const newState = EditorState.push(stateNoUndo, combinedContentState, 'insert-fragment');
+      const stateAllowUndo = EditorState.set(newState, { allowUndo: true });
+      const newStateWithSelection = EditorState.forceSelection(stateAllowUndo, currentSelection);
 
       return newStateWithSelection;
     }
