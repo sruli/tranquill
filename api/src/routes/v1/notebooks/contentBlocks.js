@@ -77,6 +77,7 @@ router.post(
   ensureAuthentication,
   setCurrentUser,
   setNotebook,
+  sanitizeQueryParam('offset'),
   jsonParser,
   async (req, res) => {
     const { blocks } = req.body;
@@ -89,16 +90,16 @@ router.post(
       });
     }
 
-    if (isNil(offset) || !Number.isInteger(Number(offset))) {
+    if (isNil(offset) || !Number.isInteger(offset)) {
       return res.status(BAD_REQUEST).json({
-        message: 'Request must contain a offset with an Integer value',
+        message: 'Request must contain an offset with an Integer value',
       });
     }
 
     ContentBlocksPersistenceManager.init({
       notebook,
       blocks,
-      options: { offset: Number(offset) },
+      options: { offset },
     }).manage();
 
     await notebook.touch();
