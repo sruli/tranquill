@@ -13,7 +13,7 @@ const ContentBlockKeyGenerator = require('./ContentBlockKeyGenerator');
 
 const maxRetries = 5;
 
-const keyUniquenessError = function keyUniquenessError(e) {
+const isKeyUniquenessError = function isKeyUniquenessError(e) {
   return (
     e.name === 'ValidationError'
     && e.message.match(new RegExp(ContentBlock.KEY_UNIQ_ERROR_MSG))
@@ -27,7 +27,7 @@ const handleDuplicate = async function handleDuplicate(dup, keyGenerator, instan
     dup.set({ key: keyGenerator.generateRandomKey() });
     await dup.save();
   } catch (e) {
-    if (keyUniquenessError(e)) {
+    if (isKeyUniquenessError(e)) {
       if (factory.retries >= factory.maxRetries) {
         // log something
         throw (new Error(`Could not generate unique key for content block for notebook: ${factory.notebook.id}`));
@@ -59,8 +59,8 @@ class ContentBlockFactory {
     try {
       contentBlock = await contentBlock.save();
     } catch (e) {
-      if (keyUniquenessError(e)) {
-        const dup = await ContentBlock.findOne({ notebook: this.notebook, key: contentBlock.key });
+      if (isKeyUniquenessError(e)) {
+        const dup = await this.notebook.contentBlocksQuery().findOne({ key: contentBlock.key });
         dup.set({ key: '' });
         await dup.save();
         contentBlock = await contentBlock.save();
