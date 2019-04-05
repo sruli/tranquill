@@ -9,7 +9,7 @@ import './DraftEditorStyles.scss';
 import { getEditorState, getOffset, getLoadMoreUrl, getLoadingBusy } from '../../reducer';
 import { editorChanged, loadMoreContent } from '../../actions';
 
-const loadMoreOffset = 100;
+const loadMoreOffset = 300;
 
 const keyBindingFn = function keyBindingFn(e) {
   enforceCursorLocation(e);
