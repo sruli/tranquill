@@ -13,7 +13,7 @@ describe('ContentBlocksPresenter', () => {
     beforeEach(async () => {
       notebook = await notebookFactory.create('notebook');
       await Promise.all(
-        timesMap(6, () => contentBlockFactory.create('contentBlock', { notebook: notebook.id })),
+        timesMap(6, i => contentBlockFactory.create('contentBlock', { notebook: notebook.id, position: i })),
       );
     });
 

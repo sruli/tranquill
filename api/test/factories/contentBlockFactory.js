@@ -15,8 +15,22 @@ factory.define('contentBlock', ContentBlock, async () => {
     inlineStyleRanges: [],
     entityRanges: [],
     data: {},
-    position: factory.sequence('ContentBlock.position', n => n - 1),
   };
+},
+{
+  afterBuild: async function setPosition(model, options) {
+    const contentBlock = model;
+    const { position } = options;
+
+    if (position) {
+      contentBlock.position = position;
+    } else {
+      const { notebook } = contentBlock;
+      contentBlock.position = await ContentBlock.find({ notebook }).countDocuments();
+    }
+
+    return contentBlock;
+  },
 });
 
 module.exports = factory;

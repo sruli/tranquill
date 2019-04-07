@@ -30,7 +30,7 @@ describe('Notebook', () => {
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
         await Promise.all(
-          timesMap(2, () => contentBlockFactory.create('contentBlock', { notebook })),
+          timesMap(2, i => contentBlockFactory.create('contentBlock', { notebook, position: i })),
         );
       });
 
@@ -41,7 +41,7 @@ describe('Notebook', () => {
 
       it('does not retrieve contentBlocks that belong to a different notebook', async () => {
         const differentNotebook = await notebookFactory.create('notebook');
-        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook, position: 0 });
+        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook });
 
         expect(
           await differentNotebook.contentBlocksQuery(),
@@ -62,7 +62,7 @@ describe('Notebook', () => {
         await contentBlockFactory.create('contentBlock', { notebook, position: 1 });
       });
 
-      it('returns the contentBlocks based on the option params', async () => {
+      it('returns the contentBlocks based on the options params', async () => {
         const contentBlocks = await notebook.contentBlocksQuery({ options: { limit: 1, sort: { position: 'desc' } } });
         expect(contentBlocks).to.have.lengthOf(1);
         expect(contentBlocks[0].position).to.equal(1);

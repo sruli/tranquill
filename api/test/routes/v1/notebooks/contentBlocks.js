@@ -32,7 +32,7 @@ describe('contentBlocks routes', () => {
       beforeEach(async () => {
         const user = await userFactory.create('user');
         notebook = await notebookFactory.create('notebook', { user });
-        await Promise.all(timesMap(3, () => contentBlockFactory.create('contentBlock', { notebook })));
+        await Promise.all(timesMap(3, i => contentBlockFactory.create('contentBlock', { notebook, position: i })));
         app = stubContentBlocksMiddleware({ ensureAuthentication: ensureAuthenticationStub(user) });
       });
 
@@ -55,7 +55,7 @@ describe('contentBlocks routes', () => {
       beforeEach(async () => {
         const user = await userFactory.create('user');
         notebook = await notebookFactory.create('notebook', { user });
-        await Promise.all(timesMap(3, () => contentBlockFactory.create('contentBlock', { notebook })));
+        await Promise.all(timesMap(3, i => contentBlockFactory.create('contentBlock', { notebook, position: i })));
         app = stubContentBlocksMiddleware({ ensureAuthentication: ensureAuthenticationStub(user) });
       });
 
@@ -73,7 +73,7 @@ describe('contentBlocks routes', () => {
       beforeEach(async () => {
         const user = await userFactory.create('user');
         const notebook = await notebookFactory.create('notebook', { user });
-        await Promise.all(timesMap(3, () => contentBlockFactory.create('contentBlock', { notebook })));
+        await Promise.all(timesMap(3, i => contentBlockFactory.create('contentBlock', { notebook, position: i })));
         app = stubContentBlocksMiddleware({ ensureAuthentication: ensureAuthenticationStub(user) });
       });
 
@@ -266,7 +266,7 @@ describe('contentBlocks routes', () => {
 
       it('provides an error message', () => {
         const { message } = response.body;
-        expect(message).to.equal('Request must contain a offset with an Integer value');
+        expect(message).to.equal('Request must contain an offset with an Integer value');
       });
     });
 
@@ -291,7 +291,7 @@ describe('contentBlocks routes', () => {
 
       it('provides an error message', () => {
         const { message } = response.body;
-        expect(message).to.equal('Request must contain a offset with an Integer value');
+        expect(message).to.equal('Request must contain an offset with an Integer value');
       });
     });
   });

@@ -51,7 +51,7 @@ describe('ContentBlocksPersistenceManager', () => {
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
         await Promise.all(
-          timesMap(3, () => contentBlockFactory.create('contentBlock', { notebook })),
+          timesMap(3, i => contentBlockFactory.create('contentBlock', { notebook, position: i })),
         );
         const contentBlock = await notebook.contentBlocksQuery({ query: { position: 1 } })
           .then(results => results[0]);
