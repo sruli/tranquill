@@ -33,7 +33,7 @@ describe('contentBlock', () => {
       notebook = await notebookFactory.create('notebook');
     });
 
-    it('creates a contentBlock', async () => (
+    it('creates a contentBlock', () => (
       expect(
         () => contentBlockFactory.create('contentBlock', { notebook }),
       ).to.alter(

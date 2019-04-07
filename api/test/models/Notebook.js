@@ -79,8 +79,7 @@ describe('Notebook', () => {
       });
 
       it('returns the contentBlocks based on the query params', async () => {
-        const query = notebook.contentBlocksQuery({ query: { position: 0 } });
-        const contentBlocks = await query;
+        const contentBlocks = await notebook.contentBlocksQuery({ query: { position: 0 } });
         expect(contentBlocks).to.have.lengthOf(1);
         expect(contentBlocks[0].position).to.equal(0);
       });

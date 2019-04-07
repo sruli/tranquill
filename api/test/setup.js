@@ -31,8 +31,7 @@ const flushMongoDB = async function flushMongoDB() {
 };
 
 before(async () => {
-  await connectDB();
-  await flushMongoDB();
+  await connectDB().then(flushMongoDB);
 });
 
 after(() => {

@@ -78,8 +78,8 @@ describe('contentBlocks routes', () => {
       });
 
       it('returns NOT_FOUND status', async () => {
-        const response = await request(app).get(`/v1/notebooks/${mongoose.Types.ObjectId()}/contentBlocks`);
-        expect(response.statusCode).to.equal(NOT_FOUND);
+        const { statusCode } = await request(app).get(`/v1/notebooks/${mongoose.Types.ObjectId()}/contentBlocks`);
+        expect(statusCode).to.equal(NOT_FOUND);
       });
     });
   });

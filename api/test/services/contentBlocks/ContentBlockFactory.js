@@ -30,6 +30,7 @@ describe('ContentBlockFactory', () => {
 
     describe('when a contentBlock exists with the proposed key', () => {
       const duplicateKey = 'c7ppu';
+
       let notebook;
       let existingContentBlock;
       let newContentBlock;
@@ -65,7 +66,7 @@ describe('ContentBlockFactory', () => {
           keyGeneratorSpy.returns(duplicateKey);
         });
 
-        afterEach(async () => {
+        afterEach(() => {
           keyGeneratorSpy.restore();
         });
 
