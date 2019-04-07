@@ -2,7 +2,7 @@ import api from '../api';
 import mountApp from '../spec/helpers/mountApp';
 import wait from '../spec/helpers/wait';
 import resetImportedMock from '../spec/helpers/resetImportedMock';
-import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
+import getNotebookResponse from '../spec/fixtures/apiResponses/getNotebookResponse';
 
 jest.mock('../api');
 

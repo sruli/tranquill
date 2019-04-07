@@ -1,24 +1,36 @@
-import draftJS from 'draft-js';
+import draftJS, { createEmpty, createWithContent, moveFocusToEnd } from 'draft-js';
 import { NOTEBOOK_RETRIEVED } from './actions';
 import { editorStateReducer } from './reducer';
+import contentBlocksApi from '../../spec/fixtures/apiResponses/contentBlocks';
 
-jest.mock('draft-js');
+const mockDraftJS = function mockDraftJS() {
+  draftJS.EditorState.createEmpty = jest.fn();
+  draftJS.EditorState.createWithContent = jest.fn();
+  draftJS.EditorState.moveFocusToEnd = jest.fn();
+};
+
+const unmockDraftJS = function unmockDraftJS() {
+  draftJS.EditorState.createEmpty = createEmpty;
+  draftJS.EditorState.createWithContent = createWithContent;
+  draftJS.EditorState.moveFocusToEnd = moveFocusToEnd;
+};
 
 describe('notebook reducer', () => {
   describe('editorStateReducer', () => {
-    describe('when editorState is null', () => {
+    describe('when there are no content blocks', () => {
       let action;
 
       beforeEach(() => {
+        mockDraftJS();
+
         action = {
           type: NOTEBOOK_RETRIEVED,
-          payload: { editorState: null },
+          payload: { blocks: [] },
         };
       });
 
       afterEach(() => {
-        draftJS.EditorState.createEmpty.mockReset();
-        draftJS.EditorState.createWithContent.mockReset();
+        unmockDraftJS();
       });
 
       it('returns an empty editorState', () => {
@@ -28,27 +40,29 @@ describe('notebook reducer', () => {
       });
     });
 
-    describe('when editorState is not null', () => {
+    describe('when there are content blocks', () => {
       let action;
-      let editorState;
+      let blocks;
 
       beforeEach(() => {
-        editorState = 'not null';
+        mockDraftJS();
+
+        blocks = contentBlocksApi.get().items;
         action = {
           type: NOTEBOOK_RETRIEVED,
-          payload: { editorState },
+          payload: { blocks },
         };
       });
 
       afterEach(() => {
-        draftJS.EditorState.createEmpty.mockReset();
-        draftJS.EditorState.createWithContent.mockReset();
+        unmockDraftJS();
       });
 
       it('returns EditorState.createWithContent', () => {
+        const content = draftJS.convertFromRaw({ blocks, entityMap: {} });
         editorStateReducer(null, action);
         expect(draftJS.EditorState.createEmpty).not.toHaveBeenCalled();
-        expect(draftJS.EditorState.createWithContent).toHaveBeenCalledWith(editorState);
+        expect(draftJS.EditorState.createWithContent).toHaveBeenCalledWith(content);
       });
     });
   });

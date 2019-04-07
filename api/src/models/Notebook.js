@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
+const tap = require('lodash/tap');
 const ContentBlock = require('./ContentBlock');
+
+const modelName = 'Notebook';
 
 // TODO: add validation that name is unique per user
 const notebookSchema = mongoose.Schema({
@@ -12,12 +15,11 @@ const notebookSchema = mongoose.Schema({
 // TODO: removing a notebook removes all associated content blocks
 
 class NotebookClass {
-  async contentBlocks() {
-    const contentBlocks = await ContentBlock
-      .find({ notebook: this })
-      .sort({ position: 'asc' });
-
-    return contentBlocks;
+  contentBlocksQuery({ query, options } = {}) {
+    return tap(ContentBlock.find({ notebook: this }), (q) => {
+      if (query) q.merge(query);
+      if (options) q.setOptions(options);
+    });
   }
 
   toJSON() {
@@ -39,6 +41,6 @@ class NotebookClass {
 
 notebookSchema.loadClass(NotebookClass);
 
-const Notebook = mongoose.model('Notebook', notebookSchema);
+const Notebook = mongoose.model(modelName, notebookSchema);
 
 module.exports = Notebook;

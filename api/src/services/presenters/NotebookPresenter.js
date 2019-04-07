@@ -1,4 +1,5 @@
-const { present: presentContentBlocks } = require('./contentBlocksPresenter');
+const ContentBlock = require('../../models/ContentBlock');
+const ContentBlocksPresenter = require('./ContentBlocksPresenter');
 
 const { API_URL } = process.env;
 
@@ -19,7 +20,15 @@ class NotebookPresenter {
     };
 
     if (includeContentBlocks) {
-      presented.contentBlocks = await presentContentBlocks(this.notebook);
+      const options = { limit: ContentBlock.FETCH_LIMIT_DEFAULT, sort: { position: 'desc' } };
+      const contentBlocks = await this.notebook
+        .contentBlocksQuery({ options })
+        .then(blocks => blocks.reverse());
+
+      presented.contentBlocks = await ContentBlocksPresenter.init({
+        contentBlocks,
+        notebook: this.notebook,
+      }).present();
     }
 
     return presented;

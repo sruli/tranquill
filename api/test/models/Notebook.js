@@ -23,19 +23,19 @@ describe('Notebook', () => {
     });
   });
 
-  describe('prototype.contentBlocks()', () => {
+  describe('prototype.contentBlocksQuery()', () => {
     describe('happy path', () => {
       let notebook;
 
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
         await Promise.all(
-          timesMap(2, () => contentBlockFactory.create('contentBlock', { notebook })),
+          timesMap(2, i => contentBlockFactory.create('contentBlock', { notebook, position: i })),
         );
       });
 
       it('retrieves the contentBlocks for a notebook', async () => {
-        const contentBlocks = await notebook.contentBlocks();
+        const contentBlocks = await notebook.contentBlocksQuery();
         expect(contentBlocks).to.have.lengthOf(2);
       });
 
@@ -44,29 +44,53 @@ describe('Notebook', () => {
         await contentBlockFactory.create('contentBlock', { notebook: differentNotebook });
 
         expect(
-          await differentNotebook.contentBlocks(),
+          await differentNotebook.contentBlocksQuery(),
         ).to.have.lengthOf(1);
 
         expect(
-          await notebook.contentBlocks(),
+          await notebook.contentBlocksQuery(),
         ).to.have.lengthOf(2);
       });
     });
 
-    describe('when contentBlocks are created out of order', () => {
+    describe('with options params', () => {
       let notebook;
 
       beforeEach(async () => {
         notebook = await notebookFactory.create('notebook');
-        await contentBlockFactory.create('contentBlock', { notebook, position: 1 });
         await contentBlockFactory.create('contentBlock', { notebook, position: 0 });
+        await contentBlockFactory.create('contentBlock', { notebook, position: 1 });
       });
 
-      it('returns them in their proper order', async () => {
-        const contentBlocks = await notebook.contentBlocks();
+      it('returns the contentBlocks based on the options params', async () => {
+        const contentBlocks = await notebook.contentBlocksQuery({ options: { limit: 1, sort: { position: 'desc' } } });
+        expect(contentBlocks).to.have.lengthOf(1);
+        expect(contentBlocks[0].position).to.equal(1);
+      });
+    });
+
+    describe('with query params', () => {
+      let notebook;
+
+      beforeEach(async () => {
+        notebook = await notebookFactory.create('notebook');
+        await contentBlockFactory.create('contentBlock', { notebook, position: 0 });
+        await contentBlockFactory.create('contentBlock', { notebook, position: 1 });
+      });
+
+      it('returns the contentBlocks based on the query params', async () => {
+        const contentBlocks = await notebook.contentBlocksQuery({ query: { position: 0 } });
+        expect(contentBlocks).to.have.lengthOf(1);
+        expect(contentBlocks[0].position).to.equal(0);
+      });
+
+      it('does not retrieve contentBlocks that belong to a different notebook', async () => {
+        const differentNotebook = await notebookFactory.create('notebook');
+        await contentBlockFactory.create('contentBlock', { notebook: differentNotebook, position: 0 });
+
         expect(
-          contentBlocks.map(contentBlock => contentBlock.position),
-        ).to.deep.equal([0, 1]);
+          await differentNotebook.contentBlocksQuery({ query: { position: 0 } }),
+        ).to.have.lengthOf(1);
       });
     });
   });

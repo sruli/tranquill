@@ -1,5 +1,4 @@
-import { convertFromRaw } from 'draft-js';
-import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
+import getNotebookResponse from '../spec/fixtures/apiResponses/getNotebookResponse';
 import transmuter from './transmuter';
 
 describe('transmuter', () => {
@@ -18,39 +17,22 @@ describe('transmuter', () => {
               id: '5c374963bb3224058cf7d2aa',
               name: 'First notebook',
             },
-            editorState: convertFromRaw({
-              blocks: [
-                {
-                  data: {},
-                  depth: 0,
-                  entityRanges: [],
-                  inlineStyleRanges: [],
-                  key: 'aergj',
-                  text: 'Some text',
-                  type: 'unstyled',
-                },
-              ],
-              entityMap: {},
-            }),
+            blocks: [
+              {
+                data: {},
+                depth: 0,
+                entityRanges: [],
+                inlineStyleRanges: [],
+                key: response.contentBlocks.items[0].key,
+                text: 'Some text',
+                type: 'unstyled',
+              },
+            ],
+            offset: 0,
+            loadMoreUrl: null,
           };
 
           expect(transmuter.getNotebook.fromServer(response)).toEqual(expectedResult);
-        });
-      });
-
-      describe('when the notebook does not have any content blocks', () => {
-        beforeEach(() => {
-          response = getNotebookResponse({
-            contentBlocks: {
-              href: '',
-              items: [],
-            },
-          });
-        });
-
-        it('sets editorState to null', () => {
-          const transmutedResponse = transmuter.getNotebook.fromServer(response);
-          expect(transmutedResponse.editorState).toBeNull();
         });
       });
     });
@@ -70,6 +52,7 @@ describe('transmuter', () => {
             ],
             entityMap: {},
           },
+          offset: 0,
         };
       });
 
@@ -83,6 +66,7 @@ describe('transmuter', () => {
             ],
             entityMap: {},
           },
+          offset: 0,
         };
 
         expect(

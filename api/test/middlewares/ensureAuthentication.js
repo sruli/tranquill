@@ -101,9 +101,9 @@ describe('ensureAuthentication', () => {
       sinon.restore();
     });
 
-    it('sets a userId on the request object', async () => {
+    it('sets a userId on the response object', async () => {
       await ensureAuthentication(req, res, next);
-      expect(req.userId).to.equal(userId);
+      expect(res.locals.userId).to.equal(userId);
     });
 
     it('sets a new authJWT cookie', async () => {

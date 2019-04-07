@@ -1,4 +1,3 @@
-import { convertFromRaw } from 'draft-js';
 import url from 'url';
 
 export default {
@@ -13,22 +12,35 @@ export default {
     },
   },
   getNotebook: {
-    fromServer({ id, name, contentBlocks: { items } }) {
+    fromServer(response) {
+      const { id, name, contentBlocks: { items, offset, previous } } = response;
+
       const blocks = items.map((item) => {
         const { createdAt, updatedAt, notebook, position, ...rest } = item;
         return rest;
       });
 
-      const editorState = blocks.length > 0
-        ? convertFromRaw({
-          blocks,
-          entityMap: {},
-        })
-        : null;
+      return {
+        blocks,
+        offset,
+        loadMoreUrl: previous,
+        notebook: { id, name },
+      };
+    },
+  },
+  loadMoreContent: {
+    fromServer(response) {
+      const { items, offset, previous } = response;
+
+      const blocks = items.map((item) => {
+        const { createdAt, updatedAt, notebook, position, ...rest } = item;
+        return rest;
+      });
 
       return {
-        editorState,
-        notebook: { id, name },
+        blocks,
+        offset,
+        loadMoreUrl: previous,
       };
     },
   },
@@ -37,11 +49,11 @@ export default {
      * Adds a position to the content blocks so they can be persisted and
      * later retrieved & displayed in their correct order.
      */
-    toServer({ notebookId, rawEditorState }) {
+    toServer({ notebookId, rawEditorState, offset }) {
       const { blocks } = rawEditorState;
       const blocksWithPosition = blocks.map((block, index) => ({
         ...block,
-        position: index,
+        position: offset + index,
       }));
 
       return {
@@ -50,6 +62,7 @@ export default {
           ...rawEditorState,
           blocks: blocksWithPosition,
         },
+        offset,
       };
     },
   },

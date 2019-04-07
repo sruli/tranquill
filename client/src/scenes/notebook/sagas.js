@@ -6,7 +6,7 @@ import api from '../../api';
 import transmuter from '../../api/transmuter';
 import authenticatedRequest from '../../api/authenticatedRequest';
 import { SCENE_PATH, DEBOUNCE_MILISECONDS } from './constants';
-import { notebookRetrieved, EDITOR_CHANGED } from './actions';
+import { notebookRetrieved, moreContentRetrieved, EDITOR_CHANGED, LOAD_MORE_CONTENT } from './actions';
 import { getNotebookId } from './reducer';
 
 function* loadNotebook() {
@@ -27,17 +27,31 @@ function* loadNotebook() {
 }
 
 function* saveEditorState(action) {
-  const { editorState } = action.payload;
+  const { editorState, offset } = action.payload;
   const notebookId = yield select(getNotebookId);
   if (!notebookId) return;
 
   const rawEditorState = convertToRaw(editorState.getCurrentContent());
-  const params = transmuter.saveEditorState.toServer({ notebookId, rawEditorState });
+  const params = transmuter.saveEditorState.toServer({ notebookId, rawEditorState, offset });
   yield* authenticatedRequest({ request: api.saveEditorState, requestArgs: [params] });
+}
+
+function* loadMoreContent(action) {
+  const { loadMoreUrl } = action.payload;
+
+  yield* authenticatedRequest({
+    request: api.loadMoreContent,
+    requestArgs: [loadMoreUrl],
+    callback: function* apiCallback(response) {
+      const transmutedResponse = transmuter.loadMoreContent.fromServer(response);
+      yield put(moreContentRetrieved(transmutedResponse));
+    },
+  });
 }
 
 function* notebookSaga() {
   yield takeEvery(LOCATION_CHANGE, loadNotebook);
+  yield takeEvery(LOAD_MORE_CONTENT, loadMoreContent);
   yield debounce(DEBOUNCE_MILISECONDS, EDITOR_CHANGED, saveEditorState);
 }
 

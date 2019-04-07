@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
-// TODO: ensure that `key` is unique per user
+const modelName = 'ContentBlock';
+const fetchLimitDefault = 10;
+const keyUniqErrorMessage = 'Key has already been taken.';
+
 // TODO: create compound index for notebook id and key
 const contentBlockSchema = mongoose.Schema({
   notebook: { type: mongoose.Schema.Types.ObjectId, ref: 'Notebook', required: true },
@@ -15,6 +18,18 @@ const contentBlockSchema = mongoose.Schema({
 }, {
   timestamps: true,
   minimize: false,
+});
+
+contentBlockSchema.path('key').validate({
+  validator: async function validateKeyUniquness(key) {
+    if (this.isNew || this.isModified('key')) {
+      const existing = await this.model(modelName).findOne({ key, notebook: this.notebook });
+      return !existing;
+    }
+
+    return true;
+  },
+  message: keyUniqErrorMessage,
 });
 
 class ContentBlockClass {
@@ -51,6 +66,8 @@ class ContentBlockClass {
 
 contentBlockSchema.loadClass(ContentBlockClass);
 
-const ContentBlock = mongoose.model('ContentBlock', contentBlockSchema);
+const ContentBlock = mongoose.model(modelName, contentBlockSchema);
 
 module.exports = ContentBlock;
+module.exports.FETCH_LIMIT_DEFAULT = fetchLimitDefault;
+module.exports.KEY_UNIQ_ERROR_MSG = keyUniqErrorMessage;

@@ -121,7 +121,7 @@ describe('User', () => {
     });
   });
 
-  describe('prototype.notebooks()', () => {
+  describe('prototype.notebooksQuery()', () => {
     let user;
     let notebook1;
     let notebook2;
@@ -135,17 +135,22 @@ describe('User', () => {
     });
 
     it('returns all the notebooks for a user ordered by createdAt asc', async () => {
-      const notebooks = await user.notebooks();
+      const notebooks = await user.notebooksQuery();
       expect(notebooks).to.have.lengthOf(2);
       expect(notebooks[0].toJSON()).to.eql(notebook1.toJSON());
       expect(notebooks[1].toJSON()).to.eql(notebook2.toJSON());
     });
 
     it('accepts an order argument', async () => {
-      const notebooks = await user.notebooks({ sort: { createdAt: 'desc' } });
+      const notebooks = await user.notebooksQuery({ options: { sort: { createdAt: 'desc' } } });
       expect(notebooks).to.have.lengthOf(2);
       expect(notebooks[0].toJSON()).to.eql(notebook2.toJSON());
       expect(notebooks[1].toJSON()).to.eql(notebook1.toJSON());
+    });
+
+    it('allows query chaining', async () => {
+      const notebook = await user.notebooksQuery().findOne({ _id: notebook1.id });
+      expect(notebook.toJSON()).to.eql(notebook1.toJSON());
     });
   });
 });

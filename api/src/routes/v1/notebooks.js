@@ -1,21 +1,20 @@
 const { Router } = require('express');
 const { OK, NOT_FOUND, BAD_REQUEST } = require('http-status');
-const User = require('../../models/User');
-const Notebook = require('../../models/Notebook');
 const NotebooksPresenter = require('../../services/presenters/NotebooksPresenter');
 const NotebookPresenter = require('../../services/presenters/NotebookPresenter');
 const ensureAuthentication = require('../../middlewares/ensureAuthentication');
+const setCurrentUser = require('../../middlewares/setCurrentUser');
 
 const router = Router();
 
-router.get('/notebooks', ensureAuthentication, async (req, res) => {
-  const user = await User.findById(req.userId);
-  const queryParams = {};
+router.get('/notebooks', ensureAuthentication, setCurrentUser, async (req, res) => {
+  const options = {};
   const { sort } = req.query;
+  const { currentUser } = res.locals;
 
   if (sort) {
     try {
-      queryParams.sort = { ...JSON.parse(sort) };
+      options.sort = { ...JSON.parse(sort) };
     } catch (e) {
       if (e instanceof SyntaxError) {
         return res.status(BAD_REQUEST).json({ message: 'Sort param must be an object' });
@@ -24,14 +23,16 @@ router.get('/notebooks', ensureAuthentication, async (req, res) => {
     }
   }
 
-  const notebooks = await user.notebooks(queryParams);
+  const notebooks = await currentUser.notebooksQuery({ options });
   const presentedNotebooks = await NotebooksPresenter.init({ notebooks }).present();
   return res.status(OK).json(presentedNotebooks);
 });
 
-router.get('/notebooks/:id', ensureAuthentication, async (req, res) => {
+router.get('/notebooks/:id', ensureAuthentication, setCurrentUser, async (req, res) => {
   const { id } = req.params;
-  const notebook = await Notebook.findById(id);
+  const { currentUser } = res.locals;
+
+  const notebook = await currentUser.notebooksQuery().findOne({ _id: id });
 
   if (!notebook) return res.status(NOT_FOUND).end();
 

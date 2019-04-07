@@ -3,7 +3,7 @@ import api from '../api';
 import { cookieToObject } from '../utilities/cookieUtils';
 import { stubAuth, unstubAuth } from '../spec/helpers/authStubs';
 import mountApp from '../spec/helpers/mountApp';
-import getNotebookResponse from '../spec/fixtures/apiResponses/notebooks';
+import getNotebookResponse from '../spec/fixtures/apiResponses/getNotebookResponse';
 
 jest.mock('../api');
 
