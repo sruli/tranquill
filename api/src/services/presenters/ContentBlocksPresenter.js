@@ -2,28 +2,23 @@ const ContentBlock = require('../../models/ContentBlock');
 
 const { API_URL } = process.env;
 
-const getCurrentHref = function getCurrentHref(notebook, firstContentBlock, limit) {
-  const { position } = firstContentBlock;
-
-  return `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=${position}&limit=${limit}`;
+const getCurrentHref = function getCurrentHref(notebook, firstPosition, limit) {
+  return `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=${firstPosition}&limit=${limit}`;
 };
 
-const getPreviousHref = function getPreviousHref(notebook, firstContentBlock, currentLimit) {
-  const { position } = firstContentBlock;
-
-  if (position <= 0) {
+const getPreviousHref = function getPreviousHref(notebook, firstPosition, currentLimit) {
+  if (firstPosition <= 0) {
     return null;
   }
 
-  const offset = Math.max(position - currentLimit, 0);
-  const limit = Math.min(position, currentLimit);
+  const offset = Math.max(firstPosition - currentLimit, 0);
+  const limit = Math.min(firstPosition, currentLimit);
 
   return `${API_URL}/v1/notebooks/${notebook.id}/contentBlocks?offset=${offset}&limit=${limit}`;
 };
 
-const getNextHref = function getNextHref(notebook, lastContentBlock, total, limit) {
-  const { position } = lastContentBlock;
-  const nextPosition = position + 1;
+const getNextHref = function getNextHref(notebook, lastPosition, total, limit) {
+  const nextPosition = lastPosition + 1;
 
   // use nextPosition since position index starts at 0
   if (nextPosition >= total) {
@@ -47,17 +42,19 @@ class ContentBlocksPresenter {
 
   async present() {
     const total = await this.notebook.contentBlocksQuery().countDocuments();
-    const first = this.contentBlocks[0] || { position: 0 };
-    const last = this.contentBlocks[this.contentBlocks.length - 1] || { position: total };
+    const firstPosition = this.contentBlocks[0] ? this.contentBlocks[0].position : 0;
+    const lastPosition = this.contentBlocks[this.contentBlocks.length - 1] ? (
+      this.contentBlocks[this.contentBlocks.length - 1].position
+    ) : total;
 
     return {
       total,
-      href: getCurrentHref(this.notebook, first, this.limit),
+      href: getCurrentHref(this.notebook, firstPosition, this.limit),
       items: this.contentBlocks.map(contentBlock => contentBlock.toJSON()),
       limit: this.limit,
-      offset: first.position,
-      previous: getPreviousHref(this.notebook, first, this.limit),
-      next: getNextHref(this.notebook, last, total, this.limit),
+      offset: firstPosition,
+      previous: getPreviousHref(this.notebook, firstPosition, this.limit),
+      next: getNextHref(this.notebook, lastPosition, total, this.limit),
     };
   }
 }
