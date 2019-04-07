@@ -22,7 +22,7 @@ factory.define('contentBlock', ContentBlock, async () => {
     const contentBlock = model;
     const { position } = options;
 
-    if (position) {
+    if (Number.isInteger(position)) {
       contentBlock.position = position;
     } else {
       const { notebook } = contentBlock;
