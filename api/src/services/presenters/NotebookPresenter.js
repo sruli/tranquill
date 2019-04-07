@@ -25,12 +25,10 @@ class NotebookPresenter {
         .contentBlocksQuery({ options })
         .then(blocks => blocks.reverse());
 
-      const contentBlocksPresenter = ContentBlocksPresenter.init({
+      presented.contentBlocks = await ContentBlocksPresenter.init({
         contentBlocks,
         notebook: this.notebook,
-      });
-
-      presented.contentBlocks = await contentBlocksPresenter.present();
+      }).present();
     }
 
     return presented;

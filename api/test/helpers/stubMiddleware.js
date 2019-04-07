@@ -12,7 +12,7 @@ const stubMiddleware = function stubMiddleware(stubObj) {
   return app;
 };
 
-const ensureAuthenticationStub = function authMiddlewareStub(user) {
+const ensureAuthenticationStub = function ensureAuthenticationStub(user) {
   return (req, res, next) => {
     res.locals.userId = user.id;
     return next();
