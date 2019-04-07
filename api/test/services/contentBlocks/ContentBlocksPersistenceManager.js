@@ -53,9 +53,8 @@ describe('ContentBlocksPersistenceManager', () => {
         await Promise.all(
           timesMap(3, i => contentBlockFactory.create('contentBlock', { notebook, position: i })),
         );
-        const contentBlock = await notebook.contentBlocksQuery({ query: { position: 1 } })
-          .then(results => results[0]);
-        blocks = [{ ...contentBlock.toObject(), text: 'New text' }];
+        const block = await notebook.contentBlocksQuery({ query: { position: 1 } }).findOne();
+        blocks = [{ ...block.toObject(), text: 'New text' }];
         await ContentBlocksPersistenceManager.init({
           notebook,
           blocks,
@@ -64,21 +63,18 @@ describe('ContentBlocksPersistenceManager', () => {
       });
 
       it('deletes those contentBlocks from the database', async () => {
-        const deletedBlock = await notebook.contentBlocksQuery({ query: { position: 2 } })
-          .then(results => results[0]);
-        expect(deletedBlock).to.be.undefined;
+        const deleted = await notebook.contentBlocksQuery({ query: { position: 2 } }).findOne();
+        expect(deleted).to.be.null;
       });
 
       it('does not delete contentBlocks that were updated', async () => {
-        const existingBlock = await notebook.contentBlocksQuery({ query: { position: 1 } })
-          .then(results => results[0]);
-        expect(existingBlock).to.exist;
+        const existing = await notebook.contentBlocksQuery({ query: { position: 1 } }).findOne();
+        expect(existing).to.exist;
       });
 
       it('does not delete contentBlocks whose position is lower than the offset', async () => {
-        const ignoredBlock = await notebook.contentBlocksQuery({ query: { position: 0 } })
-          .then(results => results[0]);
-        expect(ignoredBlock).to.exist;
+        const ignored = await notebook.contentBlocksQuery({ query: { position: 0 } }).findOne();
+        expect(ignored).to.exist;
       });
     });
 
