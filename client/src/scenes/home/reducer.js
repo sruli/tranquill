@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import isNil from 'lodash/isNil';
 import { SCENE_NAME, FORM_STATUS } from './constants';
 import {
   FORM_CHANGED,
@@ -16,7 +17,7 @@ export const getValidate = state => state[SCENE_NAME].validate;
 export const getError = state => state[SCENE_NAME].error;
 export const getStatus = state => state[SCENE_NAME].status;
 export const getButtonDisabled = state => (
-  getError(state) !== '' || [SUBMITTING, SUBMITTED].includes(getStatus(state))
+  !isNil(getError(state)) || [SUBMITTING, SUBMITTED].includes(getStatus(state))
 );
 
 // reducers
@@ -40,11 +41,11 @@ const validateReducer = (state = false, action) => {
   }
 };
 
-const errorReducer = (state = '', action) => {
+const errorReducer = (state = null, action) => {
   switch (action.type) {
     case FORM_VALIDATED:
     case EMAIL_SUBMIT_COMPLETED:
-      return action.payload.error || '';
+      return action.payload.error;
     default:
       return state;
   }

@@ -1,3 +1,5 @@
+import { EmailSubmitError } from './errors';
+
 export const FORM_SUBMITTED = 'home.FORM_SUBMITTED';
 export const FORM_CHANGED = 'home.FORM_CHANGED';
 export const FORM_VALIDATED = 'home.FORM_VALIDATED';
@@ -25,7 +27,7 @@ export const emailSubmitStarted = () => ({
 
 export const emailSubmitCompleted = ({ ok }) => ({
   payload: {
-    error: ok ? '' : 'Something went wrong. Try again.',
+    error: ok ? null : new EmailSubmitError(),
   },
   type: EMAIL_SUBMIT_COMPLETED,
 });

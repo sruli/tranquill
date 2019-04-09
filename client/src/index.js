@@ -6,7 +6,10 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
+import { IntlProvider } from 'react-intl';
 import createSagaMiddleware from 'redux-saga';
+import flattenKeys from './utilities/flattenKeys';
+import i18nMessages from './i18n';
 import reducers from './reducers';
 import sagas from './sagas';
 import App from './App';
@@ -36,7 +39,9 @@ sagas.forEach(saga => sagaMiddleware.run(saga));
 const Tranquill = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App />
+      <IntlProvider locale="en" messages={flattenKeys(i18nMessages.en)}>
+        <App />
+      </IntlProvider>
     </ConnectedRouter>
   </Provider>
 );

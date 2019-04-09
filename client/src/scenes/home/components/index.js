@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import isNil from 'lodash/isNil';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Navbar from './Navbar';
 import { formSubmitted, formChanged } from '../actions';
 import { getEmail, getError, getButtonDisabled, getStatus } from '../reducer';
@@ -10,7 +12,7 @@ import ArrowDownCircle from '../../../components/icons/ArrowDownCircle';
 import EmailSignupButton from './EmailSignupButton';
 import styles from './Home.module.scss';
 
-const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmit }) => (
+const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmit, intl }) => (
   <React.Fragment>
     <Navbar />
 
@@ -19,28 +21,32 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
         <div className="col-md-5 offset-md-1 pt-5">
           <div className="row mb-4">
             <div className="col">
-              <h1 className={`display-2 d-md-block d-none ls-5 ${styles.display}`}>Grab a notebook—</h1>
-              <h1 className={`display-4 d-md-none ls-4 ${styles.display}`}>Grab a notebook—</h1>
+              <h1 className={`display-2 d-md-block d-none ls-5 ${styles.display}`}>
+                <FormattedMessage id="home.grabANotebook" />
+              </h1>
+              <h1 className={`display-4 d-md-none ls-4 ${styles.display}`}>
+                <FormattedMessage id="home.grabANotebook" />
+              </h1>
             </div>
           </div>
           <div className="row mb-4">
             <div className="col">
               <h5 className="font-weight-normal ls-2 ls-md-1">
-                Put your thoughts to words and bring them to life. Every notebook is encrypted so you and your ideas have privacy to grow.
+                <FormattedMessage id="home.putYourThoughtsToWords" />
               </h5>
             </div>
           </div>
           <div className="row">
             <div className="col">
               <h4 className="ls-3 ls-md-2 mb-md-2">
-                Hold that thought…
+                <FormattedMessage id="home.holdThatThought" />
               </h4>
             </div>
           </div>
           <div className="row mb-5 mb-md-4">
             <div className="col">
               <h5 className="font-weight-normal ls-2 ls-md-1">
-                We&#39;re working hard to get Tranquill live. Leave your email and you&#39;ll get a shout when it&#39;s ready.
+                <FormattedMessage id="home.weWorkingHard" />
               </h5>
             </div>
           </div>
@@ -48,16 +54,16 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
             <div className="col">
               <form noValidate onSubmit={onSubmit}>
                 <div className="form-row align-items-end">
-                  <div className="col-6 col-md-7">
+                  <div className="col-6">
                     <Input
                       type="email"
-                      placeholder="Email"
+                      placeholder={intl.formatMessage({ id: 'home.email' })}
                       value={email}
                       onChange={e => onFormChanged({ email: e.target.value })}
                       disabled={formStatus === FORM_STATUS.SUBMITTED}
                     />
                   </div>
-                  <div className="col-6 col-md-5">
+                  <div className="col-6">
                     <EmailSignupButton disabled={buttonDisabled} formStatus={formStatus} />
                   </div>
                 </div>
@@ -65,15 +71,19 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
             </div>
           </div>
           {
-            error !== '' && (
+            !isNil(error) && (
               <div id="formError" className={`row ls-2 font-italic text-danger ${styles.errors}`}>
-                <div className="col">{error}</div>
+                <div className="col">
+                  <FormattedMessage id={`home.${error.name}.message`} />
+                </div>
               </div>
             )
           }
           <div className="row mb-md-4 d-none">
             <div className="col">
-              <h5 className="font-weight-normal">Can&#39;t hold that thought? Scroll down and get started.</h5>
+              <h5 className="font-weight-normal">
+                <FormattedMessage id="home.cantHold" />
+              </h5>
             </div>
           </div>
           <div className="row d-none">
@@ -87,13 +97,18 @@ const Home = ({ email, error, formStatus, buttonDisabled, onFormChanged, onSubmi
   </React.Fragment>
 );
 
+Home.defaultProps = {
+  error: null,
+};
+
 Home.propTypes = {
   email: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.instanceOf(Error),
   buttonDisabled: PropTypes.bool.isRequired,
   formStatus: PropTypes.string.isRequired,
   onFormChanged: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -111,4 +126,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Home));
