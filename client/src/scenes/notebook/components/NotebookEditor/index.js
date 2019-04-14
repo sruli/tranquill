@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Editor, EditorState, getDefaultKeyBinding } from 'draft-js';
+import { injectIntl, intlShape } from 'react-intl';
 import enforceCursorLocation from '../../../../utilities/cursorUtils';
 import 'draft-js/dist/Draft.css';
 import styles from './NotebookEditor.module.scss';
@@ -23,6 +24,7 @@ const NotebookEditor = ({
   loadMoreUrl,
   onPageTopScroll,
   loadingBusy,
+  intl,
 }) => {
   useEffect(() => {
     const loadMoreContentListener = () => {
@@ -40,7 +42,7 @@ const NotebookEditor = ({
       <Editor
         editorState={editorState}
         onChange={newEditorState => triggerEditorChange(newEditorState, offset)}
-        placeholder="Start typing something…" // i18n!
+        placeholder={intl.formatMessage({ id: 'notebook.startTyping' })}
         keyBindingFn={keyBindingFn}
         spellCheck
       />
@@ -61,6 +63,7 @@ NotebookEditor.propTypes = {
   loadMoreUrl: PropTypes.string,
   loadingBusy: PropTypes.bool.isRequired,
   onPageTopScroll: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -79,4 +82,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotebookEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NotebookEditor));

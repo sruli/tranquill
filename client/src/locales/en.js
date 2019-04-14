@@ -38,5 +38,9 @@ export default {
         message: 'Something went wrong. Try again.',
       },
     },
+    notebook: {
+      startTyping: 'Start typing something…',
+      namePlaceholder: 'Notebook #1',
+    },
   },
 };
