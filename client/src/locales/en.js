@@ -1,5 +1,9 @@
 export default {
   en: {
+    AppNavbar: {
+      account: 'Account',
+      signOut: 'Sign out',
+    },
     home: {
       grabANotebook: 'Grab a notebook—',
       putYourThoughtsToWords: 'Put your thoughts to words and bring them to life. Every notebook is encrypted so you and your ideas have privacy to grow.',

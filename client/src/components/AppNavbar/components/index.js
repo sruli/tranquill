@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import { Button, Link } from '../../elements';
 import TranquillLogo from '../../TranquillLogo';
 import { signOut } from '../actions';
@@ -14,12 +15,12 @@ export const PlainAppNavbar = ({ onSignOutClicked }) => (
         <ul className="nav align-items-end">
           <li>
             <Link href="/" type="secondary" className="nav-link">
-              Account
+              <FormattedMessage id="AppNavbar.account" />
             </Link>
           </li>
           <li>
             <Button type="secondary-link" className="nav-link" onClick={onSignOutClicked}>
-              Sign out
+              <FormattedMessage id="AppNavbar.signOut" />
             </Button>
           </li>
         </ul>
