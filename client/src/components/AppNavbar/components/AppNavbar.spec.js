@@ -1,16 +1,16 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
+import { shallowWithIntl, mountWithIntl } from '../../../spec/helpers/reactIntlEnzyme';
 import { PlainAppNavbar } from './index';
 
 describe('PlainAppNavbar', () => {
   it('displays the tranquill logo', () => {
-    const wrapper = shallow(<PlainAppNavbar onSignOutClicked={() => {}} />);
+    const wrapper = shallowWithIntl(<PlainAppNavbar onSignOutClicked={() => {}} />);
     expect(wrapper.find('TranquillLogo')).toHaveLength(1);
   });
 
   it('displays an account link', () => {
-    const wrapper = mount(
+    const wrapper = mountWithIntl(
       <MemoryRouter>
         <PlainAppNavbar onSignOutClicked={() => {}} />
       </MemoryRouter>,
@@ -20,7 +20,7 @@ describe('PlainAppNavbar', () => {
   });
 
   it('displays a sign out link', () => {
-    const wrapper = mount(
+    const wrapper = mountWithIntl(
       <MemoryRouter>
         <PlainAppNavbar onSignOutClicked={() => {}} />
       </MemoryRouter>,
