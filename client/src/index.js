@@ -38,11 +38,11 @@ sagas.forEach(saga => sagaMiddleware.run(saga));
 
 const Tranquill = () => (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <IntlProvider locale="en" messages={flattenKeys(i18nMessages.en)}>
+    <IntlProvider locale="en" messages={flattenKeys(i18nMessages.en)}>
+      <ConnectedRouter history={history}>
         <App />
-      </IntlProvider>
-    </ConnectedRouter>
+      </ConnectedRouter>
+    </IntlProvider>
   </Provider>
 );
 
