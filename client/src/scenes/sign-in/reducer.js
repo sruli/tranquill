@@ -29,8 +29,10 @@ const emailReducer = (state = '', action) => {
       return state;
     }
     case AUTHENTICATION_COMPLETED: {
-      const { error } = action;
-      if (error) return state;
+      if (action.payload && action.payload.errors) {
+        return state;
+      }
+
       return '';
     }
     default:
@@ -50,8 +52,10 @@ const passwordReducer = (state = '', action) => {
       return state;
     }
     case AUTHENTICATION_COMPLETED: {
-      const { error } = action;
-      if (error) return state;
+      if (action.payload && action.payload.errors) {
+        return state;
+      }
+
       return '';
     }
     default:
@@ -72,8 +76,11 @@ const errorsReducer = (state = [], action) => {
   switch (action.type) {
     case AUTHENTICATION_COMPLETED:
     case FORM_VALIDATED: {
-      const { meta } = action;
-      return meta || [];
+      if (action.payload && action.payload.errors) {
+        return action.payload.errors;
+      }
+
+      return [];
     }
     default:
       return state;

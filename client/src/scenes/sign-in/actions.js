@@ -1,4 +1,4 @@
-import { ClientError, ServerError } from '../../api/errors';
+import { ClientError, ServerError } from '../../errors';
 
 export const FORM_CHANGED = 'sign-in.FORM_CHANGED';
 export const FORM_SUBMITTED = 'sign-in.FORM_SUBMITTED';
@@ -15,11 +15,9 @@ export const formSubmitted = () => ({
   type: FORM_SUBMITTED,
 });
 
-export const formValidated = errors => ({
+export const formValidated = payload => ({
+  payload,
   type: FORM_VALIDATED,
-  payload: errors.length > 0 ? new Error() : null,
-  error: errors.length > 0,
-  meta: errors,
 });
 
 export const authenticationStarted = () => ({
@@ -36,18 +34,18 @@ export const authenticationCompleted = ({ ok, status } = {}) => {
   if (status >= 400 && status < 500) {
     return {
       ...action,
-      payload: new ClientError(),
-      error: true,
-      meta: ['That email/password combination is not valid'],
+      payload: {
+        errors: [new ClientError()],
+      },
     };
   }
 
   if (status >= 500) {
     return {
       ...action,
-      payload: new ServerError(),
-      error: true,
-      meta: ['Something went wrong. Try again.'],
+      payload: {
+        errors: [new ServerError()],
+      },
     };
   }
 };

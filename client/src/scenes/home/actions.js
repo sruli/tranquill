@@ -1,4 +1,4 @@
-import { EmailSubmitError } from './errors';
+import { EmailSubmitError } from '../../errors';
 
 export const FORM_SUBMITTED = 'home.FORM_SUBMITTED';
 export const FORM_CHANGED = 'home.FORM_CHANGED';

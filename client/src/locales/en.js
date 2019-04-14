@@ -17,5 +17,26 @@ export default {
         message: 'Something went wrong. Try again.',
       },
     },
+    'sign-in': {
+      signInToAccount: 'Sign in to your Tranquill account',
+      signIn: 'Sign in',
+      email: 'Email',
+      password: 'Placeholder',
+      dontHaveAccount: "Don't have an account?",
+      createAccount: 'Create account.',
+      forgotPassword: 'Forgot password?',
+      EmailInvalidError: {
+        message: 'Enter an email',
+      },
+      PasswordInvalidError: {
+        message: 'Enter a password',
+      },
+      ClientError: {
+        message: 'That email/password combination is not valid',
+      },
+      ServerError: {
+        message: 'Something went wrong. Try again.',
+      },
+    },
   },
 };

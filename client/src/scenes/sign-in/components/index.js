@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import Errors from './Errors';
 import { Input, Button } from '../../../components/elements';
 import TranquillLogo from '../../../components/TranquillLogo';
@@ -8,7 +9,7 @@ import { getEmail, getPassword, getErrors, getSubmitting } from '../reducer';
 import { formChanged, formSubmitted } from '../actions';
 import styles from './SignIn.module.scss';
 
-const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }) => {
+const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting, intl }) => {
   const emailInput = useRef(null);
   useEffect(() => emailInput.current.focus(), []);
 
@@ -21,7 +22,9 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
               <TranquillLogo size="lg" />
             </div>
             <div className="row justify-content-center mb-5">
-              <h6 className="text-muted font-weight-normal">Sign in to your Tranquill account</h6>
+              <h6 className="text-muted font-weight-normal">
+                <FormattedMessage id="sign-in.signInToAccount" />
+              </h6>
             </div>
 
             <Errors errors={errors} />
@@ -33,7 +36,7 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
                     <div className="col">
                       <Input
                         type="email"
-                        placeholder="Email"
+                        placeholder={intl.formatMessage({ id: 'sign-in.email' })}
                         value={email}
                         onChange={e => onFormChanged({ email: e.target.value })}
                         ref={emailInput}
@@ -44,7 +47,7 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
                     <div className="col">
                       <Input
                         type="password"
-                        placeholder="Password"
+                        placeholder={intl.formatMessage({ id: 'sign-in.password' })}
                         value={password}
                         onChange={e => onFormChanged({ password: e.target.value })}
                       />
@@ -53,7 +56,7 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
                   <div className="form-row mb-3">
                     <div className="col">
                       <Button disabled={errors.length > 0 || submitting} className="w-100" type="lg-primary">
-                        Sign in
+                        <FormattedMessage id="sign-in.signIn" />
                       </Button>
                     </div>
                   </div>
@@ -62,11 +65,16 @@ const SignIn = ({ email, password, onFormChanged, onSubmit, errors, submitting }
             </div>
             <div className={`row ls-2 ${styles.small}`}>
               <div className="col-12 mb-2">
-                Don&#39;t have an account?&nbsp;
-                <a href="/get-started">Create account.</a>
+                <FormattedMessage id="sign-in.dontHaveAccount" />
+                &nbsp;
+                <a href="/get-started">
+                  <FormattedMessage id="sign-in.createAccount" />
+                </a>
               </div>
               <div className="col-12">
-                <a href="/forgot-password">Forgot password?</a>
+                <a href="/forgot-password">
+                  <FormattedMessage id="sign-in.forgotPassword" />
+                </a>
               </div>
             </div>
           </div>
@@ -81,8 +89,9 @@ SignIn.propTypes = {
   password: PropTypes.string.isRequired,
   onFormChanged: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  errors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  errors: PropTypes.arrayOf(PropTypes.instanceOf(Error)).isRequired,
   submitting: PropTypes.bool.isRequired,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -100,4 +109,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SignIn));

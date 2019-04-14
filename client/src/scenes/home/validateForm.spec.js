@@ -1,5 +1,5 @@
 import validateForm from './validateForm';
-import { EmailInvalidError } from './errors';
+import { EmailInvalidError } from '../../errors';
 
 describe('validateForm', () => {
   describe('when email is valid', () => {
