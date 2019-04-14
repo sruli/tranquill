@@ -5,11 +5,11 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
 import { createMemoryHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
-import { mount } from 'enzyme';
 import App from '../../App';
 import reducers from '../../reducers';
 import sagas from '../../sagas';
 import { RESET } from '../../constants';
+import { mountWithIntl } from './reactIntlEnzyme';
 
 class TestApp extends React.Component {
   componentDidMount() {
@@ -54,7 +54,7 @@ const mountApp = ({ path = '/' } = {}) => {
 
   sagas.forEach(saga => sagaMiddleware.run(saga));
 
-  const app = mount(<TestApp store={store} history={history} />);
+  const app = mountWithIntl(<TestApp store={store} history={history} />);
 
   return { app, store };
 };

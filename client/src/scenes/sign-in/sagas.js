@@ -23,7 +23,7 @@ function* onFormChanged() {
   const password = yield select(getPassword);
   const { errors } = yield call(validateForm, { email, password });
 
-  yield put(formValidated(errors));
+  yield put(formValidated({ errors }));
 }
 
 function* submitForm() {
@@ -31,7 +31,7 @@ function* submitForm() {
   const password = yield select(getPassword);
   const { errors } = yield call(validateForm, { email, password });
 
-  yield put(formValidated(errors));
+  yield put(formValidated({ errors }));
 
   if (errors.length > 0) return;
 
@@ -42,8 +42,7 @@ function* submitForm() {
 }
 
 function* onAuthenticationCompleted(action) {
-  const { error } = action;
-  if (error) return;
+  if (action.payload && action.payload.errors) return;
 
   setCookie({ authenticated: true });
 

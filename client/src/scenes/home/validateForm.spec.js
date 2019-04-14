@@ -1,4 +1,5 @@
 import validateForm from './validateForm';
+import { EmailInvalidError } from '../../errors';
 
 describe('validateForm', () => {
   describe('when email is valid', () => {
@@ -9,13 +10,13 @@ describe('validateForm', () => {
 
   describe('when email is blank', () => {
     it('returns an error message', () => {
-      expect(validateForm({ email: '' })).toEqual('Enter an email');
+      expect(validateForm({ email: '' })).toBeInstanceOf(EmailInvalidError);
     });
   });
 
   describe('when email is not valid', () => {
     it('returns an error message', () => {
-      expect(validateForm({ email: 'foo' })).toEqual('Enter an email');
+      expect(validateForm({ email: 'foo' })).toBeInstanceOf(EmailInvalidError);
     });
   });
 });
